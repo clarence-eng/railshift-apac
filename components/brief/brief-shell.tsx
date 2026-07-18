@@ -164,7 +164,7 @@ export default function BriefShell() {
             <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Project</p>
             <IxSelect
               value={projectId}
-              onValueChange={(e) => handleProjectChange(e.detail as string)}
+              onValueChange={(e) => handleProjectChange((e.detail as string) ?? "")}
               style={{ width: "100%" }}
             >
               {PROJECTS.map((p) => (
@@ -187,7 +187,7 @@ export default function BriefShell() {
             <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</p>
             <IxSelect
               value={gridCountry}
-              onValueChange={(e) => setGridCountry(e.detail as string)}
+              onValueChange={(e) => setGridCountry((e.detail as string) ?? "")}
               style={{ width: "100%" }}
             >
               {GRID_FACTORS.map((g) => (

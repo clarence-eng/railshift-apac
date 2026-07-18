@@ -57,7 +57,7 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
     const fallbackStyle = isDark ? STYLE_DARK : STYLE_LIGHT_FALLBACK;
 
     async function initMap(style: string) {
-      const { Map, NavigationControl, AttributionControl } = await import("maplibre-gl");
+      const { Map, NavigationControl, AttributionControl, Marker } = await import("maplibre-gl");
       await import("maplibre-gl/dist/maplibre-gl.css");
 
       if (!containerRef.current) return;
@@ -84,12 +84,11 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
         "bottom-right"
       );
 
-      map.on("load", () => addMarkers(map));
+      map.on("load", () => addMarkers(map, Marker));
     }
 
-    function addMarkers(map: MLMap) {
-      import("maplibre-gl").then(({ Marker }) => {
-        for (const project of projects) {
+    function addMarkers(map: MLMap, Marker: typeof import("maplibre-gl").Marker) {
+      for (const project of projects) {
           const el = document.createElement("div");
           const color = getResolvedStatusColor(project.status);
           const isDarkMap = colorSchema !== "light";
@@ -111,7 +110,6 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
           el.addEventListener("mouseleave", () => {
             if (el.style.zIndex !== "10") el.style.transform = "scale(1)";
           });
-          // Use ref so click always calls the current onSelect, never a stale closure
           el.addEventListener("click", () => onSelectRef.current(project.id));
 
           markerEls.current.set(project.id, el);
@@ -121,7 +119,6 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
             .addTo(map);
         }
 
-        // Re-apply selection highlight for any marker that was selected before rebuild
         const sel = selectedIdRef.current;
         if (sel) {
           const selEl = markerEls.current.get(sel);
@@ -131,7 +128,6 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
             selEl.style.zIndex = "10";
           }
         }
-      });
     }
 
     initMap(primaryStyle).catch(() => initMap(fallbackStyle));
@@ -174,7 +170,10 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
     <div
       ref={containerRef}
       className="w-full rounded-sm overflow-hidden border border-border"
-      style={{ height: "clamp(300px, 50vw, 420px)" }}
+      style={{
+        height: "clamp(300px, 50vw, 420px)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.22)",
+      }}
       aria-label="APAC rail project map"
     />
   );

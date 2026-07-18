@@ -131,7 +131,10 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
       {/* Table */}
       <div
         className="overflow-x-auto rounded-sm border"
-        style={{ borderColor: "var(--theme-color-std-bdr)" }}
+        style={{
+          borderColor: "var(--theme-color-std-bdr)",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
+        }}
       >
         <table className="w-full text-sm">
           <thead

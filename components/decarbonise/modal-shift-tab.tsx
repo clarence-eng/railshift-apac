@@ -102,108 +102,121 @@ export default function ModalShiftTab() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
       {/* Controls */}
-      <div className="space-y-4">
-        <SectionDivider label="Project" />
-        <div className="space-y-1.5">
-          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Line</span>
-          <IxSelect value={lineId} onValueChange={(e) => handleLineChange(e.detail as string)} style={{ width: "100%" }}>
-            {LINE_OPTIONS.map((l) => (
-              <IxSelectItem key={l.id} value={l.id} label={l.label} />
-            ))}
-          </IxSelect>
-          {/* Project context — confirms what the selector actually controls */}
-          {selectedLine.lengthKm != null && (
-            <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
-              {selectedLine.lengthKm} km · {selectedLine.status}
-            </p>
-          )}
+      <div className="space-y-3">
+        <div
+          className="rounded-sm border p-3 space-y-3"
+          style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+        >
+          <SectionDivider label="Project" />
+          <div className="space-y-1.5">
+            <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Line</span>
+            <IxSelect value={lineId} onValueChange={(e) => handleLineChange((e.detail as string) ?? "")} style={{ width: "100%" }}>
+              {LINE_OPTIONS.map((l) => (
+                <IxSelectItem key={l.id} value={l.id} label={l.label} />
+              ))}
+            </IxSelect>
+            {selectedLine.lengthKm != null && (
+              <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+                {selectedLine.lengthKm} km · {selectedLine.status}
+              </p>
+            )}
+          </div>
         </div>
 
-        <SectionDivider label="Grid" />
-        <div className="space-y-2">
-          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
-          <IxSelect value={gridCountry} onValueChange={(e) => setGridCountry(e.detail as string)} style={{ width: "100%" }}>
-            {GRID_FACTORS.map((g) => (
-              <IxSelectItem key={g.country} value={g.country} label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`} />
-            ))}
-          </IxSelect>
-          <IxCheckbox
-            checked={simpleMode}
-            label={`Simple mode — EEA rail avg ${CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm`}
-            onCheckedChange={(e) => setSimpleMode(e.detail)}
-          />
-          {simpleMode && (
-            <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
-              Caution: EEA 2018 EU-27 avg — not calibrated to APAC grids.
-            </p>
-          )}
-        </div>
-
-        <SectionDivider label="Scenario assumptions" />
-        {/* #2: Label sliders explicitly as scenario inputs, not cited figures */}
-        <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
-          Adjust to model a specific scenario. Defaults are indicative — not line-specific.
-        </p>
-        <div className="space-y-3">
-          <SliderRow
-            label="Daily ridership (scenario)"
-            value={dailyRidership}
-            min={10_000} max={2_000_000} step={10_000}
-            format={(v) => `${(v / 1000).toFixed(0)}k pax/day`}
-            onChange={setDailyRidership}
-            note="Set to line's projected demand for a meaningful result"
-          />
-          <SliderRow
-            label="Avg trip length"
-            value={avgTripKm}
-            min={1} max={60} step={0.5}
-            format={(v) => `${v} km`}
-            onChange={setAvgTripKm}
-          />
-          <SliderRow
-            label="Diverted from car"
-            value={share}
-            min={0.05} max={1} step={0.05}
-            format={(v) => `${Math.round(v * 100)}%`}
-            onChange={setShare}
-            note="Empirical range 15–35% for new urban metro (ITDP 2022)"
-          />
-          {!simpleMode && (
-            <SliderRow
-              label="Rail energy intensity"
-              value={railEnergy}
-              min={CALC_DEFAULTS.railEnergyIntensityRange[0]}
-              max={CALC_DEFAULTS.railEnergyIntensityRange[1]}
-              step={0.005}
-              format={(v) => `${v.toFixed(3)} kWh/pkm`}
-              onChange={setRailEnergy}
-              note="MED confidence; varies by rolling stock & load"
+        <div
+          className="rounded-sm border p-3 space-y-3"
+          style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+        >
+          <SectionDivider label="Grid" />
+          <div className="space-y-2">
+            <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
+            <IxSelect value={gridCountry} onValueChange={(e) => setGridCountry((e.detail as string) ?? "")} style={{ width: "100%" }}>
+              {GRID_FACTORS.map((g) => (
+                <IxSelectItem key={g.country} value={g.country} label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`} />
+              ))}
+            </IxSelect>
+            <IxCheckbox
+              checked={simpleMode}
+              label={`Simple mode — EEA rail avg ${CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm`}
+              onCheckedChange={(e) => setSimpleMode(e.detail)}
             />
-          )}
-          <SliderRow
-            label="Baseline car factor"
-            value={carFactor}
-            min={80} max={250} step={1}
-            format={(v) => `${v} gCO₂e/pkm`}
-            onChange={setCarFactor}
-          />
-          <SliderRow
-            label="Carbon price"
-            value={carbonPrice}
-            min={CALC_DEFAULTS.carbonPriceRangeSGD[0]}
-            max={CALC_DEFAULTS.carbonPriceRangeSGD[1]}
-            step={1}
-            format={(v) => `S$${v}/tCO₂e`}
-            onChange={setCarbonPrice}
-            note="SG carbon tax 2026–27; target S$50–80 by 2030"
-          />
-          <SliderRow
-            label="Asset life"
-            value={assetLife}
-            min={10} max={60} step={5}
-            format={(v) => `${v} years`}
-            onChange={setAssetLife}
-          />
+            {simpleMode && (
+              <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+                Caution: EEA 2018 EU-27 avg — not calibrated to APAC grids.
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div
+          className="rounded-sm border p-3 space-y-3"
+          style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+        >
+          <SectionDivider label="Scenario assumptions" />
+          <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+            Adjust to model a specific scenario. Defaults are indicative — not line-specific.
+          </p>
+          <div className="space-y-3">
+            <SliderRow
+              label="Daily ridership (scenario)"
+              value={dailyRidership}
+              min={10_000} max={2_000_000} step={10_000}
+              format={(v) => `${(v / 1000).toFixed(0)}k pax/day`}
+              onChange={setDailyRidership}
+              note="Set to line's projected demand for a meaningful result"
+            />
+            <SliderRow
+              label="Avg trip length"
+              value={avgTripKm}
+              min={1} max={60} step={0.5}
+              format={(v) => `${v} km`}
+              onChange={setAvgTripKm}
+            />
+            <SliderRow
+              label="Diverted from car"
+              value={share}
+              min={0.05} max={1} step={0.05}
+              format={(v) => `${Math.round(v * 100)}%`}
+              onChange={setShare}
+              note="Empirical range 15–35% for new urban metro (ITDP 2022)"
+            />
+            {!simpleMode && (
+              <SliderRow
+                label="Rail energy intensity"
+                value={railEnergy}
+                min={CALC_DEFAULTS.railEnergyIntensityRange[0]}
+                max={CALC_DEFAULTS.railEnergyIntensityRange[1]}
+                step={0.005}
+                format={(v) => `${v.toFixed(3)} kWh/pkm`}
+                onChange={setRailEnergy}
+                note="MED confidence; varies by rolling stock & load"
+              />
+            )}
+            <SliderRow
+              label="Baseline car factor"
+              value={carFactor}
+              min={80} max={250} step={1}
+              format={(v) => `${v} gCO₂e/pkm`}
+              onChange={setCarFactor}
+            />
+            <SliderRow
+              label="Carbon price"
+              value={carbonPrice}
+              min={CALC_DEFAULTS.carbonPriceRangeSGD[0]}
+              max={CALC_DEFAULTS.carbonPriceRangeSGD[1]}
+              step={1}
+              format={(v) => `S$${v}/tCO₂e`}
+              onChange={setCarbonPrice}
+              note="SG carbon tax 2026–27; target S$50–80 by 2030"
+            />
+            <SliderRow
+              label="Asset life"
+              value={assetLife}
+              min={10} max={60} step={5}
+              format={(v) => `${v} years`}
+              onChange={setAssetLife}
+            />
+          </div>
         </div>
       </div>
 

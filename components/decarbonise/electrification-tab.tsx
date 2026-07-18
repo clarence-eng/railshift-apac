@@ -65,24 +65,34 @@ export default function ElectrificationTab() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
       {/* Controls */}
-      <div className="space-y-4">
-        <SectionDivider label="Grid" />
-        <div className="space-y-1.5">
-          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
-          <IxSelect value={gridCountry} onValueChange={(e) => setGridCountry(e.detail as string)} style={{ width: "100%" }}>
-            {GRID_FACTORS.map((g) => (
-              <IxSelectItem key={g.country} value={g.country} label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`} />
-            ))}
-          </IxSelect>
+      <div className="space-y-3">
+        <div
+          className="rounded-sm border p-3 space-y-3"
+          style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+        >
+          <SectionDivider label="Grid" />
+          <div className="space-y-1.5">
+            <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
+            <IxSelect value={gridCountry} onValueChange={(e) => setGridCountry((e.detail as string) ?? "")} style={{ width: "100%" }}>
+              {GRID_FACTORS.map((g) => (
+                <IxSelectItem key={g.country} value={g.country} label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`} />
+              ))}
+            </IxSelect>
+          </div>
         </div>
 
-        <SectionDivider label="Line assumptions" />
-        <div className="space-y-3">
-          <SliderRow label="Annual line pkm" value={annualPkmBn} min={0.1} max={10} step={0.1} format={(v) => `${v.toFixed(1)}bn pkm/yr`} onChange={setAnnualPkmBn} />
-          <SliderRow label="Diesel rail factor" value={dieselFactor} min={30} max={150} step={1} format={(v) => `${v} gCO₂e/pkm`} onChange={setDieselFactor} note="MED confidence; varies by engine + load" />
-          <SliderRow label="Electric energy intensity" value={railEnergy} min={CALC_DEFAULTS.railEnergyIntensityRange[0]} max={CALC_DEFAULTS.railEnergyIntensityRange[1]} step={0.005} format={(v) => `${v.toFixed(3)} kWh/pkm`} onChange={setRailEnergy} />
-          <SliderRow label="Carbon price" value={carbonPrice} min={CALC_DEFAULTS.carbonPriceRangeSGD[0]} max={CALC_DEFAULTS.carbonPriceRangeSGD[1]} step={1} format={(v) => `S$${v}/tCO₂e`} onChange={setCarbonPrice} note="SG carbon tax 2026–27" />
-          <SliderRow label="Asset life" value={assetLife} min={10} max={60} step={5} format={(v) => `${v} years`} onChange={setAssetLife} />
+        <div
+          className="rounded-sm border p-3 space-y-3"
+          style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+        >
+          <SectionDivider label="Line assumptions" />
+          <div className="space-y-3">
+            <SliderRow label="Annual line pkm" value={annualPkmBn} min={0.1} max={10} step={0.1} format={(v) => `${v.toFixed(1)}bn pkm/yr`} onChange={setAnnualPkmBn} />
+            <SliderRow label="Diesel rail factor" value={dieselFactor} min={30} max={150} step={1} format={(v) => `${v} gCO₂e/pkm`} onChange={setDieselFactor} note="MED confidence; varies by engine + load" />
+            <SliderRow label="Electric energy intensity" value={railEnergy} min={CALC_DEFAULTS.railEnergyIntensityRange[0]} max={CALC_DEFAULTS.railEnergyIntensityRange[1]} step={0.005} format={(v) => `${v.toFixed(3)} kWh/pkm`} onChange={setRailEnergy} />
+            <SliderRow label="Carbon price" value={carbonPrice} min={CALC_DEFAULTS.carbonPriceRangeSGD[0]} max={CALC_DEFAULTS.carbonPriceRangeSGD[1]} step={1} format={(v) => `S$${v}/tCO₂e`} onChange={setCarbonPrice} note="SG carbon tax 2026–27" />
+            <SliderRow label="Asset life" value={assetLife} min={10} max={60} step={5} format={(v) => `${v} years`} onChange={setAssetLife} />
+          </div>
         </div>
       </div>
 

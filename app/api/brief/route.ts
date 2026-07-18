@@ -59,6 +59,12 @@ const ipMap = new Map<string, { count: number; windowStart: number }>();
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
+
+  // Prune expired entries to prevent unbounded growth on long-running instances
+  for (const [key, val] of ipMap) {
+    if (now - val.windowStart > RATE_WINDOW_MS) ipMap.delete(key);
+  }
+
   const entry = ipMap.get(ip);
   if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
     ipMap.set(ip, { count: 1, windowStart: now });
