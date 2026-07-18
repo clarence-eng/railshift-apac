@@ -2,129 +2,234 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* ================================================================
+   SIEMENS iX CLASSIC THEME CSS
+   Provides --theme-color-* and all other --theme-* tokens under:
+     [data-ix-theme=classic][data-ix-color-schema=dark]
+     [data-ix-theme=classic][data-ix-color-schema=light]
+   The ThemeSync component keeps data-ix-color-schema in sync with
+   the next-themes class toggle.
+   ================================================================ */
+@import "@siemens/ix/dist/siemens-ix/theme/classic-dark.css";
+@import "@siemens/ix/dist/siemens-ix/theme/classic-light.css";
+
+/* Dark-first: .dark class on <html> activates dark: variants in Tailwind */
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
+/* ================================================================
+   RailShift APAC — iX TOKEN BRIDGE
+   Every --ix-* variable points at the real iX --theme-color-* token.
+   Because the iX CSS is scoped to [data-ix-theme=classic][data-ix-color-schema=*]
+   on the html element, these values automatically swap when ThemeSync
+   updates that attribute — no duplication, no drift.
+
+   Dark is the default (data-ix-color-schema="dark" set in layout.tsx).
+   ================================================================ */
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* ── Canvas & surfaces ── */
+  --ix-bg:        var(--theme-color-1);
+  --ix-surface-1: var(--theme-color-2);
+  --ix-surface-2: var(--theme-color-3);
+  --ix-surface-3: var(--theme-color-4);
+
+  /* ── Petrol accent ── */
+  --ix-primary:          var(--theme-color-primary);
+  --ix-primary-hover:    var(--theme-color-primary--hover);
+  --ix-primary-active:   var(--theme-color-primary--active);
+  --ix-primary-contrast: var(--theme-color-primary--contrast);
+  --ix-dynamic:          var(--theme-color-dynamic);
+
+  /* ── Text ── */
+  --ix-text:      var(--theme-color-std-text);
+  --ix-text-soft: var(--theme-color-soft-text);
+  --ix-text-weak: var(--theme-color-weak-text);
+
+  /* ── Borders ── */
+  --ix-border:      var(--theme-color-std-bdr);
+  --ix-border-soft: var(--theme-color-soft-bdr);
+  --ix-border-hair: var(--theme-color-x-weak-bdr);
+
+  /* ── Focus ── */
+  --ix-focus: var(--theme-color-focus-bdr);
+
+  /* ── Semantic status ── */
+  --ix-success:  var(--theme-color-success);
+  --ix-warning:  var(--theme-color-warning);
+  --ix-error:    var(--theme-color-alarm);
+  --ix-critical: var(--theme-color-critical);
+  --ix-info:     var(--theme-color-info);
+  --ix-neutral:  var(--theme-color-neutral);
+
+  /* ── Chart palette — first 4 series ── */
+  --ix-chart-1:    var(--theme-chart-1);
+  --ix-chart-2:    var(--theme-chart-2);
+  --ix-chart-3:    var(--theme-chart-3);
+  --ix-chart-4:    var(--theme-chart-4);
+  --ix-chart-grid: var(--theme-chart-grid-lines);
+
+  /* ── Signature gradient — derived from iX gradient-effect tokens ── */
+  --ix-gradient: linear-gradient(
+    90deg,
+    var(--theme-color-gradient-effect-1) 0%,
+    var(--theme-color-gradient-effect-2) 100%
+  );
+
+  /* ── Map to shadcn / Tailwind token names ── */
+  --background:           var(--ix-bg);
+  --foreground:           var(--ix-text);
+  --card:                 var(--ix-surface-1);
+  --card-foreground:      var(--ix-text);
+  --popover:              var(--ix-surface-1);
+  --popover-foreground:   var(--ix-text);
+  --primary:              var(--ix-primary);
+  --primary-foreground:   var(--ix-primary-contrast);
+  --secondary:            var(--ix-surface-2);
+  --secondary-foreground: var(--ix-text);
+  --muted:                var(--ix-surface-2);
+  --muted-foreground:     var(--ix-text-soft);
+  --accent:               var(--ix-surface-2);
+  --accent-foreground:    var(--ix-text);
+  --destructive:          var(--ix-error);
+  --border:               var(--ix-border);
+  --input:                var(--ix-border);
+  --ring:                 var(--ix-focus);
+
+  /* ── Chart slots ── */
+  --chart-1: var(--ix-chart-1);
+  --chart-2: var(--ix-chart-2);
+  --chart-3: var(--ix-chart-3);
+  --chart-4: var(--ix-chart-4);
+  --chart-5: var(--ix-neutral);
+
+  /* ── Sidebar ── */
+  --sidebar:                    var(--ix-surface-1);
+  --sidebar-foreground:         var(--ix-text);
+  --sidebar-primary:            var(--ix-primary);
+  --sidebar-primary-foreground: var(--ix-primary-contrast);
+  --sidebar-accent:             var(--ix-surface-2);
+  --sidebar-accent-foreground:  var(--ix-text);
+  --sidebar-border:             var(--ix-border);
+  --sidebar-ring:               var(--ix-focus);
+
+  /* ── Radius base ── */
+  --radius: 4px;
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+/* ================================================================
+   TAILWIND v4 THEME
+   All utilities read from --ix-* which in turn read live iX tokens.
+   ================================================================ */
+
+@theme inline {
+  /* ── Typography ── */
+  --font-sans: 'Siemens Sans', Arial, Helvetica, sans-serif;
+  --font-mono: 'JetBrains Mono', var(--font-geist-mono), monospace;
+
+  /* ── Squared radii: card=4px, control=2px ── */
+  --radius-card:    4px;
+  --radius-control: 2px;
+  --radius-sm:      2px;
+  --radius-md:      3px;
+  --radius-lg:      4px;
+  --radius-xl:      4px;
+  --radius-2xl:     4px;
+  --radius-3xl:     4px;
+  --radius-4xl:     4px;
+
+  /* ── shadcn-compatible slots ── */
+  --color-background:          var(--background);
+  --color-foreground:          var(--foreground);
+  --color-card:                var(--card);
+  --color-card-foreground:     var(--card-foreground);
+  --color-popover:             var(--popover);
+  --color-popover-foreground:  var(--popover-foreground);
+  --color-primary:             var(--primary);
+  --color-primary-foreground:  var(--primary-foreground);
+  --color-secondary:           var(--secondary);
+  --color-secondary-foreground:var(--secondary-foreground);
+  --color-muted:               var(--muted);
+  --color-muted-foreground:    var(--muted-foreground);
+  --color-accent:              var(--accent);
+  --color-accent-foreground:   var(--accent-foreground);
+  --color-destructive:         var(--destructive);
+  --color-border:              var(--border);
+  --color-input:               var(--input);
+  --color-ring:                var(--ring);
+  --color-chart-1:             var(--chart-1);
+  --color-chart-2:             var(--chart-2);
+  --color-chart-3:             var(--chart-3);
+  --color-chart-4:             var(--chart-4);
+  --color-chart-5:             var(--chart-5);
+  --color-sidebar:                    var(--sidebar);
+  --color-sidebar-foreground:         var(--sidebar-foreground);
+  --color-sidebar-primary:            var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent:             var(--sidebar-accent);
+  --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-ring:               var(--sidebar-ring);
+
+  /* ── Extended iX utilities ── */
+  --color-surface-1:      var(--ix-surface-1);
+  --color-surface-2:      var(--ix-surface-2);
+  --color-surface-3:      var(--ix-surface-3);
+  --color-primary-hover:  var(--ix-primary-hover);
+  --color-primary-active: var(--ix-primary-active);
+  --color-dynamic:        var(--ix-dynamic);
+  --color-text-soft:      var(--ix-text-soft);
+  --color-text-weak:      var(--ix-text-weak);
+  --color-border-soft:    var(--ix-border-soft);
+  --color-border-hair:    var(--ix-border-hair);
+  --color-focus:          var(--ix-focus);
+
+  /* ── Semantic status ── */
+  --color-success:  var(--ix-success);
+  --color-warning:  var(--ix-warning);
+  --color-error:    var(--ix-error);
+  --color-critical: var(--ix-critical);
+  --color-info:     var(--ix-info);
+  --color-neutral:  var(--ix-neutral);
+
+  /* ── Chart grid ── */
+  --color-chart-grid: var(--ix-chart-grid);
+
+  /* ── Elevation shadows ── */
+  --shadow-card:  var(--theme-shadow-1, 0 1px 3px rgba(0,0,0,0.35));
+  --shadow-panel: var(--theme-shadow-3, 0 4px 12px rgba(0,0,0,0.4));
+
+  /* ── Transition defaults ── */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --ease-default: cubic-bezier(0.2, 0, 0, 1);
 }
+
+/* ================================================================
+   BASE LAYER
+   ================================================================ */
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+  }
+  *:focus-visible {
+    outline: 2px solid var(--ix-focus);
+    outline-offset: 2px;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Siemens Sans', Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  html {
-    @apply font-sans;
+
+  a, button, [role="button"], input, select {
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .bg-card,
+  .bg-surface-1 {
+    box-shadow: var(--shadow-card);
   }
 }

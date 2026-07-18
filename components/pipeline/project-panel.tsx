@@ -42,7 +42,7 @@ export default function ProjectPanel({ project, onClose }: Props) {
         <Row
           label="Status"
           value={
-            <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${STATUS_BADGE[project.status]}`}>
+            <span className={`inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium ${STATUS_BADGE[project.status]}`}>
               {STATUS_LABEL[project.status]}
             </span>
           }

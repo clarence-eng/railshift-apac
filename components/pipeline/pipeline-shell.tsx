@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import type { Project } from "@/data/seed";
 import ProjectPanel from "./project-panel";
 import ProjectTable from "./project-table";
-import { STATUS_COLOR, STATUS_LABEL } from "./status-config";
+import { STATUS_COLOR_VAR, STATUS_LABEL } from "./status-config";
 import type { ProjectStatus } from "@/data/seed";
 
 const STATUSES: ProjectStatus[] = [
@@ -18,10 +18,24 @@ const STATUSES: ProjectStatus[] = [
 function MapSkeleton() {
   return (
     <div
-      className="w-full rounded-sm bg-muted/20 border border-border animate-pulse flex items-center justify-center text-muted-foreground text-sm"
-      style={{ height: "420px" }}
+      className="w-full rounded-sm border border-border bg-surface-1 overflow-hidden animate-pulse"
+      style={{ height: "clamp(300px, 50vw, 420px)" }}
+      aria-label="Map loading"
     >
-      Loading map…
+      {/* Simulated basemap structure */}
+      <div className="h-full flex flex-col justify-between p-4 opacity-30">
+        <div className="flex justify-end">
+          <div className="w-6 h-12 rounded-sm bg-border-soft" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-px bg-border-hair w-full" />
+          <div className="h-px bg-border-hair w-4/5" />
+          <div className="h-px bg-border-hair w-full" />
+        </div>
+        <div className="flex justify-end">
+          <div className="h-3 w-48 rounded-sm bg-border-soft" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -58,8 +72,8 @@ export default function PipelineShell({ projects }: Props) {
           {STATUSES.map((s) => (
             <span key={s} className="flex items-center gap-1.5">
               <span
-                className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
-                style={{ background: STATUS_COLOR[s] }}
+                className="inline-block w-2 h-2 rounded-full shrink-0"
+                style={{ background: STATUS_COLOR_VAR[s] }}
               />
               {STATUS_LABEL[s]}
             </span>
@@ -83,8 +97,8 @@ export default function PipelineShell({ projects }: Props) {
               onClose={() => setSelectedId(null)}
             />
           ) : (
-            <div className="hidden lg:flex h-full items-center justify-center rounded-sm border border-dashed border-border text-sm text-muted-foreground min-h-[120px]">
-              Select a marker to view details
+            <div className="hidden lg:flex h-full items-center justify-center rounded-sm border border-border-hair text-xs text-text-weak min-h-[120px] tracking-wide uppercase">
+              Select a marker
             </div>
           )}
         </div>

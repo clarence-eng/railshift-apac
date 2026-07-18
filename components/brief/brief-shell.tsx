@@ -65,24 +65,27 @@ function MemoBody({ markdown }: { markdown: string }) {
 
 function MemoSkeleton() {
   return (
-    <div className="space-y-3 animate-pulse">
-      <div className="h-4 bg-muted/60 rounded w-3/4" />
-      <div className="h-3 bg-muted/40 rounded w-1/4 mt-4" />
-      <div className="space-y-2 pt-1">
-        <div className="h-3 bg-muted/40 rounded w-full" />
-        <div className="h-3 bg-muted/40 rounded w-5/6" />
-        <div className="h-3 bg-muted/40 rounded w-4/6" />
-      </div>
-      <div className="h-3 bg-muted/40 rounded w-1/4 mt-5" />
-      <div className="space-y-2 pt-1">
-        <div className="h-3 bg-muted/40 rounded w-full" />
-        <div className="h-3 bg-muted/40 rounded w-3/4" />
-      </div>
-      <div className="h-3 bg-muted/40 rounded w-1/4 mt-5" />
-      <div className="space-y-2 pt-1">
-        <div className="h-3 bg-muted/40 rounded w-full" />
-        <div className="h-3 bg-muted/40 rounded w-5/6" />
-        <div className="h-3 bg-muted/40 rounded w-2/3" />
+    <div className="rounded-sm border border-border bg-surface-1 overflow-hidden animate-pulse">
+      <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <div className="px-5 py-5 space-y-4 sm:px-6">
+        <div className="h-4 bg-border rounded-sm w-2/3" />
+        <div className="space-y-1.5">
+          <div className="h-2 bg-border-soft rounded-sm w-1/5" />
+          <div className="h-2.5 bg-border rounded-sm w-full" />
+          <div className="h-2.5 bg-border-soft rounded-sm w-5/6" />
+          <div className="h-2.5 bg-border-hair rounded-sm w-4/6" />
+        </div>
+        <div className="space-y-1.5">
+          <div className="h-2 bg-border-soft rounded-sm w-1/5" />
+          <div className="h-2.5 bg-border rounded-sm w-full" />
+          <div className="h-2.5 bg-border-soft rounded-sm w-3/4" />
+        </div>
+        <div className="space-y-1.5">
+          <div className="h-2 bg-border-soft rounded-sm w-1/5" />
+          <div className="h-2.5 bg-border rounded-sm w-full" />
+          <div className="h-2.5 bg-border-soft rounded-sm w-5/6" />
+          <div className="h-2.5 bg-border-hair rounded-sm w-2/3" />
+        </div>
       </div>
     </div>
   );
@@ -281,14 +284,14 @@ export default function BriefShell() {
         <div>
           {/* Error */}
           {error && (
-            <div className="rounded-sm border border-red-800 bg-red-950/40 px-4 py-3 text-sm text-red-300 mb-4">
+            <div className="rounded-sm border border-error/30 bg-error/10 px-4 py-3 text-sm text-error mb-4">
               {error}
             </div>
           )}
 
           {/* Fallback banner */}
           {result?.isFallback && result.fallbackReason && (
-            <div className="rounded-sm border border-amber-800 bg-amber-950/30 px-4 py-2 text-xs text-amber-300 mb-4 flex items-start gap-2">
+            <div className="rounded-sm border border-warning/30 bg-warning/10 px-4 py-2 text-xs text-warning mb-4 flex items-start gap-2">
               <span className="shrink-0 mt-px" aria-hidden>⚠</span>
               <span>{result.fallbackReason}</span>
             </div>
@@ -296,16 +299,18 @@ export default function BriefShell() {
 
           {/* States: idle / loading / result */}
           {loading ? (
-            <div className="rounded-sm border border-border bg-card px-6 py-5">
-              <MemoSkeleton />
-            </div>
+            <MemoSkeleton />
           ) : result ? (
-            <div className="rounded-sm border border-border bg-card px-5 py-5 sm:px-6">
-              <MemoBody markdown={result.markdown} />
+            <div className="rounded-sm border border-border bg-surface-1 overflow-hidden">
+              <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+              <div className="px-5 py-5 sm:px-6">
+                <MemoBody markdown={result.markdown} />
+              </div>
             </div>
           ) : !error ? (
-            <div className="flex min-h-[240px] items-center justify-center rounded-sm border border-dashed border-border text-sm text-muted-foreground">
-              Configure inputs and press &ldquo;Generate brief&rdquo;
+            <div className="flex min-h-[240px] flex-col items-center justify-center rounded-sm border border-border-hair gap-2 text-center px-6">
+              <p className="text-xs text-text-weak uppercase tracking-widest">Executive Brief</p>
+              <p className="text-sm text-muted-foreground">Configure inputs and press &ldquo;Generate brief&rdquo;</p>
             </div>
           ) : null}
         </div>

@@ -1,27 +1,67 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import TopNav from "@/components/top-nav";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeSync } from "@/components/theme-sync";
 
-const geistSans = Geist({ variable: "--font-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000"
+  ),
   title: "RailShift APAC",
   description: "Rail strategy and decarbonisation cockpit for Asia-Pacific",
+  openGraph: {
+    title: "RailShift APAC",
+    description: "Rail strategy and decarbonisation cockpit for Asia-Pacific",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RailShift APAC",
+    description: "Rail strategy and decarbonisation cockpit for Asia-Pacific",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} dark`}>
+    // data-ix-theme + data-ix-color-schema activate the @siemens/ix CSS token blocks.
+    // "dark" is the SSR default; ThemeSync updates data-ix-color-schema client-side
+    // whenever the next-themes toggle fires.
+    <html
+      lang="en"
+      className={geistMono.variable}
+      data-ix-theme="classic"
+      data-ix-color-schema="dark"
+      suppressHydrationWarning
+    >
       <body className="min-h-screen bg-background text-foreground antialiased flex flex-col">
-        <TopNav />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">{children}</main>
-        <footer className="border-t border-border bg-card mt-auto">
-          <p className="mx-auto max-w-7xl px-4 py-3 text-xs text-muted-foreground sm:px-6 lg:px-8">
-            Independent analytical prototype. Not affiliated with or endorsed by Siemens. Built as a work sample.
-          </p>
-        </footer>
+        <ThemeProvider>
+          <ThemeSync />
+          <TopNav />
+          <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            {children}
+          </main>
+          <footer className="mt-auto bg-card">
+            <div
+              className="h-px w-full"
+              style={{ background: "var(--ix-gradient)" }}
+              aria-hidden="true"
+            />
+            <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+              <p className="text-xs text-muted-foreground">
+                Independent analytical prototype. Not affiliated with or endorsed by Siemens. Built as a work sample.
+              </p>
+              <p className="text-xs text-text-weak">
+                Data: EEA 2018 · Ember 2024 · NCCS 2026
+              </p>
+            </div>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -144,18 +144,18 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                 </td>
                 <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap text-xs">{p.country}</td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
-                  <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${STATUS_BADGE[p.status]}`}>
+                  <span className={`inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium ${STATUS_BADGE[p.status]}`}>
                     {STATUS_LABEL[p.status]}
                   </span>
                 </td>
                 <td className="hidden md:table-cell px-3 py-2.5 text-muted-foreground text-xs max-w-[160px]">
-                  {p.value ?? <span className="text-zinc-600">n/a</span>}
+                  {p.value ?? <span className="text-text-weak">n/a</span>}
                 </td>
                 <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap text-xs">
-                  {p.lengthKm != null ? p.lengthKm.toLocaleString() : <span className="text-zinc-600">n/a</span>}
+                  {p.lengthKm != null ? p.lengthKm.toLocaleString() : <span className="text-text-weak">n/a</span>}
                 </td>
                 <td className="hidden sm:table-cell px-3 py-2.5 text-muted-foreground text-xs max-w-[130px]">
-                  {p.keyDate ?? <span className="text-zinc-600">n/a</span>}
+                  {p.keyDate ?? <span className="text-text-weak">n/a</span>}
                 </td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
                   <ConfidenceBadge confidence={p.confidence} />

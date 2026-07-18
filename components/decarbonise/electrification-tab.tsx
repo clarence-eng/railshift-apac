@@ -18,6 +18,7 @@ import {
   electrificationByCountry,
   gridDependencyTakeaway,
 } from "@/lib/calc";
+import { useChartColors } from "@/lib/use-chart-colors";
 import {
   SliderRow,
   OutputCard,
@@ -42,11 +43,11 @@ function fmtSGD(n: number) {
   return `S$${fmt(n)}`;
 }
 
-// Colour ramp for the comparison chart: green → amber → red by reduction %
-function reductionColor(pct: number): string {
-  if (pct >= 50) return "#22c55e";
-  if (pct >= 25) return "#f59e0b";
-  return "#ef4444";
+// Colour ramp using iX status tokens — reads live from DOM
+function reductionColor(pct: number, ch: { success: string; warning: string; error: string }): string {
+  if (pct >= 50) return ch.success;
+  if (pct >= 25) return ch.warning;
+  return ch.error;
 }
 
 const COMPARISON_GRIDS = GRID_FACTORS.filter((g) =>
@@ -54,6 +55,7 @@ const COMPARISON_GRIDS = GRID_FACTORS.filter((g) =>
 );
 
 export default function ElectrificationTab() {
+  const ch = useChartColors();
   // Grid selector for the primary calculation
   const [gridCountry, setGridCountry] = useState("Singapore");
   const gridFactor =
@@ -205,28 +207,28 @@ export default function ElectrificationTab() {
               data={comparisonRows}
               margin={{ top: 4, right: 8, bottom: 0, left: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke={ch.grid} vertical={false} />
               <XAxis
                 dataKey="country"
-                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fontSize: 11, fill: ch.muted }}
                 tickLine={false}
               />
               <YAxis
                 tickFormatter={(v) => `${v}%`}
-                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fontSize: 11, fill: ch.muted }}
                 tickLine={false}
                 axisLine={false}
                 domain={[0, 100]}
                 width={38}
               />
-              <ReferenceLine y={0} stroke="hsl(var(--border))" />
+              <ReferenceLine y={0} stroke={ch.border} />
               <Tooltip
                 contentStyle={{
-                  background: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
+                  background: ch.card,
+                  border: `1px solid ${ch.border}`,
                   borderRadius: "4px",
                   fontSize: "12px",
-                  color: "hsl(var(--foreground))",
+                  color: ch.foreground,
                 }}
                 formatter={(v, _name, entry) => {
                   const ef = (entry.payload as { electricFactor: number }).electricFactor;
@@ -235,10 +237,7 @@ export default function ElectrificationTab() {
               />
               <Bar dataKey="reductionPct" radius={[2, 2, 0, 0]}>
                 {comparisonRows.map((row) => (
-                  <Cell
-                    key={row.country}
-                    fill={reductionColor(row.reductionPct)}
-                  />
+                  <Cell key={row.country} fill={reductionColor(row.reductionPct, ch)} />
                 ))}
               </Bar>
             </BarChart>
@@ -246,11 +245,11 @@ export default function ElectrificationTab() {
         </div>
 
         {/* Takeaway sentence */}
-        <div className="rounded-sm border border-amber-800 bg-amber-950/30 px-4 py-3">
-          <p className="text-xs font-medium text-amber-300 uppercase tracking-wider mb-1">
+        <div className="rounded-sm border border-warning/30 bg-warning/10 px-4 py-3">
+          <p className="text-xs font-semibold text-warning uppercase tracking-wider mb-1">
             Grid dependency insight
           </p>
-          <p className="text-sm text-amber-100/80 leading-relaxed">{takeaway}</p>
+          <p className="text-sm text-foreground leading-relaxed">{takeaway}</p>
         </div>
 
         {/* Show calculation */}

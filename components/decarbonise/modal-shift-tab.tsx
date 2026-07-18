@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
+import { useChartColors } from "@/lib/use-chart-colors";
 import {
   SliderRow,
   OutputCard,
@@ -42,6 +43,7 @@ function fmtSGD(n: number) {
 }
 
 export default function ModalShiftTab() {
+  const ch = useChartColors();
   // Line selector (cosmetic — affects ridership default hint only)
   const [_lineId, setLineId] = useState(PROJECTS[0].id);
 
@@ -227,7 +229,7 @@ export default function ModalShiftTab() {
       {/* ---- Outputs ---- */}
       <div className="space-y-6">
         {result.degenerate && (
-          <p className="text-xs text-amber-400 bg-amber-950/40 border border-amber-800 rounded px-3 py-2">
+          <p className="text-xs text-warning bg-warning/10 border border-warning/30 rounded-sm px-3 py-2">
             Ridership is zero — all outputs are zero.
           </p>
         )}
@@ -260,29 +262,29 @@ export default function ModalShiftTab() {
           </p>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={chartData} margin={{ top: 4, right: 8, bottom: 0, left: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <CartesianGrid strokeDasharray="3 3" stroke={ch.grid} />
               <XAxis
                 dataKey="sharePct"
                 tickFormatter={(v) => `${v}%`}
-                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fontSize: 11, fill: ch.muted }}
                 tickLine={false}
               />
               <YAxis
                 tickFormatter={(v) =>
                   v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v)
                 }
-                tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fontSize: 11, fill: ch.muted }}
                 tickLine={false}
                 axisLine={false}
                 width={44}
               />
               <Tooltip
                 contentStyle={{
-                  background: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
+                  background: ch.card,
+                  border: `1px solid ${ch.border}`,
                   borderRadius: "4px",
                   fontSize: "12px",
-                  color: "hsl(var(--foreground))",
+                  color: ch.foreground,
                 }}
                 formatter={(v) => [`${fmt(Number(v ?? 0))} tCO₂`, "Avoided"]}
                 labelFormatter={(l) => `Modal shift: ${l}%`}
@@ -290,10 +292,10 @@ export default function ModalShiftTab() {
               <Line
                 type="monotone"
                 dataKey="tCO2"
-                stroke="hsl(var(--primary))"
+                stroke={ch.c1}
                 strokeWidth={1.5}
                 dot={false}
-                activeDot={{ r: 4 }}
+                activeDot={{ r: 4, fill: ch.c1 }}
               />
             </LineChart>
           </ResponsiveContainer>
