@@ -9,10 +9,18 @@ import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { PRECOMPUTED_BY_ID } from "@/data/precomputed-briefs";
 
-// react-markdown is large (~150kB) — only load it when a memo exists to display
 const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
 const hasFallback = (id: string) => id in PRECOMPUTED_BY_ID;
+
+// Resolve the best available grid country for a project country string
+function projectGridCountry(projectCountry: string): string {
+  const available = new Set(GRID_FACTORS.map((g) => g.country));
+  for (const token of projectCountry.split(/\s*\/\s*/)) {
+    if (available.has(token.trim())) return token.trim();
+  }
+  return "World avg";
+}
 
 interface BriefResponse {
   markdown: string;
@@ -27,7 +35,7 @@ function buildCalcOutputs(gridCountry: string, dailyRidership: number, carbonPri
   const result = modalShiftAvoided({
     dailyRidership,
     avgTripKm: CALC_DEFAULTS.avgTripKm,
-    shareDivertedFromCar: CALC_DEFAULTS.shareDivertedFromCar,
+    shareDivertedFromCar: 0.30, // conservative mid-range: ITDP empirical 15–35%
     gridFactor,
     railEnergyIntensity: CALC_DEFAULTS.railEnergyIntensity,
     baselineCarFactor: CALC_DEFAULTS.baselineCarFactor,
@@ -95,12 +103,20 @@ function MemoSkeleton() {
 
 export default function BriefShell() {
   const [projectId, setProjectId] = useState(PROJECTS[0].id);
-  const [gridCountry, setGridCountry] = useState("Singapore");
-  const [dailyRidership, setDailyRidership] = useState(500_000);
+  const [gridCountry, setGridCountry] = useState(() => projectGridCountry(PROJECTS[0].country));
+  const [dailyRidership, setDailyRidership] = useState(300_000);
   const [carbonPrice, setCarbonPrice] = useState(CALC_DEFAULTS.carbonPriceSGD);
   const [result, setResult] = useState<BriefResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function handleProjectChange(id: string) {
+    setProjectId(id);
+    setResult(null);
+    setError(null);
+    const p = PROJECTS.find((p) => p.id === id);
+    if (p) setGridCountry(projectGridCountry(p.country));
+  }
 
   const selectedProject = PROJECTS.find((p) => p.id === projectId)!;
   const calcOutputs = buildCalcOutputs(gridCountry, dailyRidership, carbonPrice);
@@ -150,10 +166,7 @@ export default function BriefShell() {
             <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Project</p>
             <IxSelect
               value={projectId}
-              onValueChange={(e) => {
-                setProjectId(e.detail as string);
-                setResult(null); setError(null);
-              }}
+              onValueChange={(e) => handleProjectChange(e.detail as string)}
               style={{ width: "100%" }}
             >
               {PROJECTS.map((p) => (

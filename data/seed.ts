@@ -140,7 +140,8 @@ export const CALC_DEFAULTS: CalculatorDefaults = {
 };
 
 // ----------------------------------------------------------------------------
-// APAC pipeline. lat/lng are APPROX centroids — VERIFY before shipping.
+// APAC pipeline. lat/lng are indicative centroids — verify before using in
+// any map-critical context. sg-tel updated Jul 2026.
 // ----------------------------------------------------------------------------
 
 export const PROJECTS: Project[] = [
@@ -183,7 +184,7 @@ export const PROJECTS: Project[] = [
     lengthKm: 43,
     stations: 32,
     keyDate: "Stage 5 2H2026",
-    lat: 1.3,
+    lat: 1.36,
     lng: 103.85,
     note: "Final stages; adjacent opportunity for services/software.",
     source: "lta",
@@ -242,7 +243,7 @@ export const PROJECTS: Project[] = [
     value: "RM50.27bn",
     lengthKm: 665,
     stations: 20,
-    keyDate: "Operations Jan 2027",
+    keyDate: "Target 2027 (subject to revision)",
     lat: 3.8,
     lng: 102.5,
     note: "~92% built; China EXIM financed. Near-term commissioning.",
@@ -368,15 +369,15 @@ export const SOURCES: Source[] = [
   { id: "lta", label: "Land Transport Authority Singapore — rail network & LTMP 2040", url: "https://www.lta.gov.sg" },
   { id: "siemens-crl", label: "Siemens Mobility — Cross Island Line CBTC award", url: "https://press.siemens.com/global/en/pressrelease/siemens-mobility-awarded-contract-deliver-cbtc-singapores-8th-longest-fully" },
   { id: "siemens-jrl", label: "Siemens Mobility — Jurong Region Line CBTC award", url: "https://press.siemens.com/global/en/pressrelease/siemens-mobility-install-cbtc-jurong-region-line-singapore" },
-  { id: "pib-in", label: "Press Information Bureau India — Mumbai-Ahmedabad HSR", url: "https://pib.gov.in" },
-  { id: "id-hsr", label: "Whoosh Jakarta-Bandung HSR (news + govt)", url: "https://www.railjournal.com" },
-  { id: "id-mrt", label: "Jakarta MRT (news + PT MRT Jakarta)", url: "https://www.railjournal.com" },
-  { id: "my-ecrl", label: "East Coast Rail Link (MRL Malaysia)", url: "https://www.mrl.com.my" },
-  { id: "my-mrt3", label: "MRT3 Circle Line KL (MRT Corp)", url: "https://www.mymrt.com.my" },
-  { id: "my-sg-hsr", label: "KL-Singapore HSR status (news)", url: "https://www.railjournal.com" },
-  { id: "th-hsr", label: "Thai-China HSR (news + SRT)", url: "https://www.railjournal.com" },
+  { id: "pib-in", label: "NHSRCL — Mumbai-Ahmedabad HSR project page", url: "https://nhsrcl.in/en/home" },
+  { id: "id-hsr", label: "KCIC / Whoosh — official operator site", url: "https://www.kcic.co.id" },
+  { id: "id-mrt", label: "PT MRT Jakarta — official project site", url: "https://www.jakartamrt.co.id" },
+  { id: "my-ecrl", label: "Malaysia Rail Link — East Coast Rail Link", url: "https://www.mrl.com.my" },
+  { id: "my-mrt3", label: "MRT Corp — MRT3 Circle Line", url: "https://www.mymrt.com.my" },
+  { id: "my-sg-hsr", label: "Malaysian PM Dept — Johor Bahru–Singapore RTS Link (closest confirmed bilateral project)", url: "https://www.pmo.gov.my" },
+  { id: "th-hsr", label: "State Railway of Thailand — Thai-Chinese HSR project", url: "https://www.railway.co.th" },
   { id: "vn-hsr", label: "Vietnam North-South HSR approval (Government Portal)", url: "https://en.baochinhphu.vn" },
-  { id: "ph-mms", label: "Metro Manila Subway (DOTr / JICA)", url: "https://www.railjournal.com" },
+  { id: "ph-mms", label: "DOTr Philippines — Metro Manila Subway project", url: "https://www.dotr.gov.ph" },
   { id: "au-mmt", label: "Melbourne Metro Tunnel (Victoria's Big Build)", url: "https://bigbuild.vic.gov.au" },
   { id: "au-inland", label: "Inland Rail (Australian Rail Track Corporation)", url: "https://inlandrail.artc.com.au" },
 ];

@@ -17,21 +17,30 @@ const ModalShiftChart = dynamic(() => import("./modal-shift-chart"), {
   ),
 });
 
-// Projects that have ridership-relevant data (all have lat/lng; use them all)
-// We derive a plausible daily ridership from context notes; user can tune it via slider.
-// The line selector exposes the project name; the ridership slider is the primary input.
+// Build a map from the primary country word (first token before " /") to grid country
+const COUNTRY_TO_GRID: Record<string, string> = {};
+GRID_FACTORS.forEach((g) => { COUNTRY_TO_GRID[g.country] = g.country; });
+
+function projectGridCountry(projectCountry: string): string {
+  // "Malaysia / Singapore" → try "Malaysia" first, then "Singapore"
+  const tokens = projectCountry.split(/\s*\/\s*/);
+  for (const t of tokens) {
+    if (COUNTRY_TO_GRID[t.trim()]) return t.trim();
+  }
+  return "World avg";
+}
+
 const LINE_OPTIONS = PROJECTS.map((p) => ({
   id: p.id,
   label: `${p.country} — ${p.name}`,
+  country: p.country,
+  lengthKm: p.lengthKm,
+  status: p.status,
 }));
 
 function fmt(n: number, dec = 0) {
-  return n.toLocaleString("en-SG", {
-    minimumFractionDigits: dec,
-    maximumFractionDigits: dec,
-  });
+  return n.toLocaleString("en-SG", { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
-
 function fmtSGD(n: number) {
   if (Math.abs(n) >= 1_000_000)
     return `S$${(n / 1_000_000).toLocaleString("en-SG", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m`;
@@ -39,19 +48,26 @@ function fmtSGD(n: number) {
 }
 
 export default function ModalShiftTab() {
-  // Line selector (cosmetic — affects ridership default hint only)
-  const [_lineId, setLineId] = useState(PROJECTS[0].id);
+  const [lineId, setLineId] = useState(PROJECTS[0].id);
 
-  // Grid selector
-  const [gridCountry, setGridCountry] = useState("Singapore");
+  // When a project is selected, auto-set the grid country to match
+  const selectedLine = LINE_OPTIONS.find((l) => l.id === lineId) ?? LINE_OPTIONS[0];
+  const [gridCountry, setGridCountry] = useState(() => projectGridCountry(PROJECTS[0].country));
+
+  function handleLineChange(id: string) {
+    setLineId(id);
+    const line = LINE_OPTIONS.find((l) => l.id === id);
+    if (line) setGridCountry(projectGridCountry(line.country));
+  }
+
   const gridFactor =
     GRID_FACTORS.find((g) => g.country === gridCountry)?.gCO2ePerKWh ??
     CALC_DEFAULTS.eeaRailAvgFactor;
 
-  // Sliders
-  const [dailyRidership, setDailyRidership] = useState(500_000);
+  const [dailyRidership, setDailyRidership] = useState(300_000);
   const [avgTripKm, setAvgTripKm] = useState(CALC_DEFAULTS.avgTripKm);
-  const [share, setShare] = useState(CALC_DEFAULTS.shareDivertedFromCar);
+  // #3: Default 30% — sits within the empirical 15–35% range for new urban metro (ITDP 2022)
+  const [share, setShare] = useState(0.30);
   const [railEnergy, setRailEnergy] = useState(CALC_DEFAULTS.railEnergyIntensity);
   const [carFactor, setCarFactor] = useState(CALC_DEFAULTS.baselineCarFactor);
   const [carbonPrice, setCarbonPrice] = useState(CALC_DEFAULTS.carbonPriceSGD);
@@ -59,46 +75,24 @@ export default function ModalShiftTab() {
   const [simpleMode, setSimpleMode] = useState(false);
 
   const result = useMemo(
-    () =>
-      modalShiftAvoided({
-        dailyRidership,
-        avgTripKm,
-        shareDivertedFromCar: share,
-        gridFactor,
-        railEnergyIntensity: railEnergy,
-        baselineCarFactor: carFactor,
-        carbonPriceSGD: carbonPrice,
-        assetLifeYears: assetLife,
-        simpleMode,
-        eeaRailAvgFactor: CALC_DEFAULTS.eeaRailAvgFactor,
-      }),
-    [
-      dailyRidership,
-      avgTripKm,
-      share,
-      gridFactor,
-      railEnergy,
-      carFactor,
-      carbonPrice,
-      assetLife,
-      simpleMode,
-    ]
+    () => modalShiftAvoided({
+      dailyRidership, avgTripKm, shareDivertedFromCar: share,
+      gridFactor, railEnergyIntensity: railEnergy,
+      baselineCarFactor: carFactor, carbonPriceSGD: carbonPrice,
+      assetLifeYears: assetLife, simpleMode,
+      eeaRailAvgFactor: CALC_DEFAULTS.eeaRailAvgFactor,
+    }),
+    [dailyRidership, avgTripKm, share, gridFactor, railEnergy, carFactor, carbonPrice, assetLife, simpleMode]
   );
 
-  // Chart: avoided tCO2/yr vs modal-shift % (0..100), holding other inputs fixed
   const chartData = useMemo(() => {
     const points: { sharePct: number; tCO2: number }[] = [];
     for (let pct = 0; pct <= 100; pct += 5) {
       const r = modalShiftAvoided({
-        dailyRidership,
-        avgTripKm,
-        shareDivertedFromCar: pct / 100,
-        gridFactor,
-        railEnergyIntensity: railEnergy,
-        baselineCarFactor: carFactor,
-        carbonPriceSGD: carbonPrice,
-        assetLifeYears: assetLife,
-        simpleMode,
+        dailyRidership, avgTripKm, shareDivertedFromCar: pct / 100,
+        gridFactor, railEnergyIntensity: railEnergy,
+        baselineCarFactor: carFactor, carbonPriceSGD: carbonPrice,
+        assetLifeYears: assetLife, simpleMode,
         eeaRailAvgFactor: CALC_DEFAULTS.eeaRailAvgFactor,
       });
       points.push({ sharePct: pct, tCO2: Math.round(r.avoidedTCO2PerYear) });
@@ -108,36 +102,30 @@ export default function ModalShiftTab() {
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
-      {/* ---- Controls ---- */}
+      {/* Controls */}
       <div className="space-y-4">
-        <SectionDivider label="Line" />
+        <SectionDivider label="Project" />
         <div className="space-y-1.5">
-          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Project</span>
-          <IxSelect
-            value={_lineId}
-            onValueChange={(e) => setLineId(e.detail as string)}
-            style={{ width: "100%" }}
-          >
+          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Line</span>
+          <IxSelect value={lineId} onValueChange={(e) => handleLineChange(e.detail as string)} style={{ width: "100%" }}>
             {LINE_OPTIONS.map((l) => (
               <IxSelectItem key={l.id} value={l.id} label={l.label} />
             ))}
           </IxSelect>
+          {/* Project context — confirms what the selector actually controls */}
+          {selectedLine.lengthKm != null && (
+            <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+              {selectedLine.lengthKm} km · {selectedLine.status}
+            </p>
+          )}
         </div>
 
         <SectionDivider label="Grid" />
         <div className="space-y-2">
           <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
-          <IxSelect
-            value={gridCountry}
-            onValueChange={(e) => setGridCountry(e.detail as string)}
-            style={{ width: "100%" }}
-          >
+          <IxSelect value={gridCountry} onValueChange={(e) => setGridCountry(e.detail as string)} style={{ width: "100%" }}>
             {GRID_FACTORS.map((g) => (
-              <IxSelectItem
-                key={g.country}
-                value={g.country}
-                label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`}
-              />
+              <IxSelectItem key={g.country} value={g.country} label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`} />
             ))}
           </IxSelect>
           <IxCheckbox
@@ -145,36 +133,41 @@ export default function ModalShiftTab() {
             label={`Simple mode — EEA rail avg ${CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm`}
             onCheckedChange={(e) => setSimpleMode(e.detail)}
           />
+          {simpleMode && (
+            <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+              Caution: EEA 2018 EU-27 avg — not calibrated to APAC grids.
+            </p>
+          )}
         </div>
 
-        <SectionDivider label="Assumptions" />
+        <SectionDivider label="Scenario assumptions" />
+        {/* #2: Label sliders explicitly as scenario inputs, not cited figures */}
+        <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+          Adjust to model a specific scenario. Defaults are indicative — not line-specific.
+        </p>
         <div className="space-y-3">
           <SliderRow
-            label="Daily ridership"
+            label="Daily ridership (scenario)"
             value={dailyRidership}
-            min={10_000}
-            max={2_000_000}
-            step={10_000}
+            min={10_000} max={2_000_000} step={10_000}
             format={(v) => `${(v / 1000).toFixed(0)}k pax/day`}
             onChange={setDailyRidership}
+            note="Set to line's projected demand for a meaningful result"
           />
           <SliderRow
             label="Avg trip length"
             value={avgTripKm}
-            min={1}
-            max={60}
-            step={0.5}
+            min={1} max={60} step={0.5}
             format={(v) => `${v} km`}
             onChange={setAvgTripKm}
           />
           <SliderRow
             label="Diverted from car"
             value={share}
-            min={0.05}
-            max={1}
-            step={0.05}
+            min={0.05} max={1} step={0.05}
             format={(v) => `${Math.round(v * 100)}%`}
             onChange={setShare}
+            note="Empirical range 15–35% for new urban metro (ITDP 2022)"
           />
           {!simpleMode && (
             <SliderRow
@@ -191,9 +184,7 @@ export default function ModalShiftTab() {
           <SliderRow
             label="Baseline car factor"
             value={carFactor}
-            min={80}
-            max={250}
-            step={1}
+            min={80} max={250} step={1}
             format={(v) => `${v} gCO₂e/pkm`}
             onChange={setCarFactor}
           />
@@ -210,16 +201,14 @@ export default function ModalShiftTab() {
           <SliderRow
             label="Asset life"
             value={assetLife}
-            min={10}
-            max={60}
-            step={5}
+            min={10} max={60} step={5}
             format={(v) => `${v} years`}
             onChange={setAssetLife}
           />
         </div>
       </div>
 
-      {/* ---- Outputs ---- */}
+      {/* Outputs */}
       <div className="space-y-6">
         {result.degenerate && (
           <IxMessageBar type="warning" persistent>
@@ -228,73 +217,26 @@ export default function ModalShiftTab() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <OutputCard
-            label="Avoided tCO₂ / year"
-            value={fmt(result.avoidedTCO2PerYear)}
-            sub="tCO₂e — modal shift only"
-          />
-          <OutputCard
-            label="Carbon value / year"
-            value={fmtSGD(result.carbonValueSGDPerYear)}
-            sub={`at S$${carbonPrice}/tCO₂e`}
-          />
-          <OutputCard
-            label={`Lifetime value (${assetLife}yr)`}
-            value={fmtSGD(result.lifetimeValueSGD)}
-            sub="undiscounted"
-          />
+          <OutputCard label="Avoided tCO₂ / year" value={fmt(result.avoidedTCO2PerYear)} sub="tCO₂e — modal shift only" />
+          <OutputCard label="Carbon value / year" value={fmtSGD(result.carbonValueSGDPerYear)} sub={`at S$${carbonPrice}/tCO₂e`} />
+          <OutputCard label={`Lifetime value (${assetLife}yr)`} value={fmtSGD(result.lifetimeValueSGD)} sub="undiscounted, no NPV" />
         </div>
 
-        {/* Chart — lazy loaded */}
         <ModalShiftChart data={chartData} currentShare={share} />
 
-        {/* Show calculation */}
         <Disclosure label="Show calculation">
-          <CalcRow
-            label="Daily ridership"
-            value={`${fmt(dailyRidership)} pax/day`}
-          />
+          <CalcRow label="Daily ridership (scenario)" value={`${fmt(dailyRidership)} pax/day`} />
           <CalcRow label="Avg trip length" value={`${avgTripKm} km`} />
-          <CalcRow
-            label="Annual pkm shifted"
-            value={`${fmt(result.annualPkmShifted)} pkm`}
-          />
-          <CalcRow
-            label="Rail emission factor"
-            value={`${result.railFactor.toFixed(2)} gCO₂e/pkm${simpleMode ? " (EEA avg)" : ` (${railEnergy} kWh/pkm × ${gridFactor} gCO₂e/kWh)`}`}
-          />
-          <CalcRow
-            label="Baseline car factor"
-            value={`${carFactor} gCO₂e/pkm`}
-          />
-          <CalcRow
-            label="Net saving / pkm"
-            value={`${result.netFactorSaving.toFixed(2)} gCO₂e/pkm`}
-          />
-          <CalcRow
-            label="Avoided grams / year"
-            value={`${fmt(result.netFactorSaving * result.annualPkmShifted)} gCO₂e`}
-          />
-          <CalcRow
-            label="Avoided tCO₂ / year"
-            value={`${fmt(result.avoidedTCO2PerYear, 1)} tCO₂e`}
-          />
-          <CalcRow
-            label="× carbon price S$"
-            value={`${carbonPrice}/tCO₂e`}
-          />
-          <CalcRow
-            label="Carbon value / year"
-            value={fmtSGD(result.carbonValueSGDPerYear)}
-          />
-          <CalcRow
-            label={`× asset life`}
-            value={`${assetLife} years (undiscounted)`}
-          />
-          <CalcRow
-            label="Lifetime value"
-            value={fmtSGD(result.lifetimeValueSGD)}
-          />
+          <CalcRow label="Annual pkm shifted" value={`${fmt(result.annualPkmShifted)} pkm`} />
+          <CalcRow label="Rail emission factor" value={`${result.railFactor.toFixed(2)} gCO₂e/pkm${simpleMode ? " (EEA EU-27 avg, 2018 — see caveat)" : ` (${railEnergy} kWh/pkm × ${gridFactor} gCO₂e/kWh)`}`} />
+          <CalcRow label="Baseline car factor" value={`${carFactor} gCO₂e/pkm (EEA EU-27, 2018)`} />
+          <CalcRow label="Net saving / pkm" value={`${result.netFactorSaving.toFixed(2)} gCO₂e/pkm`} />
+          <CalcRow label="Avoided grams / year" value={`${fmt(result.netFactorSaving * result.annualPkmShifted)} gCO₂e`} />
+          <CalcRow label="Avoided tCO₂ / year" value={`${fmt(result.avoidedTCO2PerYear, 1)} tCO₂e`} />
+          <CalcRow label="× carbon price" value={`S$${carbonPrice}/tCO₂e`} />
+          <CalcRow label="Carbon value / year" value={fmtSGD(result.carbonValueSGDPerYear)} />
+          <CalcRow label="× asset life" value={`${assetLife} years (undiscounted, no NPV)`} />
+          <CalcRow label="Lifetime value" value={fmtSGD(result.lifetimeValueSGD)} />
         </Disclosure>
       </div>
     </div>

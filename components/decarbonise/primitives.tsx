@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IxKpi, IxBlind, IxSlider, IxCheckbox } from "@siemens/ix-react";
+import { IxBlind, IxSlider, IxCheckbox } from "@siemens/ix-react";
 
 // ---------------------------------------------------------------------------
 // SliderRow — wraps IxSlider
@@ -65,7 +65,8 @@ export function CheckboxRow({ checked, onChange, children }: CheckboxRowProps) {
 }
 
 // ---------------------------------------------------------------------------
-// OutputCard — IxKpi tile
+// OutputCard — KPI tile with iX token hierarchy (no IxKpi — unit prop is for
+// short inline units like "kW", not multi-word subtitles)
 // ---------------------------------------------------------------------------
 
 interface OutputCardProps {
@@ -82,12 +83,18 @@ export function OutputCard({ label, value, sub }: OutputCardProps) {
     >
       {/* 3px petrol gradient accent */}
       <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-      <div className="px-3 py-2.5">
-        <IxKpi label={label} unit={sub ?? ""}>
-          <span slot="number" className="font-mono text-lg font-semibold tabular-nums">
-            {value}
-          </span>
-        </IxKpi>
+      <div className="px-3 pt-2.5 pb-3 space-y-0.5">
+        <p className="text-xs uppercase tracking-wider leading-4" style={{ color: "var(--theme-color-soft-text)" }}>
+          {label}
+        </p>
+        <p className="font-mono text-xl font-semibold tabular-nums leading-6" style={{ color: "var(--theme-color-std-text)" }}>
+          {value}
+        </p>
+        {sub && (
+          <p className="text-xs leading-4" style={{ color: "var(--theme-color-weak-text)" }}>
+            {sub}
+          </p>
+        )}
       </div>
     </div>
   );
