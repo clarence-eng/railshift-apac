@@ -61,9 +61,9 @@ export default function PipelineShell({ projects }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <div>
+        <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
           <h1 className="text-2xl font-semibold tracking-tight">Pipeline</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-0.5 text-sm text-muted-foreground">
             {projects.length} active APAC rail projects — total identified value exceeding US$200bn
           </p>
         </div>

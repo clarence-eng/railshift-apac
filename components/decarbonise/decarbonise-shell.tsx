@@ -10,14 +10,14 @@ export default function DecarboniseShell() {
 
   return (
     <div className="space-y-5">
-      <div>
+      <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--theme-color-std-text)" }}>
           Decarbonise
         </h1>
-        <p className="mt-1 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
+        <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
           Emission avoided and carbon value calculator — all figures from verified sources. Zero network calls.
         </p>
-        <p className="mt-1 text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+        <p className="mt-0.5 text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
           Aligned to Siemens <strong style={{ color: "var(--theme-color-soft-text)" }}>DEGREE</strong> framework — Decarbonization · Ethics · Governance · Resource efficiency · Equity · Employability
         </p>
       </div>

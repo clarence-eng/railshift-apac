@@ -36,6 +36,11 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
   const mapRef = useRef<MLMap | null>(null);
   const markerEls = useRef<Map<string, HTMLDivElement>>(new Map());
   const colorSchema = useIxColorSchema();
+  // Refs so map init closure always sees current values without re-running the effect
+  const onSelectRef = useRef(onSelect);
+  const selectedIdRef = useRef(selectedId);
+  useEffect(() => { onSelectRef.current = onSelect; }, [onSelect]);
+  useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
   // Destroy and rebuild when theme flips so basemap changes
   useEffect(() => {
@@ -106,13 +111,25 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
           el.addEventListener("mouseleave", () => {
             if (el.style.zIndex !== "10") el.style.transform = "scale(1)";
           });
-          el.addEventListener("click",      () => onSelect(project.id));
+          // Use ref so click always calls the current onSelect, never a stale closure
+          el.addEventListener("click", () => onSelectRef.current(project.id));
 
           markerEls.current.set(project.id, el);
 
           new Marker({ element: el })
             .setLngLat([project.lng, project.lat])
             .addTo(map);
+        }
+
+        // Re-apply selection highlight for any marker that was selected before rebuild
+        const sel = selectedIdRef.current;
+        if (sel) {
+          const selEl = markerEls.current.get(sel);
+          if (selEl) {
+            selEl.style.transform = "scale(1.8)";
+            selEl.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
+            selEl.style.zIndex = "10";
+          }
         }
       });
     }

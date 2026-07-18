@@ -59,9 +59,9 @@ function buildCalcOutputs(gridCountry: string, dailyRidership: number, carbonPri
 function MemoBody({ markdown }: { markdown: string }) {
   return (
     <div
-      className="prose prose-sm max-w-none
+      className="prose prose-sm max-w-none memo-body
         [&_h1]:text-base [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:mb-3
-        [&_h2]:text-xs [&_h2]:font-semibold [&_h2]:uppercase [&_h2]:tracking-wider [&_h2]:mt-6 [&_h2]:mb-2
+        [&_h2]:text-xs [&_h2]:font-semibold [&_h2]:uppercase [&_h2]:tracking-widest [&_h2]:mt-6 [&_h2]:mb-2 [&_h2]:pl-2 [&_h2]:border-l-[2px] [&_h2]:border-l-[var(--ix-primary)]
         [&_p]:text-sm [&_p]:leading-relaxed [&_p]:mb-3
         [&_hr]:my-4 [&_strong]:font-semibold [&_li]:mb-1"
       style={{ color: "var(--theme-color-std-text)" }}
@@ -148,9 +148,9 @@ export default function BriefShell() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
+      <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--theme-color-std-text)" }}>Brief</h1>
-        <p className="mt-1 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
+        <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
           AI-generated executive strategy memo. All figures are sourced from the verified dataset — Gemini is instructed not to invent data.
         </p>
       </div>
@@ -287,7 +287,11 @@ export default function BriefShell() {
           ) : result ? (
             <div
               className="rounded-sm border overflow-hidden"
-              style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}
+              style={{
+                background: "var(--theme-color-2)",
+                borderColor: "var(--theme-color-std-bdr)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.22)",
+              }}
             >
               <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
               <div className="px-5 py-5 sm:px-6">

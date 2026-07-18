@@ -19,8 +19,8 @@ export default function TopNav() {
 
   return (
     <>
-      {/* 3px signature gradient band */}
-      <div className="h-[3px] w-full shrink-0" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      {/* 4px signature gradient band */}
+      <div className="h-[4px] w-full shrink-0" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
 
       <header
         className="border-b shrink-0"
