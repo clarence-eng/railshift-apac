@@ -100,8 +100,12 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
           el.title = project.name;
           el.setAttribute("aria-label", project.name);
 
-          el.addEventListener("mouseenter", () => { el.style.transform = "scale(1.6)"; });
-          el.addEventListener("mouseleave", () => { el.style.transform = "scale(1)"; });
+          el.addEventListener("mouseenter", () => {
+            if (el.style.zIndex !== "10") el.style.transform = "scale(1.6)";
+          });
+          el.addEventListener("mouseleave", () => {
+            if (el.style.zIndex !== "10") el.style.transform = "scale(1)";
+          });
           el.addEventListener("click",      () => onSelect(project.id));
 
           markerEls.current.set(project.id, el);

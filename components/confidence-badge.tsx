@@ -3,7 +3,6 @@
 import { IxChip } from "@siemens/ix-react";
 import type { Confidence } from "@/data/seed";
 
-// Map confidence to iX chip background colors (iX custom variant)
 const BG: Record<Confidence, string> = {
   HIGH: "var(--theme-color-neutral)",
   MED:  "var(--theme-color-warning)",
@@ -27,10 +26,3 @@ export default function ConfidenceBadge({ confidence, className = "" }: Props) {
     </IxChip>
   );
 }
-
-// Keep export for any remaining code that imports CONFIDENCE_BADGE_STYLES
-export const CONFIDENCE_BADGE_STYLES: Record<Confidence, string> = {
-  HIGH: "",
-  MED: "",
-  LOW: "",
-};

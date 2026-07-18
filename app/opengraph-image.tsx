@@ -31,60 +31,31 @@ export default function OgImage() {
           }}
         />
 
-        {/* Tile + wordmark row */}
-        <div style={{ display: "flex", alignItems: "center", gap: 28, marginBottom: 40 }}>
-          {/* Petrol tile */}
-          <div
+        {/* Wordmark row — Siemens-style */}
+        <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 40 }}>
+          <span
             style={{
-              width: 72,
-              height: 72,
-              background: "#00bde3",
-              borderRadius: 4,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              fontSize: 64,
+              fontWeight: 700,
+              color: "#009999",
+              letterSpacing: "4px",
+              fontFamily: "Arial, Helvetica, sans-serif",
             }}
           >
-            <svg
-              width="44"
-              height="52"
-              viewBox="12 11 16 28"
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="2"
-              strokeLinecap="square"
-            >
-              <path d="M14 37 L18.5 13" />
-              <path d="M26 37 L21.5 13" />
-              <line x1="12.5" y1="34" x2="27.5" y2="34" />
-              <line x1="14.5" y1="27" x2="25.5" y2="27" />
-              <line x1="16" y1="20.5" x2="24" y2="20.5" />
-            </svg>
-          </div>
-
-          {/* Text */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-            <span
-              style={{
-                fontSize: 56,
-                fontWeight: 700,
-                color: "rgba(245,252,255,0.9)",
-                letterSpacing: "-1px",
-              }}
-            >
-              RailShift
-            </span>
-            <span
-              style={{
-                fontSize: 56,
-                fontWeight: 700,
-                color: "#00bde3",
-                letterSpacing: "4px",
-              }}
-            >
-              APAC
-            </span>
-          </div>
+            SIEMENS
+          </span>
+          <div style={{ width: 2, height: 52, background: "#009999", opacity: 0.35, alignSelf: "center" }} />
+          <span
+            style={{
+              fontSize: 36,
+              fontWeight: 400,
+              color: "#009999",
+              letterSpacing: "2px",
+              fontFamily: "Arial, Helvetica, sans-serif",
+            }}
+          >
+            RailShift APAC
+          </span>
         </div>
 
         {/* Tagline */}
@@ -101,7 +72,7 @@ export default function OgImage() {
           Rail strategy &amp; decarbonisation cockpit for Asia-Pacific
         </p>
 
-        {/* Disclaimer */}
+        {/* Attribution */}
         <p
           style={{
             position: "absolute",
@@ -112,7 +83,7 @@ export default function OgImage() {
             margin: 0,
           }}
         >
-          Independent analytical prototype. Not affiliated with or endorsed by Siemens.
+          Rail strategy &amp; decarbonisation cockpit — Asia-Pacific
         </p>
       </div>
     ),

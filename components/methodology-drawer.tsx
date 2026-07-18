@@ -234,7 +234,7 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
             label="Share diverted from car"
             value={`${CALC_DEFAULTS.shareDivertedFromCar * 100}%`}
             confidence="MED"
-            note="Conservative default; empirical range 30–70% for urban metro."
+            note="CALC_DEFAULTS reference value; UI default is 30% (ITDP empirical mid-range for new urban metro). Empirical range: 15–35%."
           />
           <DataRow
             label="Average trip length"

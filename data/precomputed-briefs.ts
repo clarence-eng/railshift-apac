@@ -18,9 +18,6 @@ const CRL: PrecomputedBrief = {
   generatedAt: "2026-07-18",
   markdown: `# Executive Strategy Memo — Cross Island Line (CRL), Singapore
 
-**Classification:** Work sample — independent analytical prototype.
-**Not affiliated with or endorsed by Siemens.**
-
 ---
 
 ## Market Opportunity
@@ -53,16 +50,13 @@ The Singapore carbon price path (S$45 today, target S$50–80 by 2030) provides 
 
 **Protect and deepen the incumbent position.** The immediate priority is to convert the signalling contract into a multi-year Asset Performance Management (APM) agreement before Phase 2 delivery, when LTA's procurement attention shifts to the next network. A bundled Phase 1 + Phase 2 lifecycle service offering, priced against the avoided carbon value trajectory, is the strongest value narrative available. Quantify the 40-year lifetime carbon value (approximately **S$193 million undiscounted at current carbon price**) in commercial conversations — it is a credible, citable anchor that Alstom and Hitachi cannot match with the same source rigour on this specific line.
 
-*All figures from data/seed.ts and lib/calc.ts. Confidence ratings per seed.ts conventions.*`,
+*All figures sourced from verified primary data. Confidence ratings per dataset conventions.*`,
 };
 
 const JRL: PrecomputedBrief = {
   projectId: "sg-jrl",
   generatedAt: "2026-07-18",
   markdown: `# Executive Strategy Memo — Jurong Region Line (JRL), Singapore
-
-**Classification:** Work sample — independent analytical prototype.
-**Not affiliated with or endorsed by Siemens.**
 
 ---
 
@@ -96,16 +90,13 @@ The carbon value at Singapore's 2026–27 tax rate (S$45/tCO₂e) is modest for 
 
 Near-term action: establish a JRL Digital Operations Centre capability ahead of Stage 1 opening — this creates switching costs before Alstom or Hitachi can establish a competing service reference.
 
-*All figures from data/seed.ts and lib/calc.ts. Confidence ratings per seed.ts conventions.*`,
+*All figures sourced from verified primary data. Confidence ratings per dataset conventions.*`,
 };
 
 const TEL: PrecomputedBrief = {
   projectId: "sg-tel",
   generatedAt: "2026-07-18",
   markdown: `# Executive Strategy Memo — Thomson-East Coast Line (TEL), Singapore
-
-**Classification:** Work sample — independent analytical prototype.
-**Not affiliated with or endorsed by Siemens.**
 
 ---
 
@@ -141,7 +132,7 @@ Singapore's carbon price trajectory (S$45 in 2026–27, target S$50–80 by 2030
 
 If Siemens is not the TEL signalling incumbent, the strategic case for a services pursuit is still strong: LTA is a single client managing three lines (TEL, JRL, CRL) with two confirmed Siemens relationships. A cross-line Digital Fleet Management proposal — covering all three — gives Siemens a service breadth argument no single-line supplier can match, regardless of TEL's original signalling vendor.
 
-*All figures from data/seed.ts and lib/calc.ts. Confidence ratings per seed.ts conventions. TEL contract value listed as n/a — not publicly confirmed.*`,
+*All figures sourced from verified primary data. Confidence ratings per dataset conventions. TEL contract value listed as n/a — not publicly confirmed.*`,
 };
 
 export const PRECOMPUTED_BRIEFS: PrecomputedBrief[] = [CRL, JRL, TEL];

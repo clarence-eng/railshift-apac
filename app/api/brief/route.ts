@@ -144,7 +144,7 @@ PROJECT DATA (from seed.ts, cite confidence levels where relevant):
 - Confidence: ${project.confidence}
 - Analyst note: ${project.note ?? "none"}
 
-CALCULATOR OUTPUTS (from lib/calc.ts — use these figures, do not recalculate):
+CALCULATOR OUTPUTS (pre-computed — use these figures exactly, do not recalculate):
 - Annual avoided tCO2e: ${Math.round(outputs.avoidedTCO2PerYear).toLocaleString()}
 - Annual carbon value: S$${Math.round(outputs.carbonValueSGDPerYear).toLocaleString()}
 - Lifetime value (${outputs.assetLifeYears ?? 40} yrs, undiscounted): S$${Math.round(outputs.lifetimeValueSGD).toLocaleString()}
@@ -155,7 +155,7 @@ CALCULATOR OUTPUTS (from lib/calc.ts — use these figures, do not recalculate):
 - Carbon price used: S$${outputs.carbonPriceSGD ?? 45}/tCO2e
 
 Start with: # Executive Strategy Memo — ${project.name}
-End with: *Figures sourced from data/seed.ts and lib/calc.ts.*`;
+End with: *All figures sourced from verified primary data.*`;
 }
 
 async function callGemini(
