@@ -1,81 +1,58 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 /* ================================================================
-   SIEMENS iX CLASSIC THEME CSS
-   Provides --theme-color-* and all other --theme-* tokens under:
-     [data-ix-theme=classic][data-ix-color-schema=dark]
-     [data-ix-theme=classic][data-ix-color-schema=light]
-   The ThemeSync component keeps data-ix-color-schema in sync with
-   the next-themes class toggle.
+   SIEMENS iX CLASSIC THEME CSS — authoritative token source
+   Activated by [data-ix-theme=classic][data-ix-color-schema=dark|light]
+   on the <html> element. ThemeSync keeps data-ix-color-schema current.
    ================================================================ */
+@import "@siemens/ix/dist/siemens-ix/siemens-ix.css";
 @import "@siemens/ix/dist/siemens-ix/theme/classic-dark.css";
 @import "@siemens/ix/dist/siemens-ix/theme/classic-light.css";
 
-/* Dark-first: .dark class on <html> activates dark: variants in Tailwind */
+/* Dark-first: .dark variant for any remaining Tailwind dark: utilities */
 @custom-variant dark (&:is(.dark *));
 
 /* ================================================================
-   RailShift APAC — iX TOKEN BRIDGE
-   Every --ix-* variable points at the real iX --theme-color-* token.
-   Because the iX CSS is scoped to [data-ix-theme=classic][data-ix-color-schema=*]
-   on the html element, these values automatically swap when ThemeSync
-   updates that attribute — no duplication, no drift.
-
-   Dark is the default (data-ix-color-schema="dark" set in layout.tsx).
+   TOKEN BRIDGE
+   --ix-* aliases point at real iX --theme-color-* tokens.
+   Swap automatically when data-ix-color-schema changes.
    ================================================================ */
-
 :root {
-  /* ── Canvas & surfaces ── */
-  --ix-bg:        var(--theme-color-1);
-  --ix-surface-1: var(--theme-color-2);
-  --ix-surface-2: var(--theme-color-3);
-  --ix-surface-3: var(--theme-color-4);
-
-  /* ── Petrol accent ── */
+  --ix-bg:               var(--theme-color-1);
+  --ix-surface-1:        var(--theme-color-2);
+  --ix-surface-2:        var(--theme-color-3);
+  --ix-surface-3:        var(--theme-color-4);
   --ix-primary:          var(--theme-color-primary);
   --ix-primary-hover:    var(--theme-color-primary--hover);
   --ix-primary-active:   var(--theme-color-primary--active);
   --ix-primary-contrast: var(--theme-color-primary--contrast);
   --ix-dynamic:          var(--theme-color-dynamic);
-
-  /* ── Text ── */
-  --ix-text:      var(--theme-color-std-text);
-  --ix-text-soft: var(--theme-color-soft-text);
-  --ix-text-weak: var(--theme-color-weak-text);
-
-  /* ── Borders ── */
-  --ix-border:      var(--theme-color-std-bdr);
-  --ix-border-soft: var(--theme-color-soft-bdr);
-  --ix-border-hair: var(--theme-color-x-weak-bdr);
-
-  /* ── Focus ── */
-  --ix-focus: var(--theme-color-focus-bdr);
-
-  /* ── Semantic status ── */
-  --ix-success:  var(--theme-color-success);
-  --ix-warning:  var(--theme-color-warning);
-  --ix-error:    var(--theme-color-alarm);
-  --ix-critical: var(--theme-color-critical);
-  --ix-info:     var(--theme-color-info);
-  --ix-neutral:  var(--theme-color-neutral);
-
-  /* ── Chart palette — first 4 series ── */
-  --ix-chart-1:    var(--theme-chart-1);
-  --ix-chart-2:    var(--theme-chart-2);
-  --ix-chart-3:    var(--theme-chart-3);
-  --ix-chart-4:    var(--theme-chart-4);
-  --ix-chart-grid: var(--theme-chart-grid-lines);
-
-  /* ── Signature gradient — derived from iX gradient-effect tokens ── */
+  --ix-text:             var(--theme-color-std-text);
+  --ix-text-soft:        var(--theme-color-soft-text);
+  --ix-text-weak:        var(--theme-color-weak-text);
+  --ix-border:           var(--theme-color-std-bdr);
+  --ix-border-soft:      var(--theme-color-soft-bdr);
+  --ix-border-hair:      var(--theme-color-x-weak-bdr);
+  --ix-focus:            var(--theme-color-focus-bdr);
+  --ix-success:          var(--theme-color-success);
+  --ix-warning:          var(--theme-color-warning);
+  --ix-error:            var(--theme-color-alarm);
+  --ix-critical:         var(--theme-color-critical);
+  --ix-info:             var(--theme-color-info);
+  --ix-neutral:          var(--theme-color-neutral);
+  --ix-chart-1:          var(--theme-chart-1);
+  --ix-chart-2:          var(--theme-chart-2);
+  --ix-chart-3:          var(--theme-chart-3);
+  --ix-chart-4:          var(--theme-chart-4);
+  --ix-chart-grid:       var(--theme-chart-grid-lines);
   --ix-gradient: linear-gradient(
     90deg,
     var(--theme-color-gradient-effect-1) 0%,
     var(--theme-color-gradient-effect-2) 100%
   );
 
-  /* ── Map to shadcn / Tailwind token names ── */
+  /* shadcn / Tailwind slots */
   --background:           var(--ix-bg);
   --foreground:           var(--ix-text);
   --card:                 var(--ix-surface-1);
@@ -94,15 +71,11 @@
   --border:               var(--ix-border);
   --input:                var(--ix-border);
   --ring:                 var(--ix-focus);
-
-  /* ── Chart slots ── */
   --chart-1: var(--ix-chart-1);
   --chart-2: var(--ix-chart-2);
   --chart-3: var(--ix-chart-3);
   --chart-4: var(--ix-chart-4);
   --chart-5: var(--ix-neutral);
-
-  /* ── Sidebar ── */
   --sidebar:                    var(--ix-surface-1);
   --sidebar-foreground:         var(--ix-text);
   --sidebar-primary:            var(--ix-primary);
@@ -111,22 +84,16 @@
   --sidebar-accent-foreground:  var(--ix-text);
   --sidebar-border:             var(--ix-border);
   --sidebar-ring:               var(--ix-focus);
-
-  /* ── Radius base ── */
   --radius: 4px;
 }
 
 /* ================================================================
-   TAILWIND v4 THEME
-   All utilities read from --ix-* which in turn read live iX tokens.
+   TAILWIND v4 THEME MAPPING
    ================================================================ */
-
 @theme inline {
-  /* ── Typography ── */
   --font-sans: 'Siemens Sans', Arial, Helvetica, sans-serif;
-  --font-mono: 'JetBrains Mono', var(--font-geist-mono), monospace;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  /* ── Squared radii: card=4px, control=2px ── */
   --radius-card:    4px;
   --radius-control: 2px;
   --radius-sm:      2px;
@@ -137,30 +104,29 @@
   --radius-3xl:     4px;
   --radius-4xl:     4px;
 
-  /* ── shadcn-compatible slots ── */
-  --color-background:          var(--background);
-  --color-foreground:          var(--foreground);
-  --color-card:                var(--card);
-  --color-card-foreground:     var(--card-foreground);
-  --color-popover:             var(--popover);
-  --color-popover-foreground:  var(--popover-foreground);
-  --color-primary:             var(--primary);
-  --color-primary-foreground:  var(--primary-foreground);
-  --color-secondary:           var(--secondary);
-  --color-secondary-foreground:var(--secondary-foreground);
-  --color-muted:               var(--muted);
-  --color-muted-foreground:    var(--muted-foreground);
-  --color-accent:              var(--accent);
-  --color-accent-foreground:   var(--accent-foreground);
-  --color-destructive:         var(--destructive);
-  --color-border:              var(--border);
-  --color-input:               var(--input);
-  --color-ring:                var(--ring);
-  --color-chart-1:             var(--chart-1);
-  --color-chart-2:             var(--chart-2);
-  --color-chart-3:             var(--chart-3);
-  --color-chart-4:             var(--chart-4);
-  --color-chart-5:             var(--chart-5);
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-destructive:          var(--destructive);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-ring:                 var(--ring);
+  --color-chart-1:              var(--chart-1);
+  --color-chart-2:              var(--chart-2);
+  --color-chart-3:              var(--chart-3);
+  --color-chart-4:              var(--chart-4);
+  --color-chart-5:              var(--chart-5);
   --color-sidebar:                    var(--sidebar);
   --color-sidebar-foreground:         var(--sidebar-foreground);
   --color-sidebar-primary:            var(--sidebar-primary);
@@ -170,7 +136,6 @@
   --color-sidebar-border:             var(--sidebar-border);
   --color-sidebar-ring:               var(--sidebar-ring);
 
-  /* ── Extended iX utilities ── */
   --color-surface-1:      var(--ix-surface-1);
   --color-surface-2:      var(--ix-surface-2);
   --color-surface-3:      var(--ix-surface-3);
@@ -182,23 +147,16 @@
   --color-border-soft:    var(--ix-border-soft);
   --color-border-hair:    var(--ix-border-hair);
   --color-focus:          var(--ix-focus);
+  --color-success:        var(--ix-success);
+  --color-warning:        var(--ix-warning);
+  --color-error:          var(--ix-error);
+  --color-critical:       var(--ix-critical);
+  --color-info:           var(--ix-info);
+  --color-neutral:        var(--ix-neutral);
+  --color-chart-grid:     var(--ix-chart-grid);
 
-  /* ── Semantic status ── */
-  --color-success:  var(--ix-success);
-  --color-warning:  var(--ix-warning);
-  --color-error:    var(--ix-error);
-  --color-critical: var(--ix-critical);
-  --color-info:     var(--ix-info);
-  --color-neutral:  var(--ix-neutral);
-
-  /* ── Chart grid ── */
-  --color-chart-grid: var(--ix-chart-grid);
-
-  /* ── Elevation shadows ── */
-  --shadow-card:  var(--theme-shadow-1, 0 1px 3px rgba(0,0,0,0.35));
-  --shadow-panel: var(--theme-shadow-3, 0 4px 12px rgba(0,0,0,0.4));
-
-  /* ── Transition defaults ── */
+  --shadow-card:  var(--theme-shadow-1, 0 1px 3px rgba(0,0,0,.35));
+  --shadow-panel: var(--theme-shadow-3, 0 4px 12px rgba(0,0,0,.4));
   --duration-fast: 150ms;
   --duration-base: 200ms;
   --ease-default: cubic-bezier(0.2, 0, 0, 1);
@@ -207,11 +165,8 @@
 /* ================================================================
    BASE LAYER
    ================================================================ */
-
 @layer base {
-  * {
-    border-color: var(--border);
-  }
+  * { border-color: var(--border); }
   *:focus-visible {
     outline: 2px solid var(--ix-focus);
     outline-offset: 2px;
@@ -222,14 +177,24 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
   a, button, [role="button"], input, select {
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
+  .bg-card, .bg-surface-1 { box-shadow: var(--shadow-card); }
+}
 
-  .bg-card,
-  .bg-surface-1 {
-    box-shadow: var(--shadow-card);
-  }
+/* ================================================================
+   iX APPLICATION FRAME OVERRIDES
+   Make IxApplication fill the full viewport correctly under Next.js.
+   ================================================================ */
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+ix-application {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
 }

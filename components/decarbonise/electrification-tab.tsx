@@ -12,6 +12,7 @@ import {
   ReferenceLine,
   Cell,
 } from "recharts";
+import { IxSelect, IxSelectItem, IxMessageBar } from "@siemens/ix-react";
 import { GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import {
   electrificationAvoided,
@@ -103,19 +104,21 @@ export default function ElectrificationTab() {
       {/* ---- Controls ---- */}
       <div className="space-y-4">
         <SectionDivider label="Grid" />
-        <div className="space-y-2">
-          <label className="text-xs text-muted-foreground">Country grid</label>
-          <select
+        <div className="space-y-1.5">
+          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
+          <IxSelect
             value={gridCountry}
-            onChange={(e) => setGridCountry(e.target.value)}
-            className="w-full h-8 rounded border border-input bg-card px-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            onValueChange={(e) => setGridCountry(e.detail as string)}
+            style={{ width: "100%" }}
           >
             {GRID_FACTORS.map((g) => (
-              <option key={g.country} value={g.country}>
-                {g.country} ({g.gCO2ePerKWh} gCO₂e/kWh)
-              </option>
+              <IxSelectItem
+                key={g.country}
+                value={g.country}
+                label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`}
+              />
             ))}
-          </select>
+          </IxSelect>
         </div>
 
         <SectionDivider label="Line assumptions" />
@@ -195,11 +198,11 @@ export default function ElectrificationTab() {
         </div>
 
         {/* Three-country comparison chart */}
-        <div className="rounded-sm border border-border bg-card p-4 space-y-2">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">
+        <div className="rounded-sm border p-4 space-y-2" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}>
+          <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>
             Electrification reduction vs diesel — by country grid
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
             Diesel: {dieselFactor} gCO₂e/pkm · Rail energy: {railEnergy.toFixed(3)} kWh/pkm
           </p>
           <ResponsiveContainer width="100%" height={200}>
@@ -244,13 +247,13 @@ export default function ElectrificationTab() {
           </ResponsiveContainer>
         </div>
 
-        {/* Takeaway sentence */}
-        <div className="rounded-sm border border-warning/30 bg-warning/10 px-4 py-3">
-          <p className="text-xs font-semibold text-warning uppercase tracking-wider mb-1">
-            Grid dependency insight
-          </p>
-          <p className="text-sm text-foreground leading-relaxed">{takeaway}</p>
-        </div>
+        {/* Takeaway sentence — IxMessageBar warning */}
+        <IxMessageBar type="warning" persistent>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-1">Grid dependency insight</p>
+            <p className="text-sm leading-relaxed">{takeaway}</p>
+          </div>
+        </IxMessageBar>
 
         {/* Show calculation */}
         <Disclosure label="Show calculation">

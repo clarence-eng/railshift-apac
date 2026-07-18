@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { IxChip, IxSelect, IxSelectItem, IxIconButton } from "@siemens/ix-react";
 import type { Project, ProjectStatus } from "@/data/seed";
-import { STATUS_LABEL, STATUS_BADGE } from "./status-config";
+import { STATUS_LABEL, STATUS_CHIP_BG } from "./status-config";
 import ConfidenceBadge from "@/components/confidence-badge";
 
 type SortKey = "name" | "country" | "status" | "lengthKm" | "keyDate";
@@ -22,23 +23,19 @@ interface Props {
 }
 
 function SortIcon({ dir }: { dir: SortDir | null }) {
-  if (!dir) return <span className="opacity-20">↕</span>;
-  return <span>{dir === "asc" ? "↑" : "↓"}</span>;
+  if (!dir) return <span className="opacity-20 select-none">↕</span>;
+  return <span className="select-none">{dir === "asc" ? "↑" : "↓"}</span>;
 }
 
 export default function ProjectTable({ projects, selectedId, onSelect }: Props) {
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<ProjectStatus | "">("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
 
   function toggleSort(key: SortKey) {
-    if (sortKey === key) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    } else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("asc"); }
   }
 
   const filtered = useMemo(() => {
@@ -46,19 +43,16 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
     return projects
       .filter((p) => {
         if (statusFilter && p.status !== statusFilter) return false;
-        if (q) {
-          return (
-            p.name.toLowerCase().includes(q) ||
-            p.country.toLowerCase().includes(q) ||
-            (p.value?.toLowerCase().includes(q) ?? false)
-          );
-        }
+        if (q) return (
+          p.name.toLowerCase().includes(q) ||
+          p.country.toLowerCase().includes(q) ||
+          (p.value?.toLowerCase().includes(q) ?? false)
+        );
         return true;
       })
       .sort((a, b) => {
         const dir = sortDir === "asc" ? 1 : -1;
-        const av = a[sortKey];
-        const bv = b[sortKey];
+        const av = a[sortKey], bv = b[sortKey];
         if (av == null && bv == null) return 0;
         if (av == null) return 1;
         if (bv == null) return -1;
@@ -67,19 +61,13 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
       });
   }, [projects, query, statusFilter, sortKey, sortDir]);
 
-  const TH = ({
-    col,
-    children,
-  }: {
-    col: SortKey;
-    children: React.ReactNode;
-  }) => (
+  const TH = ({ col, children }: { col: SortKey; children: React.ReactNode }) => (
     <th
       onClick={() => toggleSort(col)}
-      className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-foreground transition-colors"
+      className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap"
+      style={{ color: "var(--theme-color-soft-text)" }}
     >
-      {children}{" "}
-      <SortIcon dir={sortKey === col ? sortDir : null} />
+      {children} <SortIcon dir={sortKey === col ? sortDir : null} />
     </th>
   );
 
@@ -92,39 +80,64 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
           placeholder="Search projects…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="h-8 w-full sm:w-52 rounded border border-input bg-card px-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          className="h-8 w-full sm:w-52 rounded-sm border px-3 text-sm placeholder:opacity-50 focus:outline-none"
+          style={{
+            background: "var(--theme-color-2)",
+            borderColor: "var(--theme-color-std-bdr)",
+            color: "var(--theme-color-std-text)",
+          }}
         />
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as ProjectStatus | "")}
-          className="h-8 rounded border border-input bg-card px-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+
+        {/* iX Select for status filter */}
+        <IxSelect
+          value={statusFilter || undefined}
+          i18nPlaceholder="All statuses"
+          onValueChange={(e) => setStatusFilter(e.detail as string ?? "")}
+          style={{ width: "160px" }}
         >
-          <option value="">All statuses</option>
           {ALL_STATUSES.map((s) => (
-            <option key={s} value={s}>
-              {STATUS_LABEL[s]}
-            </option>
+            <IxSelectItem key={s} value={s} label={STATUS_LABEL[s]} />
           ))}
-        </select>
-        <span className="ml-auto text-xs text-muted-foreground whitespace-nowrap">
+        </IxSelect>
+
+        {statusFilter && (
+          <IxIconButton
+            icon="close"
+            variant="tertiary"
+            size="16"
+            onClick={() => setStatusFilter("")}
+            aria-label="Clear filter"
+          />
+        )}
+
+        <span className="ml-auto text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
           {filtered.length} of {projects.length}
         </span>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-sm border border-border">
+      <div
+        className="overflow-x-auto rounded-sm border"
+        style={{ borderColor: "var(--theme-color-std-bdr)" }}
+      >
         <table className="w-full text-sm">
-          <thead className="bg-muted/40 border-b border-border">
+          <thead
+            className="border-b"
+            style={{
+              background: "var(--theme-color-2)",
+              borderColor: "var(--theme-color-std-bdr)",
+            }}
+          >
             <tr>
               <TH col="name">Project</TH>
               <TH col="country">Country</TH>
               <TH col="status">Status</TH>
-              <th className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider whitespace-nowrap">Value</th>
+              <th className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>Value</th>
               <TH col="lengthKm">km</TH>
-              <th className="hidden sm:table-cell px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-foreground transition-colors" onClick={() => toggleSort("keyDate")}>
+              <th className="hidden sm:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }} onClick={() => toggleSort("keyDate")}>
                 Key date <SortIcon dir={sortKey === "keyDate" ? sortDir : null} />
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Conf.</th>
+              <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Conf.</th>
             </tr>
           </thead>
           <tbody>
@@ -132,30 +145,39 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
               <tr
                 key={p.id}
                 onClick={() => onSelect(p.id)}
-                className={[
-                  "border-b border-border cursor-pointer transition-colors last:border-0",
-                  selectedId === p.id
-                    ? "bg-muted/60"
-                    : "hover:bg-muted/30",
-                ].join(" ")}
+                className="border-b cursor-pointer transition-colors last:border-0"
+                style={{
+                  borderColor: "var(--theme-color-x-weak-bdr)",
+                  background: selectedId === p.id
+                    ? "var(--theme-color-ghost--selected)"
+                    : undefined,
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedId !== p.id)
+                    (e.currentTarget as HTMLTableRowElement).style.background = "var(--theme-color-ghost--hover)";
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedId !== p.id)
+                    (e.currentTarget as HTMLTableRowElement).style.background = "";
+                }}
               >
-                <td className="px-3 py-2.5 font-medium text-foreground">
+                <td className="px-3 py-2.5 font-medium" style={{ color: "var(--theme-color-std-text)" }}>
                   <span className="line-clamp-2">{p.name}</span>
                 </td>
-                <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap text-xs">{p.country}</td>
+                <td className="px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
-                  <span className={`inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium ${STATUS_BADGE[p.status]}`}>
+                  <IxChip variant="custom" background={STATUS_CHIP_BG[p.status]} style={{ fontSize: "11px" }}>
                     {STATUS_LABEL[p.status]}
-                  </span>
+                  </IxChip>
                 </td>
-                <td className="hidden md:table-cell px-3 py-2.5 text-muted-foreground text-xs max-w-[160px]">
-                  {p.value ?? <span className="text-text-weak">n/a</span>}
+                <td className="hidden md:table-cell px-3 py-2.5 text-xs max-w-[160px]" style={{ color: "var(--theme-color-soft-text)" }}>
+                  {p.value ?? <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
                 </td>
-                <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap text-xs">
-                  {p.lengthKm != null ? p.lengthKm.toLocaleString() : <span className="text-text-weak">n/a</span>}
+                <td className="px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>
+                  {p.lengthKm != null ? p.lengthKm.toLocaleString() : <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
                 </td>
-                <td className="hidden sm:table-cell px-3 py-2.5 text-muted-foreground text-xs max-w-[130px]">
-                  {p.keyDate ?? <span className="text-text-weak">n/a</span>}
+                <td className="hidden sm:table-cell px-3 py-2.5 text-xs max-w-[130px]" style={{ color: "var(--theme-color-soft-text)" }}>
+                  {p.keyDate ?? <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
                 </td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
                   <ConfidenceBadge confidence={p.confidence} />
@@ -164,7 +186,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-3 py-8 text-center text-muted-foreground text-sm">
+                <td colSpan={7} className="px-3 py-8 text-center text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
                   No projects match the current filter.
                 </td>
               </tr>

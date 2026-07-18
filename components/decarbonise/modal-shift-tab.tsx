@@ -2,24 +2,13 @@
 
 import { useState, useMemo } from "react";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
+import { IxSelect, IxSelectItem, IxCheckbox, IxMessageBar } from "@siemens/ix-react";
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { useChartColors } from "@/lib/use-chart-colors";
-import {
-  SliderRow,
-  OutputCard,
-  Disclosure,
-  CalcRow,
-  SectionDivider,
-} from "./primitives";
+import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider } from "./primitives";
 
 // Projects that have ridership-relevant data (all have lat/lng; use them all)
 // We derive a plausible daily ridership from context notes; user can tune it via slider.
@@ -116,42 +105,40 @@ export default function ModalShiftTab() {
       {/* ---- Controls ---- */}
       <div className="space-y-4">
         <SectionDivider label="Line" />
-        <div className="space-y-2">
-          <label className="text-xs text-muted-foreground">Project</label>
-          <select
+        <div className="space-y-1.5">
+          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Project</span>
+          <IxSelect
             value={_lineId}
-            onChange={(e) => setLineId(e.target.value)}
-            className="w-full h-8 rounded border border-input bg-card px-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            onValueChange={(e) => setLineId(e.detail as string)}
+            style={{ width: "100%" }}
           >
             {LINE_OPTIONS.map((l) => (
-              <option key={l.id} value={l.id}>{l.label}</option>
+              <IxSelectItem key={l.id} value={l.id} label={l.label} />
             ))}
-          </select>
+          </IxSelect>
         </div>
 
         <SectionDivider label="Grid" />
         <div className="space-y-2">
-          <label className="text-xs text-muted-foreground">Country grid</label>
-          <select
+          <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</span>
+          <IxSelect
             value={gridCountry}
-            onChange={(e) => setGridCountry(e.target.value)}
-            className="w-full h-8 rounded border border-input bg-card px-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            onValueChange={(e) => setGridCountry(e.detail as string)}
+            style={{ width: "100%" }}
           >
             {GRID_FACTORS.map((g) => (
-              <option key={g.country} value={g.country}>
-                {g.country} ({g.gCO2ePerKWh} gCO₂e/kWh)
-              </option>
+              <IxSelectItem
+                key={g.country}
+                value={g.country}
+                label={`${g.country} (${g.gCO2ePerKWh} gCO₂e/kWh)`}
+              />
             ))}
-          </select>
-          <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
-            <input
-              type="checkbox"
-              checked={simpleMode}
-              onChange={(e) => setSimpleMode(e.target.checked)}
-              className="accent-primary"
-            />
-            Simple mode (use EEA rail avg {CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm, ignore grid)
-          </label>
+          </IxSelect>
+          <IxCheckbox
+            checked={simpleMode}
+            label={`Simple mode — EEA rail avg ${CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm`}
+            onCheckedChange={(e) => setSimpleMode(e.detail)}
+          />
         </div>
 
         <SectionDivider label="Assumptions" />
@@ -229,9 +216,9 @@ export default function ModalShiftTab() {
       {/* ---- Outputs ---- */}
       <div className="space-y-6">
         {result.degenerate && (
-          <p className="text-xs text-warning bg-warning/10 border border-warning/30 rounded-sm px-3 py-2">
+          <IxMessageBar type="warning" persistent>
             Ridership is zero — all outputs are zero.
-          </p>
+          </IxMessageBar>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -253,11 +240,11 @@ export default function ModalShiftTab() {
         </div>
 
         {/* Chart */}
-        <div className="rounded-sm border border-border bg-card p-4 space-y-2">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">
+        <div className="rounded-sm border p-4 space-y-2" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}>
+          <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>
             Avoided tCO₂/yr vs modal-shift %
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
             Current diverted-from-car share: {Math.round(share * 100)}%
           </p>
           <ResponsiveContainer width="100%" height={220}>

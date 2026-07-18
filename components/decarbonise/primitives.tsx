@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { IxKpi, IxBlind, IxSlider, IxCheckbox } from "@siemens/ix-react";
 
 // ---------------------------------------------------------------------------
-// SliderRow
+// SliderRow — wraps IxSlider
 // ---------------------------------------------------------------------------
 
 interface SliderRowProps {
@@ -19,29 +20,52 @@ interface SliderRowProps {
 
 export function SliderRow({ label, value, min, max, step, format, onChange, note }: SliderRowProps) {
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-0.5 items-center">
-      <label className="text-xs text-muted-foreground leading-4">{label}</label>
-      <span className="text-xs font-mono text-foreground text-right tabular-nums w-24 leading-4">
-        {format(value)}
-      </span>
-      <input
-        type="range"
+    <div className="space-y-0.5">
+      <div className="flex justify-between text-xs">
+        <span style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
+        <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>
+          {format(value)}
+        </span>
+      </div>
+      <IxSlider
         min={min}
         max={max}
         step={step}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="col-span-2 h-1 accent-primary cursor-pointer mt-0.5"
+        onValueChange={(e) => onChange(e.detail)}
+        style={{ width: "100%" }}
       />
       {note && (
-        <p className="col-span-2 text-xs text-text-weak leading-3 mt-0.5">{note}</p>
+        <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>{note}</p>
       )}
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// OutputCard — KPI tile with JetBrains Mono number
+// SimpleCheckbox — wraps IxCheckbox
+// ---------------------------------------------------------------------------
+
+interface CheckboxRowProps {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  children: React.ReactNode;
+}
+
+export function CheckboxRow({ checked, onChange, children }: CheckboxRowProps) {
+  return (
+    <IxCheckbox
+      checked={checked}
+      label={typeof children === "string" ? children : undefined}
+      onCheckedChange={(e) => onChange(e.detail)}
+    >
+      {typeof children !== "string" && children}
+    </IxCheckbox>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// OutputCard — IxKpi tile
 // ---------------------------------------------------------------------------
 
 interface OutputCardProps {
@@ -52,20 +76,25 @@ interface OutputCardProps {
 
 export function OutputCard({ label, value, sub }: OutputCardProps) {
   return (
-    <div className="rounded-sm border border-border bg-surface-1 overflow-hidden">
-      {/* 3px petrol accent — sole use of brand colour in content cards */}
+    <div
+      className="rounded-sm border overflow-hidden"
+      style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}
+    >
+      {/* 3px petrol gradient accent */}
       <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-      <div className="px-3 py-2.5 space-y-0.5">
-        <p className="text-xs text-muted-foreground uppercase tracking-wider leading-4">{label}</p>
-        <p className="text-xl font-mono font-semibold tabular-nums text-foreground leading-6">{value}</p>
-        {sub && <p className="text-xs text-muted-foreground leading-4">{sub}</p>}
+      <div className="px-3 py-2.5">
+        <IxKpi label={label} unit={sub ?? ""}>
+          <span slot="number" className="font-mono text-lg font-semibold tabular-nums">
+            {value}
+          </span>
+        </IxKpi>
       </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Disclosure — collapsible "Show calculation"
+// Disclosure — IxBlind (collapsible)
 // ---------------------------------------------------------------------------
 
 interface DisclosureProps {
@@ -74,48 +103,42 @@ interface DisclosureProps {
 }
 
 export function Disclosure({ label, children }: DisclosureProps) {
-  const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   return (
-    <div className="border border-border rounded-sm">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <span>{label}</span>
-        <span className="font-mono text-text-weak">{open ? "−" : "+"}</span>
-      </button>
-      {open && (
-        <div className="border-t border-border px-3 py-2.5 space-y-1.5">{children}</div>
-      )}
-    </div>
+    <IxBlind
+      label={label}
+      collapsed={collapsed}
+      onCollapsedChange={(e) => setCollapsed(e.detail)}
+    >
+      <div className="space-y-1.5 px-1 py-2">{children}</div>
+    </IxBlind>
   );
 }
 
 // ---------------------------------------------------------------------------
-// CalcRow — intermediate value row inside Disclosure
+// CalcRow — unchanged (pure layout)
 // ---------------------------------------------------------------------------
 
 export function CalcRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid grid-cols-[1fr_auto] text-xs gap-x-4">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-mono text-foreground tabular-nums">{value}</span>
+      <span style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
+      <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>{value}</span>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// SectionDivider
+// SectionDivider — hairline with label
 // ---------------------------------------------------------------------------
 
 export function SectionDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-2 pt-1">
-      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">
+      <span className="text-xs font-semibold uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>
         {label}
       </span>
-      <div className="flex-1 border-t border-border-hair" />
+      <div className="flex-1 border-t" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }} />
     </div>
   );
 }
