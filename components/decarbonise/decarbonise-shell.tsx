@@ -4,6 +4,7 @@ import { useState } from "react";
 import { IxTabs, IxTabItem } from "@siemens/ix-react";
 import ModalShiftTab from "./modal-shift-tab";
 import ElectrificationTab from "./electrification-tab";
+import ReferenceTab from "./reference-tab";
 
 export default function DecarboniseShell() {
   const [activeTab, setActiveTab] = useState(0);
@@ -32,10 +33,11 @@ export default function DecarboniseShell() {
       >
         <IxTabItem label="Modal shift" />
         <IxTabItem label="Electrification" />
+        <IxTabItem label="Reference" />
       </IxTabs>
 
       <div>
-        {activeTab === 0 ? <ModalShiftTab /> : <ElectrificationTab />}
+        {activeTab === 0 ? <ModalShiftTab /> : activeTab === 1 ? <ElectrificationTab /> : <ReferenceTab />}
       </div>
 
       <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-soft-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>

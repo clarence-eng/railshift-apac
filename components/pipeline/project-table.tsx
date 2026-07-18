@@ -136,6 +136,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
           boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
         }}
       >
+        <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
         <table className="w-full text-sm">
           <thead
             className="border-b"
@@ -186,7 +187,17 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                     borderLeft: selectedId === p.id ? "2px solid var(--theme-color-primary)" : "2px solid transparent",
                   }}
                 >
-                  <span className="line-clamp-2">{p.name}</span>
+                  <span className="line-clamp-2">
+                    {p.name}
+                    {/siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "") && (
+                      <span
+                        className="hidden sm:inline"
+                        style={{ background: "var(--ix-primary)", color: "#fff", fontSize: "9px", fontWeight: 700, padding: "1px 4px", borderRadius: "2px", marginLeft: "6px", verticalAlign: "middle", letterSpacing: "0.5px" }}
+                      >
+                        SIEMENS
+                      </span>
+                    )}
+                  </span>
                 </td>
                 <td className="px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</td>
                 <td className="px-3 py-2.5 whitespace-nowrap">

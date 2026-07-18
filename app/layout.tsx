@@ -48,10 +48,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <footer
             className="shrink-0"
-            style={{ borderTop: "1px solid var(--ix-border)", background: "var(--ix-surface-1)" }}
+            style={{ borderTop: "1px solid var(--ix-border)", background: "var(--ix-surface-1)", boxShadow: "0 -2px 8px rgba(0,0,0,0.12)" }}
           >
             <div
-              className="h-px w-full"
+              className="h-[2px] w-full"
               style={{ background: "var(--ix-gradient)" }}
               aria-hidden="true"
             />

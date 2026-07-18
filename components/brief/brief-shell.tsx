@@ -157,7 +157,12 @@ export default function BriefShell() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
         {/* Controls */}
-        <div className="space-y-4">
+        <div
+          className="rounded-sm border overflow-hidden"
+          style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.18)" }}
+        >
+          <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+          <div className="p-4 space-y-4">
 
           {/* Project select */}
           <div className="space-y-1.5">
@@ -237,7 +242,7 @@ export default function BriefShell() {
           {/* Figures preview */}
           <div
             className="rounded-sm border px-3 py-3 space-y-2"
-            style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}
+            style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
           >
             <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>
               Scenario inputs
@@ -266,7 +271,8 @@ export default function BriefShell() {
           <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>
             Project id and calculator outputs are sent to Gemini server-side. No personal data is transmitted. Responses are cached 1 hour per unique input set.
           </p>
-        </div>
+          </div>{/* end p-4 space-y-4 */}
+        </div>{/* end controls card */}
 
         {/* Output panel */}
         <div className="space-y-3">
@@ -300,11 +306,14 @@ export default function BriefShell() {
             </div>
           ) : !error ? (
             <div
-              className="flex min-h-[240px] flex-col items-center justify-center rounded-sm border gap-2 text-center px-6"
-              style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}
+              className="overflow-hidden rounded-sm border min-h-[280px] flex flex-col"
+              style={{ borderColor: "var(--theme-color-x-weak-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
             >
-              <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-weak-text)" }}>Executive Brief</p>
-              <p className="text-sm" style={{ color: "var(--theme-color-soft-text)" }}>Configure inputs and press &ldquo;Generate brief&rdquo;</p>
+              <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+              <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center px-6">
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-weak-text)" }}>Executive Brief</p>
+                <p className="text-sm" style={{ color: "var(--theme-color-soft-text)" }}>Configure inputs and press &ldquo;Generate brief&rdquo;</p>
+              </div>
             </div>
           ) : null}
         </div>

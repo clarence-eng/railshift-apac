@@ -29,7 +29,7 @@ function SourceLink({ id }: { id: string }) {
 
 function SectionHead({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-5 pb-2 border-b border-border">
+    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-5 pb-2 border-b border-border" style={{ color: "var(--ix-primary)" }}>
       {children}
     </h3>
   );
@@ -51,12 +51,12 @@ function DataRow({
   return (
     <div className="py-2.5 border-b border-border last:border-0 space-y-0.5">
       <div className="flex items-start justify-between gap-3">
-        <span className="text-sm text-foreground leading-5">{label}</span>
+        <span className="font-medium text-sm text-foreground leading-5">{label}</span>
         <div className="flex items-center gap-2 shrink-0">
           {confidence && (
             <ConfidenceBadge confidence={confidence as "HIGH" | "MED" | "LOW"} />
           )}
-          <span className="font-mono text-sm text-foreground tabular-nums">{value}</span>
+          <span className="font-mono font-semibold text-sm text-foreground tabular-nums">{value}</span>
         </div>
       </div>
       {note && <p className="text-xs text-muted-foreground">{note}</p>}

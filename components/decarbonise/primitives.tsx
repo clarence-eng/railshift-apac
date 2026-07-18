@@ -133,7 +133,7 @@ export function CalcRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid grid-cols-[1fr_auto] text-xs gap-x-4">
       <span style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
-      <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>{value}</span>
+      <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{value}</span>
     </div>
   );
 }

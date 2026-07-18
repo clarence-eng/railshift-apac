@@ -112,7 +112,12 @@ function getCached(key: string): string | null {
 }
 
 function setCached(key: string, markdown: string): void {
-  responseCache.set(key, { markdown, storedAt: Date.now() });
+  // Prune stale entries before inserting
+  const now = Date.now();
+  for (const [k, v] of responseCache) {
+    if (now - v.storedAt > CACHE_TTL_MS) responseCache.delete(k);
+  }
+  responseCache.set(key, { markdown, storedAt: now });
 }
 
 // ---------------------------------------------------------------------------

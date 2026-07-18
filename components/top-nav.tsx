@@ -24,7 +24,7 @@ export default function TopNav() {
 
       <header
         className="border-b shrink-0"
-        style={{ background: "var(--ix-surface-1)", borderColor: "var(--ix-border)" }}
+        style={{ background: "var(--ix-surface-1)", borderColor: "var(--ix-border)", boxShadow: "0 2px 8px rgba(0,0,0,0.20)" }}
       >
         <div className="mx-auto flex max-w-7xl items-center px-4 sm:px-6 lg:px-8">
           {/* Wordmark */}

@@ -16,7 +16,7 @@ const sourceMap = Object.fromEntries(SOURCES.map((s) => [s.id, s]));
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[6.5rem_1fr] gap-x-2 py-2 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
-      <dt className="text-xs pt-px" style={{ color: "var(--theme-color-soft-text)" }}>{label}</dt>
+      <dt className="text-xs font-medium uppercase tracking-wider pt-px" style={{ color: "var(--theme-color-soft-text)" }}>{label}</dt>
       <dd className="text-sm break-words" style={{ color: "var(--theme-color-std-text)" }}>
         {value ?? <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
       </dd>
