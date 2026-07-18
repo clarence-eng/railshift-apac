@@ -66,7 +66,6 @@ export default function ModalShiftTab() {
 
   const [dailyRidership, setDailyRidership] = useState(300_000);
   const [avgTripKm, setAvgTripKm] = useState(CALC_DEFAULTS.avgTripKm);
-  // #3: Default 30% — sits within the empirical 15–35% range for new urban metro (ITDP 2022)
   const [share, setShare] = useState(0.30);
   const [railEnergy, setRailEnergy] = useState(CALC_DEFAULTS.railEnergyIntensity);
   const [carFactor, setCarFactor] = useState(CALC_DEFAULTS.baselineCarFactor);

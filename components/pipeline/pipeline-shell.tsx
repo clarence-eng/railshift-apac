@@ -97,8 +97,21 @@ export default function PipelineShell({ projects }: Props) {
               onClose={() => setSelectedId(null)}
             />
           ) : (
-            <div className="hidden lg:flex h-full items-center justify-center rounded-sm border border-border-hair text-xs text-text-weak min-h-[120px] tracking-wide uppercase">
-              Select a marker
+            <div
+              className="hidden lg:flex h-full flex-col items-center justify-center rounded-sm border min-h-[120px] gap-2"
+              style={{
+                borderColor: "var(--theme-color-x-weak-bdr)",
+                background: "var(--theme-color-2)",
+              }}
+            >
+              <span
+                className="inline-block w-2 h-2 rounded-full"
+                style={{ background: "var(--ix-primary)", opacity: 0.5 }}
+                aria-hidden="true"
+              />
+              <p className="text-xs tracking-widest uppercase" style={{ color: "var(--theme-color-weak-text)" }}>
+                Select a project
+              </p>
             </div>
           )}
         </div>

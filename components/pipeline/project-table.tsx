@@ -105,7 +105,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
         <IxSelect
           value={statusFilter || undefined}
           i18nPlaceholder="All statuses"
-          onValueChange={(e) => setStatusFilter(e.detail as string ?? "")}
+          onValueChange={(e) => setStatusFilter((e.detail as string) ?? "")}
           style={{ width: "160px" }}
         >
           {ALL_STATUSES.map((s) => (
@@ -176,7 +176,13 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                     (e.currentTarget as HTMLTableRowElement).style.background = "";
                 }}
               >
-                <td className="px-3 py-2.5 font-medium" style={{ color: "var(--theme-color-std-text)" }}>
+                <td
+                  className="px-3 py-2.5 font-medium"
+                  style={{
+                    color: "var(--theme-color-std-text)",
+                    borderLeft: selectedId === p.id ? "2px solid var(--theme-color-primary)" : "2px solid transparent",
+                  }}
+                >
                   <span className="line-clamp-2">{p.name}</span>
                 </td>
                 <td className="px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</td>

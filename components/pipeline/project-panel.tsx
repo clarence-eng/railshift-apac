@@ -33,8 +33,10 @@ export default function ProjectPanel({ project, onClose }: Props) {
       style={{
         background: "var(--theme-color-2)",
         borderColor: "var(--theme-color-std-bdr)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.22)",
       }}
     >
+      <div className="h-[4px] w-full shrink-0" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="flex items-start justify-between gap-2 px-4 py-3 border-b" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
         <h2 className="text-sm font-semibold leading-5" style={{ color: "var(--theme-color-std-text)" }}>
           {project.name}

@@ -77,7 +77,7 @@ function MemoSkeleton() {
       className="rounded-sm border overflow-hidden animate-pulse"
       style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}
     >
-      <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="px-5 py-5 space-y-4">
         <div className="h-4 rounded-sm w-2/3" style={{ background: "var(--theme-color-3)" }} />
         <div className="space-y-1.5">
@@ -114,8 +114,8 @@ export default function BriefShell() {
     setProjectId(id);
     setResult(null);
     setError(null);
-    const p = PROJECTS.find((p) => p.id === id);
-    if (p) setGridCountry(projectGridCountry(p.country));
+    const proj = PROJECTS.find((proj) => proj.id === id);
+    if (proj) setGridCountry(projectGridCountry(proj.country));
   }
 
   const selectedProject = PROJECTS.find((p) => p.id === projectId)!;
@@ -293,7 +293,7 @@ export default function BriefShell() {
                 boxShadow: "0 2px 12px rgba(0,0,0,0.22)",
               }}
             >
-              <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+              <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
               <div className="px-5 py-5 sm:px-6">
                 <MemoBody markdown={result.markdown} />
               </div>
@@ -312,15 +312,24 @@ export default function BriefShell() {
 
       {/* Project quick-ref */}
       <div
-        className="rounded-sm border px-4 py-3 text-xs"
-        style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", color: "var(--theme-color-soft-text)" }}
+        className="rounded-sm border overflow-hidden"
+        style={{
+          background: "var(--theme-color-2)",
+          borderColor: "var(--theme-color-std-bdr)",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        }}
       >
-        <span className="font-medium" style={{ color: "var(--theme-color-std-text)" }}>{selectedProject.name}</span>
-        {" — "}
-        <span>{selectedProject.status} · {selectedProject.country}</span>
-        {selectedProject.value && <span> · {selectedProject.value}</span>}
-        {selectedProject.keyDate && <span> · {selectedProject.keyDate}</span>}
-        {selectedProject.note && <p className="mt-1 italic leading-relaxed">{selectedProject.note}</p>}
+        <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+        <div className="px-4 py-3 text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
+          <span className="font-semibold text-sm" style={{ color: "var(--theme-color-std-text)" }}>{selectedProject.name}</span>
+          <span className="mx-1.5 opacity-30">·</span>
+          <span>{selectedProject.status}</span>
+          <span className="mx-1.5 opacity-30">·</span>
+          <span>{selectedProject.country}</span>
+          {selectedProject.value && <><span className="mx-1.5 opacity-30">·</span><span>{selectedProject.value}</span></>}
+          {selectedProject.keyDate && <><span className="mx-1.5 opacity-30">·</span><span>{selectedProject.keyDate}</span></>}
+          {selectedProject.note && <p className="mt-1.5 leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>{selectedProject.note}</p>}
+        </div>
       </div>
     </div>
   );
