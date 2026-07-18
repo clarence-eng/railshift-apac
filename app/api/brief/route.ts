@@ -144,7 +144,7 @@ The memo must cover exactly four sections:
 
 ---
 
-PROJECT DATA (from seed.ts, cite confidence levels where relevant):
+PROJECT DATA (cite confidence levels where relevant):
 - Name: ${project.name}
 - Country: ${project.country}
 - Status: ${project.status}

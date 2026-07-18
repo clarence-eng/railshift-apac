@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import type { Project } from "@/data/seed";
 import ProjectPanel from "./project-panel";
@@ -52,6 +52,13 @@ interface Props {
 export default function PipelineShell({ projects }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedProject = projects.find((p) => p.id === selectedId) ?? null;
+
+  const kpis = useMemo(() => [
+    { label: "Projects tracked",    value: projects.length },
+    { label: "Under construction",  value: projects.filter((p) => p.status === "under-construction").length },
+    { label: "Approved / pipeline", value: projects.filter((p) => p.status === "approved").length },
+    { label: "Siemens incumbent",   value: projects.filter((p) => /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")).length },
+  ], [projects]);
 
   function handleSelect(id: string) {
     setSelectedId((prev) => (prev === id ? null : id));
@@ -128,53 +135,29 @@ export default function PipelineShell({ projects }: Props) {
       )}
 
       {/* KPI strip */}
-      {(() => {
-        const kpis = [
-          {
-            label: "Projects tracked",
-            value: projects.length,
-          },
-          {
-            label: "Under construction",
-            value: projects.filter((p) => p.status === "under-construction").length,
-          },
-          {
-            label: "Approved / pipeline",
-            value: projects.filter((p) => p.status === "approved").length,
-          },
-          {
-            label: "Siemens incumbent",
-            value: projects.filter((p) =>
-              /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")
-            ).length,
-          },
-        ];
-        return (
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {kpis.map((kpi) => (
-              <div
-                key={kpi.label}
-                className="rounded-sm border overflow-hidden"
-                style={{
-                  background: "var(--theme-color-2)",
-                  borderColor: "var(--theme-color-std-bdr)",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.14)",
-                }}
-              >
-                <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-                <div className="px-4 pt-3 pb-4 space-y-1">
-                  <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>
-                    {kpi.label}
-                  </p>
-                  <p className="font-mono text-2xl font-bold tabular-nums leading-7" style={{ color: "var(--theme-color-primary)" }}>
-                    {kpi.value}
-                  </p>
-                </div>
-              </div>
-            ))}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {kpis.map((kpi) => (
+          <div
+            key={kpi.label}
+            className="rounded-sm border overflow-hidden"
+            style={{
+              background: "var(--theme-color-2)",
+              borderColor: "var(--theme-color-std-bdr)",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.14)",
+            }}
+          >
+            <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+            <div className="px-4 pt-3 pb-4 space-y-1">
+              <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>
+                {kpi.label}
+              </p>
+              <p className="font-mono text-2xl font-bold tabular-nums leading-7" style={{ color: "var(--theme-color-primary)" }}>
+                {kpi.value}
+              </p>
+            </div>
           </div>
-        );
-      })()}
+        ))}
+      </div>
 
       {/* Table */}
       <ProjectTable

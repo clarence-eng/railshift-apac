@@ -187,17 +187,17 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                     borderLeft: selectedId === p.id ? "2px solid var(--theme-color-primary)" : "2px solid transparent",
                   }}
                 >
-                  <span className="line-clamp-2">
-                    {p.name}
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="line-clamp-2">{p.name}</span>
                     {/siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "") && (
                       <span
-                        className="hidden sm:inline"
-                        style={{ background: "var(--ix-primary)", color: "#fff", fontSize: "9px", fontWeight: 700, padding: "1px 4px", borderRadius: "2px", marginLeft: "6px", verticalAlign: "middle", letterSpacing: "0.5px" }}
+                        className="hidden sm:inline shrink-0"
+                        style={{ background: "var(--ix-primary)", color: "#fff", fontSize: "9px", fontWeight: 700, padding: "1px 4px", borderRadius: "2px", letterSpacing: "0.5px" }}
                       >
                         SIEMENS
                       </span>
                     )}
-                  </span>
+                  </div>
                 </td>
                 <td className="px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
