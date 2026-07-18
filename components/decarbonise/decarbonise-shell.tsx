@@ -15,9 +15,10 @@ export default function DecarboniseShell() {
           Decarbonise
         </h1>
         <p className="mt-1 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-          Emission avoided and carbon value calculator — all figures from{" "}
-          <code className="font-mono text-xs">data/seed.ts</code> and{" "}
-          <code className="font-mono text-xs">lib/calc.ts</code>. Zero network calls.
+          Emission avoided and carbon value calculator — all figures from verified sources. Zero network calls.
+        </p>
+        <p className="mt-1 text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+          Aligned to Siemens <strong style={{ color: "var(--theme-color-soft-text)" }}>DEGREE</strong> framework — Decarbonization · Ethics · Governance · Resource efficiency · Equity · Employability
         </p>
       </div>
 
@@ -39,7 +40,7 @@ export default function DecarboniseShell() {
 
       <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-soft-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
         Emission factors: EEA EU-27 WtW 2018. Grid factors: Ember 2024 lifecycle.
-        Carbon price: NCCS Singapore 2026–27. Calculations are indicative.
+        Carbon price: NCCS Singapore 2026–27. Supports DEGREE decarbonization pillar. Calculations are indicative.
       </p>
     </div>
   );

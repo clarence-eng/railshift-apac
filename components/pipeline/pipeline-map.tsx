@@ -34,6 +34,7 @@ interface Props {
 export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
+  const markerEls = useRef<Map<string, HTMLDivElement>>(new Map());
   const colorSchema = useIxColorSchema();
 
   // Destroy and rebuild when theme flips so basemap changes
@@ -43,6 +44,7 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
     if (mapRef.current) {
       mapRef.current.remove();
       mapRef.current = null;
+      markerEls.current.clear();
     }
 
     const isDark = colorSchema !== "light";
@@ -84,7 +86,6 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
       import("maplibre-gl").then(({ Marker }) => {
         for (const project of projects) {
           const el = document.createElement("div");
-          // Read live token value — correct for current theme
           const color = getResolvedStatusColor(project.status);
           const isDarkMap = colorSchema !== "light";
           el.style.cssText = `
@@ -102,6 +103,8 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
           el.addEventListener("mouseenter", () => { el.style.transform = "scale(1.6)"; });
           el.addEventListener("mouseleave", () => { el.style.transform = "scale(1)"; });
           el.addEventListener("click",      () => onSelect(project.id));
+
+          markerEls.current.set(project.id, el);
 
           new Marker({ element: el })
             .setLngLat([project.lng, project.lat])
@@ -130,6 +133,21 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
       duration: 800,
     });
   }, [selectedId, projects]);
+
+  // Highlight selected marker
+  useEffect(() => {
+    markerEls.current.forEach((el, id) => {
+      if (id === selectedId) {
+        el.style.transform = "scale(1.8)";
+        el.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
+        el.style.zIndex = "10";
+      } else {
+        el.style.transform = "scale(1)";
+        el.style.boxShadow = "0 1px 3px rgba(0,0,0,0.5)";
+        el.style.zIndex = "";
+      }
+    });
+  }, [selectedId]);
 
   return (
     <div

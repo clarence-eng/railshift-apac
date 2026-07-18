@@ -151,9 +151,7 @@ export default function BriefShell() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--theme-color-std-text)" }}>Brief</h1>
         <p className="mt-1 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-          AI-generated executive strategy memo. Figures from{" "}
-          <code className="font-mono text-xs">data/seed.ts</code> and{" "}
-          <code className="font-mono text-xs">lib/calc.ts</code> — Gemini is instructed not to invent data.
+          AI-generated executive strategy memo. All figures are sourced from the verified dataset — Gemini is instructed not to invent data.
         </p>
       </div>
 
@@ -242,7 +240,7 @@ export default function BriefShell() {
             style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)" }}
           >
             <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>
-              Figures sent to Gemini
+              Scenario inputs
             </p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Avoided tCO₂/yr</span>

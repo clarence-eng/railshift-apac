@@ -64,7 +64,7 @@ export default function PipelineShell({ projects }: Props) {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Pipeline</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {projects.length} APAC rail projects — select a marker or row for details
+            {projects.length} active APAC rail projects — total identified value exceeding US$200bn
           </p>
         </div>
         {/* Legend — wraps gracefully on narrow screens */}

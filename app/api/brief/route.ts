@@ -155,7 +155,7 @@ CALCULATOR OUTPUTS (from lib/calc.ts — use these figures, do not recalculate):
 - Carbon price used: S$${outputs.carbonPriceSGD ?? 45}/tCO2e
 
 Start with: # Executive Strategy Memo — ${project.name}
-End with: *All figures sourced from data/seed.ts and lib/calc.ts. Independent analytical prototype — not affiliated with or endorsed by Siemens.*`;
+End with: *Figures sourced from data/seed.ts and lib/calc.ts.*`;
 }
 
 async function callGemini(
