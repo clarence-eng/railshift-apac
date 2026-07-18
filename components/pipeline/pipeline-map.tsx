@@ -1,15 +1,29 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useTheme } from "next-themes";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import type { Map as MLMap } from "maplibre-gl";
 import type { Project } from "@/data/seed";
 import { getResolvedStatusColor } from "./status-config";
 
 // Dark → Carto dark-matter; Light → OpenFreeMap liberty (Carto positron fallback)
-const STYLE_DARK        = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
-const STYLE_LIGHT       = "https://tiles.openfreemap.org/styles/liberty";
+const STYLE_DARK         = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+const STYLE_LIGHT        = "https://tiles.openfreemap.org/styles/liberty";
 const STYLE_LIGHT_FALLBACK = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
+
+// Read data-ix-color-schema from <html> — set by IxAppShell's themeSwitcher listener.
+// useSyncExternalStore re-renders when the attribute changes (theme toggle).
+function useIxColorSchema() {
+  return useSyncExternalStore(
+    (cb) => {
+      if (typeof window === "undefined") return () => {};
+      const obs = new MutationObserver(cb);
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-ix-color-schema"] });
+      return () => obs.disconnect();
+    },
+    () => document.documentElement.getAttribute("data-ix-color-schema") ?? "dark",
+    () => "dark" // SSR snapshot
+  );
+}
 
 interface Props {
   projects: Project[];
@@ -20,19 +34,18 @@ interface Props {
 export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MLMap | null>(null);
-  const { resolvedTheme } = useTheme();
+  const colorSchema = useIxColorSchema();
 
   // Destroy and rebuild when theme flips so basemap changes
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Clean up any prior instance
     if (mapRef.current) {
       mapRef.current.remove();
       mapRef.current = null;
     }
 
-    const isDark = resolvedTheme !== "light";
+    const isDark = colorSchema !== "light";
     const primaryStyle = isDark ? STYLE_DARK : STYLE_LIGHT;
     const fallbackStyle = isDark ? STYLE_DARK : STYLE_LIGHT_FALLBACK;
 
@@ -73,7 +86,7 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
           const el = document.createElement("div");
           // Read live token value — correct for current theme
           const color = getResolvedStatusColor(project.status);
-          const isDarkMap = resolvedTheme !== "light";
+          const isDarkMap = colorSchema !== "light";
           el.style.cssText = `
             width: 12px; height: 12px;
             background: ${color};
@@ -104,7 +117,7 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
       mapRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolvedTheme]);
+  }, [colorSchema]);
 
   // Fly to selected project
   useEffect(() => {

@@ -20,10 +20,10 @@ interface SliderRowProps {
 
 export function SliderRow({ label, value, min, max, step, format, onChange, note }: SliderRowProps) {
   return (
-    <div className="space-y-0.5">
-      <div className="flex justify-between text-xs">
-        <span style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
-        <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>
+    <div className="space-y-0.5 min-w-0">
+      <div className="flex justify-between text-xs min-w-0">
+        <span className="truncate pr-2" style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
+        <span className="font-mono tabular-nums shrink-0" style={{ color: "var(--theme-color-std-text)" }}>
           {format(value)}
         </span>
       </div>
@@ -33,7 +33,7 @@ export function SliderRow({ label, value, min, max, step, format, onChange, note
         step={step}
         value={value}
         onValueChange={(e) => onChange(e.detail)}
-        style={{ width: "100%" }}
+        style={{ width: "100%", minWidth: 0 }}
       />
       {note && (
         <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>{note}</p>

@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import dynamic from "next/dynamic";
 import {
-  IxSelect, IxSelectItem, IxSlider, IxButton, IxMessageBar, IxSpinner,
+  IxSelect, IxSelectItem, IxSlider, IxButton, IxMessageBar,
 } from "@siemens/ix-react";
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { PRECOMPUTED_BY_ID } from "@/data/precomputed-briefs";
+
+// react-markdown is large (~150kB) — only load it when a memo exists to display
+const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
 const hasFallback = (id: string) => id in PRECOMPUTED_BY_ID;
 

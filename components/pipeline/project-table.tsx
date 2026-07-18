@@ -27,6 +27,28 @@ function SortIcon({ dir }: { dir: SortDir | null }) {
   return <span className="select-none">{dir === "asc" ? "↑" : "↓"}</span>;
 }
 
+// Hoisted outside the component — avoids react-hooks/static-components error.
+// Receives sort state and callback as plain props (no closures over component state).
+function TH({
+  col, children, sortKey, sortDir, onSort,
+}: {
+  col: SortKey;
+  children: React.ReactNode;
+  sortKey: SortKey;
+  sortDir: SortDir;
+  onSort: (col: SortKey) => void;
+}) {
+  return (
+    <th
+      onClick={() => onSort(col)}
+      className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap"
+      style={{ color: "var(--theme-color-soft-text)" }}
+    >
+      {children} <SortIcon dir={sortKey === col ? sortDir : null} />
+    </th>
+  );
+}
+
 export default function ProjectTable({ projects, selectedId, onSelect }: Props) {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("");
@@ -61,15 +83,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
       });
   }, [projects, query, statusFilter, sortKey, sortDir]);
 
-  const TH = ({ col, children }: { col: SortKey; children: React.ReactNode }) => (
-    <th
-      onClick={() => toggleSort(col)}
-      className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap"
-      style={{ color: "var(--theme-color-soft-text)" }}
-    >
-      {children} <SortIcon dir={sortKey === col ? sortDir : null} />
-    </th>
-  );
+  const thProps = { sortKey, sortDir, onSort: toggleSort };
 
   return (
     <section className="space-y-3">
@@ -88,7 +102,6 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
           }}
         />
 
-        {/* iX Select for status filter */}
         <IxSelect
           value={statusFilter || undefined}
           i18nPlaceholder="All statuses"
@@ -129,12 +142,16 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
             }}
           >
             <tr>
-              <TH col="name">Project</TH>
-              <TH col="country">Country</TH>
-              <TH col="status">Status</TH>
+              <TH col="name" {...thProps}>Project</TH>
+              <TH col="country" {...thProps}>Country</TH>
+              <TH col="status" {...thProps}>Status</TH>
               <th className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>Value</th>
-              <TH col="lengthKm">km</TH>
-              <th className="hidden sm:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }} onClick={() => toggleSort("keyDate")}>
+              <TH col="lengthKm" {...thProps}>km</TH>
+              <th
+                className="hidden sm:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap"
+                style={{ color: "var(--theme-color-soft-text)" }}
+                onClick={() => toggleSort("keyDate")}
+              >
                 Key date <SortIcon dir={sortKey === "keyDate" ? sortDir : null} />
               </th>
               <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Conf.</th>
@@ -148,9 +165,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                 className="border-b cursor-pointer transition-colors last:border-0"
                 style={{
                   borderColor: "var(--theme-color-x-weak-bdr)",
-                  background: selectedId === p.id
-                    ? "var(--theme-color-ghost--selected)"
-                    : undefined,
+                  background: selectedId === p.id ? "var(--theme-color-ghost--selected)" : undefined,
                 }}
                 onMouseEnter={(e) => {
                   if (selectedId !== p.id)

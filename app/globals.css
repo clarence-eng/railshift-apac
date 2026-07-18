@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /* ================================================================
    SIEMENS iX CLASSIC THEME CSS — authoritative token source
@@ -184,6 +183,15 @@
   .bg-card, .bg-surface-1 { box-shadow: var(--shadow-card); }
 }
 
+/* Drawer slide-in (replaces tw-animate-css animate-in slide-in-from-right) */
+@keyframes ix-slide-in-from-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+.ix-drawer-enter {
+  animation: ix-slide-in-from-right 200ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
 /* ================================================================
    iX APPLICATION FRAME OVERRIDES
    Make IxApplication fill the full viewport correctly under Next.js.
@@ -197,4 +205,17 @@ ix-application {
   display: flex;
   height: 100vh;
   width: 100vw;
+}
+
+/* IxContent: ensure scrollable, no horizontal bleed at 375px */
+ix-content {
+  overflow: auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Prevent any direct child from forcing horizontal scroll on mobile */
+ix-content > * {
+  min-width: 0;
+  max-width: 100%;
 }

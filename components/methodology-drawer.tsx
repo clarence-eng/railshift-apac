@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   EMISSION_FACTORS,
   GRID_FACTORS,
@@ -75,6 +75,8 @@ interface Props {
 }
 
 export default function MethodologyDrawer({ open, onClose }: Props) {
+  const panelRef = useRef<HTMLElement>(null);
+
   // Lock body scroll while open
   useEffect(() => {
     if (open) {
@@ -82,18 +84,45 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
     } else {
       document.body.style.overflow = "";
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  // Close on Escape
+  // Close on Escape + focus trap
   useEffect(() => {
     if (!open) return;
+
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+
+      const panel = panelRef.current;
+      if (!panel) return;
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.closest("[aria-hidden]"));
+
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     }
+
     window.addEventListener("keydown", onKey);
+    // Move focus into the panel on open
+    const panel = panelRef.current;
+    if (panel) {
+      const first = panel.querySelector<HTMLElement>(
+        'button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])'
+      );
+      first?.focus();
+    }
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
@@ -103,17 +132,19 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 z-40 backdrop-blur-sm"
+        style={{ background: "var(--theme-color-backdrop, rgba(0,0,0,0.85))" }}
         aria-hidden="true"
         onClick={onClose}
       />
 
       {/* Drawer panel */}
       <aside
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label="Methodology & Sources"
-        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xl flex-col bg-card border-l border-border shadow-2xl overflow-hidden animate-in slide-in-from-right duration-200"
+        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xl flex-col bg-card border-l border-border shadow-2xl overflow-hidden ix-drawer-enter"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
@@ -123,8 +154,6 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
           <button
             onClick={onClose}
             aria-label="Close drawer"
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
             className="text-muted-foreground hover:text-foreground transition-colors text-xl leading-none"
           >
             ×
