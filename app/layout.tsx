@@ -57,8 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
             <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
               <p className="text-xs" style={{ color: "var(--ix-text-soft)" }}>
-                Independent concept prototype. Not affiliated with or endorsed by Siemens AG.
-                Built by Clarence Eng as a work sample.
+                Built by Clarence Eng.
               </p>
               <p className="text-xs" style={{ color: "var(--ix-text-weak)" }}>
                 Data: EEA 2018 · Ember 2024 · NCCS 2026

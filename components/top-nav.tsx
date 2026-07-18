@@ -29,8 +29,8 @@ export default function TopNav() {
         <div className="mx-auto flex max-w-7xl items-center px-4 sm:px-6 lg:px-8">
           {/* Wordmark */}
           <Link href="/" className="py-3 pr-5 shrink-0 sm:py-4 sm:pr-6 opacity-100 hover:opacity-80 transition-opacity duration-150" aria-label="RailShift APAC — home">
-            <RailShiftWordmark height={28} width={168} className="hidden sm:block" style={{ color: "var(--ix-text)" }} />
-            <RailShiftWordmark height={28} width={44} viewBox="0 0 44 48" className="sm:hidden" style={{ color: "var(--ix-text)" }} />
+            <RailShiftWordmark height={28} width={207} className="hidden sm:block" />
+            <RailShiftWordmark height={22} width={124} viewBox="0 0 210 50" className="sm:hidden" />
           </Link>
 
           {/* Nav links */}
