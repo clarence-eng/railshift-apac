@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-import IxAppShell from "@/components/ix-app-shell";
+import TopNav from "@/components/top-nav";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeSync } from "@/components/theme-sync";
 
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
@@ -27,19 +29,43 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // data-ix-theme + data-ix-color-schema activate iX CSS token blocks.
-    // IxAppShell keeps data-ix-color-schema current via themeSwitcher.
     <html
       lang="en"
-      className={`${geistMono.variable} dark`}
+      className={geistMono.variable}
       data-ix-theme="classic"
       data-ix-color-schema="dark"
       suppressHydrationWarning
     >
-      <body className="h-screen w-screen overflow-hidden bg-[var(--theme-color-1)] text-[var(--theme-color-std-text)] antialiased">
-        <IxAppShell initialTheme="dark">
-          {children}
-        </IxAppShell>
+      <body
+        className="min-h-screen flex flex-col antialiased"
+        style={{ background: "var(--ix-bg)", color: "var(--ix-text)" }}
+      >
+        <ThemeProvider>
+          <ThemeSync />
+          <TopNav />
+          <main className="flex-1 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            {children}
+          </main>
+          <footer
+            className="shrink-0"
+            style={{ borderTop: "1px solid var(--ix-border)", background: "var(--ix-surface-1)" }}
+          >
+            <div
+              className="h-px w-full"
+              style={{ background: "var(--ix-gradient)" }}
+              aria-hidden="true"
+            />
+            <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+              <p className="text-xs" style={{ color: "var(--ix-text-soft)" }}>
+                Independent concept prototype. Not affiliated with or endorsed by Siemens AG.
+                Built by Clarence Eng as a work sample.
+              </p>
+              <p className="text-xs" style={{ color: "var(--ix-text-weak)" }}>
+                Data: EEA 2018 · Ember 2024 · NCCS 2026
+              </p>
+            </div>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );
