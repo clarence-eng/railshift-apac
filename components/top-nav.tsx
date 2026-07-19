@@ -9,6 +9,7 @@ import RailShiftWordmark from "@/components/railshift-wordmark";
 
 const NAV_LINKS = [
   { href: "/",            label: "Pipeline"    },
+  { href: "/market",     label: "Market"      },
   { href: "/decarbonise", label: "Decarbonise" },
   { href: "/brief",       label: "Brief"       },
 ];

@@ -124,18 +124,52 @@ export default function BriefShell() {
     abortRef.current?.abort();
   }, []);
 
+  const selectedProject = PROJECTS.find((p) => p.id === projectId) ?? PROJECTS[0];
+  const calcOutputs = useMemo(
+    () => buildCalcOutputs(gridCountry, dailyRidership, carbonPrice),
+    [gridCountry, dailyRidership, carbonPrice]
+  );
+
+  const loadingRef = useRef(loading);
+  useEffect(() => { loadingRef.current = loading; }, [loading]);
+
+  const handleGenerate = useCallback(async () => {
+    if (loadingRef.current) return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setLoading(true); setError(null); setResult(null);
+    try {
+      const res = await fetch("/api/brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId, calcOutputs }),
+        signal: controller.signal,
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "Unknown error");
+        throw new Error(`HTTP ${res.status}: ${text}`);
+      }
+      setResult((await res.json()) as BriefResponse);
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
+      setError((err as Error).message ?? "Request failed");
+    } finally {
+      setLoading(false);
+    }
+  }, [projectId, calcOutputs]);
+
   // Cmd/Ctrl+Enter shortcut to generate brief
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && !loading) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
         e.preventDefault();
         handleGenerate();
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
+  }, [handleGenerate]);
 
   const handleCopy = useCallback(async () => {
     if (!result?.markdown) return;
@@ -160,38 +194,6 @@ export default function BriefShell() {
     setLoading(false);
     const proj = PROJECTS.find((proj) => proj.id === id);
     if (proj) setGridCountry(projectGridCountry(proj.country));
-  }
-
-  const selectedProject = PROJECTS.find((p) => p.id === projectId) ?? PROJECTS[0];
-  const calcOutputs = useMemo(
-    () => buildCalcOutputs(gridCountry, dailyRidership, carbonPrice),
-    [gridCountry, dailyRidership, carbonPrice]
-  );
-
-  async function handleGenerate() {
-    if (loading) return;
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-    setLoading(true); setError(null); setResult(null);
-    try {
-      const res = await fetch("/api/brief", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId, calcOutputs }),
-        signal: controller.signal,
-      });
-      if (!res.ok) {
-        const text = await res.text().catch(() => "Unknown error");
-        throw new Error(`HTTP ${res.status}: ${text}`);
-      }
-      setResult((await res.json()) as BriefResponse);
-    } catch (err) {
-      if ((err as Error).name === "AbortError") return; // intentional abort, no error shown
-      setError((err as Error).message ?? "Request failed");
-    } finally {
-      setLoading(false);
-    }
   }
 
   return (
