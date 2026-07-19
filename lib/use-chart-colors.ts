@@ -8,14 +8,14 @@ function cssVar(name: string): string {
 }
 
 export interface ChartColors {
-  c1: string; c2: string; c3: string; c4: string;
+  c1: string;
   grid: string; card: string; border: string;
   foreground: string; muted: string; primary: string;
   success: string; warning: string; error: string; info: string; neutral: string;
 }
 
 const DARK_FALLBACK: ChartColors = {
-  c1: "#00ffe7", c2: "#94ffc9", c3: "#00c2cc", c4: "#a3eeff",
+  c1: "#00ffe7",
   grid: "rgba(255,255,255,0.1)",
   card: "#283236", border: "rgba(211,236,248,0.55)",
   foreground: "rgba(245,252,255,0.9)", muted: "rgba(229,247,255,0.65)",
@@ -31,9 +31,6 @@ export function useChartColors(): ChartColors {
     function read() {
       setColors({
         c1:         cssVar("--ix-chart-1")    || DARK_FALLBACK.c1,
-        c2:         cssVar("--ix-chart-2")    || DARK_FALLBACK.c2,
-        c3:         cssVar("--ix-chart-3")    || DARK_FALLBACK.c3,
-        c4:         cssVar("--ix-chart-4")    || DARK_FALLBACK.c4,
         grid:       cssVar("--ix-chart-grid") || DARK_FALLBACK.grid,
         card:       cssVar("--ix-surface-1")  || DARK_FALLBACK.card,
         border:     cssVar("--ix-border")     || DARK_FALLBACK.border,
