@@ -43,8 +43,8 @@ const TOUR_STEPS: TourStep[] = [
   {
     page: "Strategy",
     href: "/strategy",
-    headline: "DEGREE, BTA planning, and JD alignment",
-    body: "Strategy maps this prototype to Siemens' frameworks. DEGREE: 6 clickable pillars showing which app capability serves each sustainability dimension. BTA planning: 6 dimensions that feed a Business Target Agreement cycle. JD requirements: direct mapping from each role requirement to specific app evidence.",
+    headline: "DEGREE sustainability and BTA planning",
+    body: "Strategy maps this prototype to Siemens' frameworks. DEGREE: 6 clickable pillars showing which app capability serves each sustainability dimension. BTA planning: 6 dimensions that feed a Business Target Agreement cycle — from market sizing to M&A signals.",
     tip: "Each DEGREE card is a clickable link — click Decarbonization to go straight to the carbon calculator.",
   },
 ];

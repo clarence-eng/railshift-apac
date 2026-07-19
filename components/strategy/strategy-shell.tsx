@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PROJECTS, CALC_DEFAULTS, GRID_FACTORS, SOURCES } from "@/data/seed";
-import MarketCard from "@/components/market/market-card";
 import { isSiemensIncumbent, primaryCountry } from "@/lib/project-utils";
 
 // ─── Derived stats (all from seed, no fabrication) ────────────────────────────
@@ -132,40 +131,6 @@ const BTA_DIMENSIONS: BtaDimension[] = [
   },
 ];
 
-// ─── Strategic themes from JD ─────────────────────────────────────────────────
-const STRATEGIC_THEMES = [
-  {
-    theme: "Business strategy development",
-    jdRef: "Develop business strategies representative of Siemens Mobility interests in Singapore and APAC",
-    appEvidence: "M&A Signals tab identifies PROTECT/PURSUE/MONITOR/WATCH classifications; Competitive tab surfaces competitor positioning per project; Brief generates per-project strategy memos aligned to Siemens DEGREE framework.",
-  },
-  {
-    theme: "Market analysis",
-    jdRef: "Carry out market analyses to identify opportunities, trends & competition",
-    appEvidence: "Market page: Country breakdown (project count, route km, status split per market), Technology classification (CBTC/HSR/Metro/Freight mix), Timeline (delivery horizon 2026–2036), Competitive matrix.",
-  },
-  {
-    theme: "Sustainability / DEGREE",
-    jdRef: "Lead and drive sustainability initiatives aligned with Siemens's DEGREE framework",
-    appEvidence: "Decarbonise page: modal shift avoided emissions + carbon value calculator; electrification grid-dependency analysis; all figures cited to EEA/Ember/NCCS primary sources.",
-  },
-  {
-    theme: "External growth / M&A",
-    jdRef: "Develop proposals for external growth such as M&A",
-    appEvidence: "M&A Signals: project-level PURSUE signals with action notes; Competitive: incumbent gap analysis; all with confidence ratings to distinguish confirmed vs speculative intelligence.",
-  },
-  {
-    theme: "Executive communication",
-    jdRef: "Prepare & deliver accurate business presentations & reports for senior leadership",
-    appEvidence: "Brief page: Gemini-powered executive memo (Print + Copy actions); pre-computed offline examples for Singapore lines; memo structured for senior audience with 4 precise sections.",
-  },
-  {
-    theme: "BTA & target setting",
-    jdRef: "Develop business plans and control target setting processes, Business Target Agreements (BTAs)",
-    appEvidence: "Pipeline KPI strip: Projects tracked, Under construction %, Approved %, Siemens incumbent count; Market Country table: per-market route km and project status distribution.",
-  },
-];
-
 // ─── Components ───────────────────────────────────────────────────────────────
 
 function StatCard({ letter, sub, pillar, color, stat, desc, appLink, href }: DegreePillar) {
@@ -267,34 +232,6 @@ export default function StrategyShell() {
           ))}
         </div>
       </section>
-
-      {/* JD Requirements mapping */}
-      <MarketCard title="JD requirements — app capabilities mapping">
-        <div>
-          {STRATEGIC_THEMES.map(({ theme, jdRef, appEvidence }, i) => (
-            <div
-              key={theme}
-              className="py-4 border-b last:border-0"
-              style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}
-            >
-              <div className="flex items-start gap-3">
-                <span className="font-mono text-xs shrink-0 w-5 tabular-nums" style={{ color: "var(--ix-primary)" }}>
-                  {i + 1}
-                </span>
-                <div className="space-y-1.5 min-w-0">
-                  <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{theme}</p>
-                  <p className="text-xs italic leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>
-                    &ldquo;{jdRef}&rdquo;
-                  </p>
-                  <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-primary)" }}>
-                    → {appEvidence}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </MarketCard>
 
       {/* Footer */}
       <p className="text-xs border-t pt-4" style={{ color: "var(--theme-color-weak-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
