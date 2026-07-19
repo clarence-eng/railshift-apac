@@ -126,6 +126,7 @@ export default function BriefShell() {
   }, []);
 
   const selectedProject = PROJECTS.find((p) => p.id === projectId) ?? PROJECTS[0];
+  const dailyRidershipLabel = `${(dailyRidership / 1000).toFixed(0)}k pax/day`;
   const calcOutputs = useMemo(
     () => buildCalcOutputs(gridCountry, dailyRidership, carbonPrice),
     [gridCountry, dailyRidership, carbonPrice]
@@ -262,7 +263,7 @@ export default function BriefShell() {
             <div className="flex justify-between text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Daily ridership</span>
               <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-primary)" }}>
-                {(dailyRidership / 1000).toFixed(0)}k pax/day
+                {dailyRidershipLabel}
               </span>
             </div>
             <IxSlider
@@ -301,7 +302,7 @@ export default function BriefShell() {
             </p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Daily ridership</span>
-              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{(dailyRidership / 1000).toFixed(0)}k pax/day</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{dailyRidershipLabel}</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Avg trip length</span>
               <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{CALC_DEFAULTS.avgTripKm} km</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Diverted from car</span>

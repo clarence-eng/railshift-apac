@@ -28,7 +28,7 @@ export default function DecarboniseShell() {
         onTabChange={(e) => {
           const raw = e.detail;
           const idx = typeof raw === "string" ? parseInt(raw, 10) : Number(raw ?? 0);
-          setActiveTab(isNaN(idx) ? 0 : idx);
+          setActiveTab(isNaN(idx) ? 0 : Math.max(0, idx));
         }}
       >
         <IxTabItem label="Modal shift" />
