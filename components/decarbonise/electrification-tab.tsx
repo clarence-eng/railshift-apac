@@ -9,7 +9,7 @@ import {
   electrificationByCountry,
   gridDependencyTakeaway,
 } from "@/lib/calc";
-import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider } from "./primitives";
+import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider, fmt, fmtSGD } from "./primitives";
 
 const ElectrificationChart = dynamic(() => import("./electrification-chart"), {
   ssr: false,
@@ -20,15 +20,6 @@ const ElectrificationChart = dynamic(() => import("./electrification-chart"), {
     />
   ),
 });
-
-function fmt(n: number, dec = 0) {
-  return n.toLocaleString("en-SG", { minimumFractionDigits: dec, maximumFractionDigits: dec });
-}
-function fmtSGD(n: number) {
-  if (Math.abs(n) >= 1_000_000)
-    return `S$${(n / 1_000_000).toLocaleString("en-SG", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m`;
-  return `S$${fmt(n)}`;
-}
 
 const COMPARISON_GRIDS = GRID_FACTORS.filter((g) =>
   ["Singapore", "India", "Indonesia", "Australia", "Malaysia"].includes(g.country)

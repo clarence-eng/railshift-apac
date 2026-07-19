@@ -4,6 +4,20 @@ import { useState } from "react";
 import { IxBlind, IxSlider, IxCheckbox } from "@siemens/ix-react";
 
 // ---------------------------------------------------------------------------
+// Shared formatters — used by Modal Shift, Electrification, and Brief
+// ---------------------------------------------------------------------------
+
+export function fmt(n: number, dec = 0): string {
+  return n.toLocaleString("en-SG", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+export function fmtSGD(n: number): string {
+  if (Math.abs(n) >= 1_000_000)
+    return `S$${(n / 1_000_000).toLocaleString("en-SG", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m`;
+  return `S$${fmt(n)}`;
+}
+
+// ---------------------------------------------------------------------------
 // SliderRow — wraps IxSlider
 // ---------------------------------------------------------------------------
 

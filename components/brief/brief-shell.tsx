@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import {
   IxSelect, IxSelectItem, IxSlider, IxButton, IxMessageBar,
@@ -8,6 +8,7 @@ import {
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { PRECOMPUTED_BY_ID } from "@/data/precomputed-briefs";
+import { SectionDivider, fmt, fmtSGD } from "@/components/decarbonise/primitives";
 
 const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
@@ -112,13 +113,18 @@ export default function BriefShell() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up copy timer on unmount
+  useEffect(() => () => { if (copyTimerRef.current) clearTimeout(copyTimerRef.current); }, []);
 
   const handleCopy = useCallback(async () => {
     if (!result?.markdown) return;
     try {
       await navigator.clipboard.writeText(result.markdown);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       // clipboard API unavailable (non-https dev) — silently ignore
     }
@@ -132,12 +138,11 @@ export default function BriefShell() {
     if (proj) setGridCountry(projectGridCountry(proj.country));
   }
 
-  const selectedProject = PROJECTS.find((p) => p.id === projectId)!;
-  const calcOutputs = buildCalcOutputs(gridCountry, dailyRidership, carbonPrice);
-
-  const fmt = (n: number) => n.toLocaleString("en-SG", { maximumFractionDigits: 0 });
-  const fmtSGD = (n: number) =>
-    Math.abs(n) >= 1_000_000 ? `S$${(n / 1_000_000).toFixed(1)}m` : `S$${fmt(n)}`;
+  const selectedProject = PROJECTS.find((p) => p.id === projectId) ?? PROJECTS[0];
+  const calcOutputs = useMemo(
+    () => buildCalcOutputs(gridCountry, dailyRidership, carbonPrice),
+    [gridCountry, dailyRidership, carbonPrice]
+  );
 
   async function handleGenerate() {
     setLoading(true); setError(null); setResult(null);
@@ -180,7 +185,7 @@ export default function BriefShell() {
 
           {/* Project select */}
           <div className="space-y-1.5">
-            <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Project</p>
+            <SectionDivider label="Project" />
             <IxSelect
               value={projectId}
               onValueChange={(e) => handleProjectChange((e.detail as string) ?? "")}
@@ -203,7 +208,7 @@ export default function BriefShell() {
 
           {/* Grid select */}
           <div className="space-y-1.5">
-            <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</p>
+            <SectionDivider label="Country grid" />
             <IxSelect
               value={gridCountry}
               onValueChange={(e) => setGridCountry((e.detail as string) ?? "")}
@@ -223,7 +228,7 @@ export default function BriefShell() {
           <div className="space-y-0.5">
             <div className="flex justify-between text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Daily ridership</span>
-              <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>
+              <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-primary)" }}>
                 {(dailyRidership / 1000).toFixed(0)}k pax/day
               </span>
             </div>
@@ -239,7 +244,7 @@ export default function BriefShell() {
           <div className="space-y-0.5">
             <div className="flex justify-between text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Carbon price</span>
-              <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>
+              <span className="font-mono tabular-nums" style={{ color: "var(--theme-color-primary)" }}>
                 S${carbonPrice}/tCO₂e
               </span>
             </div>
@@ -262,6 +267,10 @@ export default function BriefShell() {
               Scenario inputs
             </p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+              <span style={{ color: "var(--theme-color-soft-text)" }}>Daily ridership</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{(dailyRidership / 1000).toFixed(0)}k pax/day</span>
+              <span style={{ color: "var(--theme-color-soft-text)" }}>Diverted from car</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>30% (ITDP mid-range)</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Avoided tCO₂/yr</span>
               <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{fmt(calcOutputs.avoidedTCO2PerYear)}</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Carbon value/yr</span>
@@ -285,8 +294,8 @@ export default function BriefShell() {
           <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>
             Project id and calculator outputs are sent to Gemini server-side. No personal data is transmitted. Responses are cached 1 hour per unique input set.
           </p>
-          </div>{/* end p-4 space-y-4 */}
-        </div>{/* end controls card */}
+          </div>
+        </div>
 
         {/* Output panel */}
         <div className="space-y-3">
@@ -372,12 +381,12 @@ export default function BriefShell() {
         <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
         <div className="px-4 py-3 text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
           <span className="font-semibold text-sm" style={{ color: "var(--theme-color-std-text)" }}>{selectedProject.name}</span>
-          <span className="mx-1.5 opacity-30">·</span>
+          <span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span>
           <span>{selectedProject.status}</span>
-          <span className="mx-1.5 opacity-30">·</span>
+          <span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span>
           <span>{selectedProject.country}</span>
-          {selectedProject.value && <><span className="mx-1.5 opacity-30">·</span><span>{selectedProject.value}</span></>}
-          {selectedProject.keyDate && <><span className="mx-1.5 opacity-30">·</span><span>{selectedProject.keyDate}</span></>}
+          {selectedProject.value && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.value}</span></>}
+          {selectedProject.keyDate && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.keyDate}</span></>}
           {selectedProject.note && <p className="mt-1.5 leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>{selectedProject.note}</p>}
         </div>
       </div>

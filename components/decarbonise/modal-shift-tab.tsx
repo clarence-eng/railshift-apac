@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { IxSelect, IxSelectItem, IxCheckbox, IxMessageBar } from "@siemens/ix-react";
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
-import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider } from "./primitives";
+import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider, fmt, fmtSGD } from "./primitives";
 
 const ModalShiftChart = dynamic(() => import("./modal-shift-chart"), {
   ssr: false,
@@ -37,15 +37,6 @@ const LINE_OPTIONS = PROJECTS.map((p) => ({
   lengthKm: p.lengthKm,
   status: p.status,
 }));
-
-function fmt(n: number, dec = 0) {
-  return n.toLocaleString("en-SG", { minimumFractionDigits: dec, maximumFractionDigits: dec });
-}
-function fmtSGD(n: number) {
-  if (Math.abs(n) >= 1_000_000)
-    return `S$${(n / 1_000_000).toLocaleString("en-SG", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m`;
-  return `S$${fmt(n)}`;
-}
 
 export default function ModalShiftTab() {
   const [lineId, setLineId] = useState(PROJECTS[0].id);

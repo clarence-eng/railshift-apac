@@ -18,23 +18,38 @@ const STATUSES: ProjectStatus[] = [
 function MapSkeleton() {
   return (
     <div
-      className="w-full rounded-sm border border-border bg-surface-1 overflow-hidden animate-pulse"
-      style={{ height: "clamp(300px, 50vw, 420px)" }}
+      className="w-full rounded-sm border border-border bg-surface-1 overflow-hidden animate-pulse relative"
+      style={{ height: "clamp(300px, 50vw, 420px)", background: "var(--theme-color-2)" }}
       aria-label="Map loading"
     >
-      {/* Simulated basemap structure */}
-      <div className="h-full flex flex-col justify-between p-4 opacity-30">
-        <div className="flex justify-end">
-          <div className="w-6 h-12 rounded-sm bg-border-soft" />
-        </div>
-        <div className="space-y-2">
-          <div className="h-px bg-border-hair w-full" />
-          <div className="h-px bg-border-hair w-4/5" />
-          <div className="h-px bg-border-hair w-full" />
-        </div>
-        <div className="flex justify-end">
-          <div className="h-3 w-48 rounded-sm bg-border-soft" />
-        </div>
+      {/* Horizontal grid lines */}
+      {[20, 38, 56, 74].map((pct) => (
+        <div
+          key={pct}
+          className="absolute left-0 right-0 h-px"
+          style={{ top: `${pct}%`, background: "var(--theme-color-x-weak-bdr)" }}
+        />
+      ))}
+      {/* Vertical grid lines */}
+      {[18, 36, 54, 72].map((pct) => (
+        <div
+          key={pct}
+          className="absolute top-0 bottom-0 w-px"
+          style={{ left: `${pct}%`, background: "var(--theme-color-x-weak-bdr)" }}
+        />
+      ))}
+      {/* Nav control placeholder — top right */}
+      <div className="absolute top-3 right-3 flex flex-col gap-0.5">
+        <div className="w-6 h-6 rounded-sm" style={{ background: "var(--theme-color-3)" }} />
+        <div className="w-6 h-6 rounded-sm" style={{ background: "var(--theme-color-3)" }} />
+      </div>
+      {/* Attribution placeholder — bottom right */}
+      <div className="absolute bottom-2 right-2 h-3 w-36 rounded-sm" style={{ background: "var(--theme-color-3)" }} />
+      {/* Centre label */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-weak-text)" }}>
+          Loading map…
+        </p>
       </div>
     </div>
   );
