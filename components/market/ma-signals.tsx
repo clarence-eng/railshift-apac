@@ -84,15 +84,16 @@ function deriveSignals(projects: Project[]): Signal[] {
   }
 
   const seen = new Set<string>();
-  const urgencyRank = { HIGH: 0, MED: 1, LOW: 2 };
   return signals
-    .sort((a, b) => urgencyRank[a.urgency] - urgencyRank[b.urgency])
+    .sort((a, b) => URGENCY_RANK[a.urgency] - URGENCY_RANK[b.urgency])
     .filter((s) => {
       if (seen.has(s.project.id)) return false;
       seen.add(s.project.id);
       return true;
     });
 }
+
+const URGENCY_RANK: Record<string, number> = { HIGH: 0, MED: 1, LOW: 2 };
 
 const SIGNAL_STYLE: Record<SignalType, { color: string; bg: string }> = {
   PROTECT: { color: "#fff",                          bg: "var(--ix-primary)" },
