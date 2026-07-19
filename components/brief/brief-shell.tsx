@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
   IxSelect, IxSelectItem, IxSlider, IxButton, IxMessageBar,
@@ -181,7 +182,7 @@ export default function BriefShell() {
     } catch {
       // clipboard API unavailable (non-https dev) — silently ignore
     }
-  }, [result?.markdown]);
+  }, [result]);
 
   function handleProjectChange(id: string) {
     setProjectId(id);
@@ -452,13 +453,13 @@ export default function BriefShell() {
               {selectedProject.keyDate && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.keyDate}</span></>}
               {selectedProject.note && <p className="mt-1.5 leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>{selectedProject.note}</p>}
             </div>
-            <a
+            <Link
               href="/"
               className="shrink-0 text-xs underline transition-opacity duration-150 hover:opacity-70"
               style={{ color: "var(--theme-color-primary)" }}
             >
               View on Pipeline →
-            </a>
+            </Link>
           </div>
         </div>
       </div>

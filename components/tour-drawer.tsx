@@ -61,7 +61,8 @@ export default function TourDrawer({ open, onClose }: Props) {
   const [step, setStep] = useState(0);
   const panelRef = useRef<HTMLElement>(null);
 
-  // Reset to first step when reopened
+  // Reset to first step when reopened — intentional setState inside effect
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (open) setStep(0); }, [open]);
 
   // Lock body scroll

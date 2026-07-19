@@ -149,11 +149,19 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
 
     initMap(primaryStyle).catch(() => initMap(fallbackStyle));
 
+    // Capture refs in local variables so the cleanup function uses the values
+    // from the time the effect ran, not the (potentially changed) ref values.
+    const mapToClean = mapRef;
+    const markersToClean = markerEls;
     return () => {
-      mapRef.current?.remove();
-      mapRef.current = null;
-      markerEls.current.clear();
+      mapToClean.current?.remove();
+      mapToClean.current = null;
+      markersToClean.current.clear();
     };
+  // Projects is intentionally excluded: the map is only rebuilt on theme
+  // changes (colorSchema). Project marker updates happen via the separate
+  // selectedId effect below. Adding projects here would tear down and
+  // rebuild the entire map on every data change.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorSchema]);
 

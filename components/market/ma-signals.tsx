@@ -1,5 +1,4 @@
 import type { Project } from "@/data/seed";
-import MarketCard from "./market-card";
 
 interface Props { projects: Project[]; }
 

@@ -111,8 +111,11 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
     const a = document.createElement("a");
     a.href = url;
     a.download = `railshift-apac-pipeline-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    // Delay revoke to give the browser time to initiate the download
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   }
 
   return (
