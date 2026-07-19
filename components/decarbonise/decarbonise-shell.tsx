@@ -26,7 +26,7 @@ export default function DecarboniseShell() {
       </div>
 
       {/* Tab bar — custom buttons for consistent spacing and label control */}
-      <div className="ix-no-scrollbar flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
+      <div role="tablist" aria-label="Decarbonisation calculators" className="ix-no-scrollbar flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
         {TABS.map((tab) => (
           <button
             key={tab}

@@ -8,10 +8,9 @@ interface Props { projects: Project[]; }
 // Sustainability context data — sourced from publicly available figures.
 // Figures are indicative/reference-level; see Methodology drawer for sources.
 const CARBON_PRICE_TRAJECTORY = [
-  { year: "2024", sgd: 25,  note: "Singapore carbon tax (actual)" },
-  { year: "2026", sgd: 45,  note: "Current rate (NCCS verified)" },
-  { year: "2028", sgd: 50,  note: "S$50 target (NCCS 2030 path)" },
-  { year: "2030", sgd: 80,  note: "S$80 ceiling target (NCCS)" },
+  { year: "2024", sgd: 25, note: "Singapore carbon tax (actual)" },
+  { year: "2026", sgd: 45, note: "Current rate — NCCS verified" },
+  { year: "2030", sgd: 80, note: "Target ceiling S$50–80 by 2030 (NCCS)" },
 ];
 
 const REGULATORY_CONTEXT = [
@@ -32,8 +31,8 @@ const REGULATORY_CONTEXT = [
   {
     market: "Indonesia",
     headline: "Whoosh HSR + Jakarta MRT expansion",
-    relevance: "Whoosh Jakarta-Bandung HSR operational Oct 2023 — first HSR in SE Asia. Government targeting 23% renewable energy by 2025.",
-    implication: "Ridership vs operating loss tension creates service/upgrade opportunity. China EXIM financing on ECRL limits systems scope for Western suppliers.",
+    relevance: "Whoosh Jakarta-Bandung HSR operational Oct 2023 — first HSR in SE Asia. China EXIM financed. Government targeting 23% renewable energy by 2025.",
+    implication: "Ridership vs operating loss tension creates service/upgrade opportunity. China EXIM financing typically involves tied procurement; monitor for systems scope available to Western suppliers.",
     signal: "MED",
   },
   {
@@ -52,9 +51,9 @@ const REGULATORY_CONTEXT = [
   },
   {
     market: "India",
-    headline: "National Rail Plan 2030 + net-zero 2070",
-    relevance: "Indian Railways targeting net-zero 2030 (freight) — already 100% electric traction on broad gauge by 2024. Mumbai-Ahmedabad HSR JICA-financed.",
-    implication: "MAHSR is the flagship HSR reference. Indian Railways' aggressive electrification sets a strong DEGREE alignment narrative.",
+    headline: "Indian Railways net-zero 2030 + national net-zero 2070",
+    relevance: "Indian Railways has a sector-level net-zero 2030 target and is pushing towards 100% electric traction on broad gauge. Mumbai-Ahmedabad HSR is JICA-financed.",
+    implication: "MAHSR is the flagship HSR reference in the region. Indian Railways' electrification ambition aligns strongly with Siemens DEGREE Decarbonization narrative.",
     signal: "HIGH",
   },
 ];
@@ -69,8 +68,8 @@ export default function SustainabilityContext({ projects }: Props) {
   // Derive Siemens-incumbent projects with sustainability angle
   const incumbentProjects = projects.filter((p) => isSiemensIncumbent(p.note));
 
-  // Carbon value of incumbent fleet at current carbon price
-  const sgGrid = GRID_FACTORS.find((g) => g.country === "Singapore")!.gCO2ePerKWh;
+  // Carbon saving vs car on Singapore grid — derived from verified seed data
+  const sgGrid = GRID_FACTORS.find((g) => g.country === "Singapore")?.gCO2ePerKWh ?? 497;
   const sgElectricGCO2 = CALC_DEFAULTS.railEnergyIntensity * sgGrid;
   const sgCarSaving = Math.round(CALC_DEFAULTS.baselineCarFactor - sgElectricGCO2);
 
@@ -125,7 +124,7 @@ export default function SustainabilityContext({ projects }: Props) {
         title="Sustainability & regulatory context by market"
         note="Indicative overview. Verify with primary government and regulatory sources before use in proposals."
       >
-        <div className="space-y-0">
+        <div>
           {REGULATORY_CONTEXT.map(({ market, headline, relevance, implication, signal }) => (
             <div key={market} className="py-4 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
               <div className="flex items-start justify-between gap-3 mb-2">
