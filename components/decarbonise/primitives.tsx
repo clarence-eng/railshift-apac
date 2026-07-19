@@ -23,7 +23,7 @@ export function SliderRow({ label, value, min, max, step, format, onChange, note
     <div className="space-y-0.5 min-w-0">
       <div className="flex justify-between text-xs min-w-0">
         <span className="truncate pr-2" style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
-        <span className="font-mono tabular-nums shrink-0" style={{ color: "var(--theme-color-std-text)" }}>
+        <span className="font-mono tabular-nums shrink-0" style={{ color: "var(--theme-color-primary)" }}>
           {format(value)}
         </span>
       </div>
@@ -32,7 +32,7 @@ export function SliderRow({ label, value, min, max, step, format, onChange, note
         max={max}
         step={step}
         value={value}
-        onValueChange={(e) => onChange(e.detail)}
+        onValueChange={(e) => { if (e.detail != null) onChange(e.detail); }}
         style={{ width: "100%", minWidth: 0 }}
       />
       {note && (
@@ -57,7 +57,7 @@ export function CheckboxRow({ checked, onChange, children }: CheckboxRowProps) {
     <IxCheckbox
       checked={checked}
       label={typeof children === "string" ? children : undefined}
-      onCheckedChange={(e) => onChange(e.detail)}
+      onCheckedChange={(e) => onChange(e.detail ?? false)}
     >
       {typeof children !== "string" && children}
     </IxCheckbox>
@@ -115,13 +115,19 @@ interface DisclosureProps {
 export function Disclosure({ label, children }: DisclosureProps) {
   const [collapsed, setCollapsed] = useState(true);
   return (
-    <IxBlind
-      label={label}
-      collapsed={collapsed}
-      onCollapsedChange={(e) => setCollapsed(e.detail)}
+    <div
+      className="rounded-sm border overflow-hidden"
+      style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
     >
-      <div className="space-y-1.5 px-1 py-2">{children}</div>
-    </IxBlind>
+      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <IxBlind
+        label={label}
+        collapsed={collapsed}
+        onCollapsedChange={(e) => setCollapsed(e.detail ?? true)}
+      >
+        <div className="space-y-1.5 px-1 py-2">{children}</div>
+      </IxBlind>
+    </div>
   );
 }
 

@@ -59,11 +59,13 @@ function buildCalcOutputs(gridCountry: string, dailyRidership: number, carbonPri
 function MemoBody({ markdown }: { markdown: string }) {
   return (
     <div
-      className="prose prose-sm max-w-none memo-body
-        [&_h1]:text-base [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:mb-3
-        [&_h2]:text-xs [&_h2]:font-semibold [&_h2]:uppercase [&_h2]:tracking-widest [&_h2]:mt-6 [&_h2]:mb-2 [&_h2]:pl-2 [&_h2]:border-l-[2px] [&_h2]:border-l-[var(--ix-primary)]
+      className="max-w-none
+        [&_h1]:text-base [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:mb-4 [&_h1]:leading-snug
+        [&_h2]:text-xs [&_h2]:font-semibold [&_h2]:uppercase [&_h2]:tracking-widest [&_h2]:mt-7 [&_h2]:mb-2.5 [&_h2]:pl-2 [&_h2]:border-l-[2px] [&_h2]:border-l-[var(--ix-primary)]
         [&_p]:text-sm [&_p]:leading-relaxed [&_p]:mb-3
-        [&_hr]:my-4 [&_strong]:font-semibold [&_li]:mb-1"
+        [&_hr]:my-5 [&_hr]:border-0 [&_hr]:h-px [&_hr]:bg-[var(--theme-color-x-weak-bdr)]
+        [&_strong]:font-semibold [&_li]:mb-1 [&_ul]:pl-4 [&_li]:text-sm [&_em]:italic
+        [&_a]:underline [&_a]:text-[var(--theme-color-primary)]"
       style={{ color: "var(--theme-color-std-text)" }}
     >
       <ReactMarkdown>{markdown}</ReactMarkdown>
@@ -337,12 +339,21 @@ export default function BriefShell() {
           ) : !error ? (
             <div
               className="overflow-hidden rounded-sm border min-h-[280px] flex flex-col"
-              style={{ borderColor: "var(--theme-color-x-weak-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
+              style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
             >
               <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-              <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center px-6">
-                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-weak-text)" }}>Executive Brief</p>
-                <p className="text-sm" style={{ color: "var(--theme-color-soft-text)" }}>Configure inputs and press &ldquo;Generate brief&rdquo;</p>
+              <div className="flex-1 flex flex-col items-center justify-center gap-3 text-center px-8">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>Executive Strategy Memo</p>
+                  <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>
+                    Select a project, set scenario parameters, and press{" "}
+                    <span style={{ color: "var(--theme-color-primary)" }}>Generate brief</span>{" "}
+                    to produce a four-section strategy memo covering market opportunity, competitive context, DEGREE alignment, and recommendation.
+                  </p>
+                </div>
+                <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+                  ★ projects include a saved example that works without an API key
+                </p>
               </div>
             </div>
           ) : null}

@@ -182,7 +182,7 @@ async function callGemini(
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.4,
-        maxOutputTokens: 1200,
+        maxOutputTokens: 1800,
       },
     }),
   });
