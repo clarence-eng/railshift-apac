@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useChartColors } from "@/lib/use-chart-colors";
 
 interface DataRow {
@@ -26,10 +26,10 @@ export default function CountryChart({ data }: Props) {
           cursor={{ fill: "rgba(255,255,255,0.04)" }}
         />
         <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "12px" }} />
-        <Bar dataKey="operational"      name="Operational"       stackId="a" fill={ch.success}  radius={[0,0,0,0]} />
-        <Bar dataKey="underConstruction" name="Under construction" stackId="a" fill={ch.warning}  radius={[0,0,0,0]} />
-        <Bar dataKey="approved"         name="Approved"          stackId="a" fill={ch.info}     radius={[0,0,0,0]} />
-        <Bar dataKey="undecided"        name="Undecided"         stackId="a" fill={ch.neutral}  radius={[2,2,0,0]} />
+        <Bar dataKey="operational"       name="Operational"        stackId="a" fill={ch.success} />
+        <Bar dataKey="underConstruction"  name="Under construction"  stackId="a" fill={ch.warning} />
+        <Bar dataKey="approved"           name="Approved"            stackId="a" fill={ch.info} />
+        <Bar dataKey="undecided"          name="Undecided"           stackId="a" fill={ch.neutral} radius={[2, 2, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

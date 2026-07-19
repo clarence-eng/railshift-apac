@@ -7,8 +7,9 @@ import TechClassification from "./tech-classification";
 import PipelineTimeline from "./pipeline-timeline";
 import CompetitiveAnalysis from "./competitive-analysis";
 import MASignals from "./ma-signals";
+import FundingAnalysis from "./funding-analysis";
 
-const TABS = ["Country", "Technology", "Timeline", "Competitive", "M&A Signals"] as const;
+const TABS = ["Country", "Technology", "Timeline", "Competitive", "Funding", "M&A Signals"] as const;
 type Tab = typeof TABS[number];
 
 export default function MarketShell() {
@@ -54,6 +55,7 @@ export default function MarketShell() {
         {activeTab === "Technology"  && <TechClassification    projects={PROJECTS} />}
         {activeTab === "Timeline"    && <PipelineTimeline       projects={PROJECTS} />}
         {activeTab === "Competitive" && <CompetitiveAnalysis    projects={PROJECTS} />}
+        {activeTab === "Funding"     && <FundingAnalysis        projects={PROJECTS} />}
         {activeTab === "M&A Signals" && <MASignals              projects={PROJECTS} />}
       </div>
 
