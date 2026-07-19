@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function MarketPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="ix-page-enter" />}>
       <MarketShell />
     </Suspense>
   );
