@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { IxSelect, IxSelectItem, IxMessageBar } from "@siemens/ix-react";
+import { IxSelect, IxSelectItem } from "@siemens/ix-react";
 import { GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import {
   electrificationAvoided,
@@ -102,13 +102,23 @@ export default function ElectrificationTab() {
         {/* Chart — lazy loaded */}
         <ElectrificationChart rows={comparisonRows} dieselFactor={dieselFactor} railEnergy={railEnergy} />
 
-        {/* Takeaway */}
-        <IxMessageBar type="warning" persistent>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider mb-1">Grid dependency insight</p>
-            <p className="text-sm leading-relaxed">{takeaway}</p>
+        {/* Grid dependency insight */}
+        <div
+          className="rounded-sm border overflow-hidden"
+          style={{
+            background: "var(--theme-color-2)",
+            borderColor: "var(--theme-color-std-bdr)",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.14)",
+          }}
+        >
+          <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+          <div className="px-4 py-3 space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ix-primary)" }}>
+              Grid dependency insight
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>{takeaway}</p>
           </div>
-        </IxMessageBar>
+        </div>
 
         {/* Show calculation */}
         <Disclosure label="Show calculation">

@@ -89,45 +89,45 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
 
     function addMarkers(map: MLMap, Marker: typeof import("maplibre-gl").Marker) {
       for (const project of projects) {
-          const el = document.createElement("div");
-          const color = getResolvedStatusColor(project.status);
-          const isDarkMap = colorSchema !== "light";
-          el.style.cssText = `
-            width: 12px; height: 12px;
-            background: ${color};
-            border: 1.5px solid ${isDarkMap ? "rgba(15,22,25,0.9)" : "rgba(255,255,255,0.9)"};
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-            transition: transform 0.12s;
-          `;
-          el.title = project.name;
-          el.setAttribute("aria-label", project.name);
+        const el = document.createElement("div");
+        const color = getResolvedStatusColor(project.status);
+        const isDarkMap = colorSchema !== "light";
+        el.style.cssText = `
+          width: 12px; height: 12px;
+          background: ${color};
+          border: 1.5px solid ${isDarkMap ? "rgba(15,22,25,0.9)" : "rgba(255,255,255,0.9)"};
+          border-radius: 50%;
+          cursor: pointer;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+          transition: transform 0.12s;
+        `;
+        el.title = project.name;
+        el.setAttribute("aria-label", project.name);
 
-          el.addEventListener("mouseenter", () => {
-            if (el.style.zIndex !== "10") el.style.transform = "scale(1.6)";
-          });
-          el.addEventListener("mouseleave", () => {
-            if (el.style.zIndex !== "10") el.style.transform = "scale(1)";
-          });
-          el.addEventListener("click", () => onSelectRef.current(project.id));
+        el.addEventListener("mouseenter", () => {
+          if (el.style.zIndex !== "10") el.style.transform = "scale(1.6)";
+        });
+        el.addEventListener("mouseleave", () => {
+          if (el.style.zIndex !== "10") el.style.transform = "scale(1)";
+        });
+        el.addEventListener("click", () => onSelectRef.current(project.id));
 
-          markerEls.current.set(project.id, el);
+        markerEls.current.set(project.id, el);
 
-          new Marker({ element: el })
-            .setLngLat([project.lng, project.lat])
-            .addTo(map);
+        new Marker({ element: el })
+          .setLngLat([project.lng, project.lat])
+          .addTo(map);
+      }
+
+      const sel = selectedIdRef.current;
+      if (sel) {
+        const selEl = markerEls.current.get(sel);
+        if (selEl) {
+          selEl.style.transform = "scale(1.8)";
+          selEl.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
+          selEl.style.zIndex = "10";
         }
-
-        const sel = selectedIdRef.current;
-        if (sel) {
-          const selEl = markerEls.current.get(sel);
-          if (selEl) {
-            selEl.style.transform = "scale(1.8)";
-            selEl.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
-            selEl.style.zIndex = "10";
-          }
-        }
+      }
     }
 
     initMap(primaryStyle).catch(() => initMap(fallbackStyle));

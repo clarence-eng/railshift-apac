@@ -94,12 +94,13 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
           placeholder="Search projects…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="h-8 w-full sm:w-52 rounded-sm border px-3 text-sm placeholder:opacity-50 focus:outline-none"
+          className="h-8 w-full sm:w-52 rounded-sm border px-3 text-sm placeholder:opacity-50 focus:outline-none focus:ring-1"
           style={{
             background: "var(--theme-color-2)",
             borderColor: "var(--theme-color-std-bdr)",
             color: "var(--theme-color-std-text)",
-          }}
+            "--tw-ring-color": "var(--ix-primary)",
+          } as React.CSSProperties}
         />
 
         <IxSelect
@@ -136,7 +137,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
           boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
         }}
       >
-        <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+        <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
         <table className="w-full text-sm">
           <thead
             className="border-b"

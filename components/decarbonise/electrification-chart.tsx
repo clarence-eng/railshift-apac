@@ -31,12 +31,12 @@ export default function ElectrificationChart({ rows, dieselFactor, railEnergy }:
         boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
       }}
     >
-      <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="p-4 space-y-2">
         <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
           Electrification reduction vs diesel — by country grid
         </p>
-        <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
+        <p className="text-xs tracking-wide" style={{ color: "var(--theme-color-soft-text)" }}>
           Diesel: {dieselFactor} gCO₂e/pkm · Rail energy: {railEnergy.toFixed(3)} kWh/pkm
         </p>
         <ResponsiveContainer width="100%" height={200}>

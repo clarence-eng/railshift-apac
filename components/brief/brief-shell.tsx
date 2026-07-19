@@ -134,6 +134,8 @@ export default function BriefShell() {
     setProjectId(id);
     setResult(null);
     setError(null);
+    setCopied(false);
+    if (copyTimerRef.current) { clearTimeout(copyTimerRef.current); copyTimerRef.current = null; }
     const proj = PROJECTS.find((proj) => proj.id === id);
     if (proj) setGridCountry(projectGridCountry(proj.country));
   }

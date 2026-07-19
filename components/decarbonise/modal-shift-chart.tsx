@@ -5,14 +5,11 @@ import {
   ResponsiveContainer, ReferenceLine,
 } from "recharts";
 import { useChartColors } from "@/lib/use-chart-colors";
+import { fmt } from "@/components/decarbonise/primitives";
 
 interface Props {
   data: { sharePct: number; tCO2: number }[];
   currentShare: number;
-}
-
-function fmt(n: number) {
-  return n.toLocaleString("en-SG", { maximumFractionDigits: 0 });
 }
 
 export default function ModalShiftChart({ data, currentShare }: Props) {
@@ -28,12 +25,12 @@ export default function ModalShiftChart({ data, currentShare }: Props) {
         boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
       }}
     >
-      <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="p-4 space-y-2">
         <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
           Avoided tCO₂/yr vs modal-shift %
         </p>
-        <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
+        <p className="text-xs tracking-wide" style={{ color: "var(--theme-color-soft-text)" }}>
           Current scenario: <span style={{ color: "var(--theme-color-primary)" }}>{currentPct}% diverted from car</span>
         </p>
         <ResponsiveContainer width="100%" height={220}>
