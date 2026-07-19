@@ -159,11 +159,11 @@ CALCULATOR OUTPUTS (pre-computed — use these figures exactly, do not recalcula
 - Annual avoided tCO2e: ${Math.round(outputs.avoidedTCO2PerYear).toLocaleString()}
 - Annual carbon value: S$${Math.round(outputs.carbonValueSGDPerYear).toLocaleString()}
 - Lifetime value (${outputs.assetLifeYears ?? 40} yrs, undiscounted): S$${Math.round(outputs.lifetimeValueSGD).toLocaleString()}
-- Rail emission factor used: ${outputs.railFactor != null ? outputs.railFactor.toFixed(2) + " gCO2e/pkm" : "n/a"}
-- Net saving vs car: ${outputs.netFactorSaving != null ? outputs.netFactorSaving.toFixed(2) + " gCO2e/pkm" : "n/a"}
+- Rail emission factor used: ${(outputs.railFactor != null && Number.isFinite(outputs.railFactor)) ? outputs.railFactor.toFixed(2) + " gCO2e/pkm" : "n/a"}
+- Net saving vs car: ${(outputs.netFactorSaving != null && Number.isFinite(outputs.netFactorSaving)) ? outputs.netFactorSaving.toFixed(2) + " gCO2e/pkm" : "n/a"}
 - Grid country: ${outputs.gridCountry ?? "n/a"}
-- Grid factor: ${outputs.gridFactor != null ? outputs.gridFactor + " gCO2e/kWh" : "n/a"}
-- Carbon price used: S$${outputs.carbonPriceSGD ?? 45}/tCO2e
+- Grid factor: ${(outputs.gridFactor != null && Number.isFinite(outputs.gridFactor)) ? outputs.gridFactor + " gCO2e/kWh" : "n/a"}
+- Carbon price used: S$${(outputs.carbonPriceSGD != null && Number.isFinite(outputs.carbonPriceSGD)) ? outputs.carbonPriceSGD : 45}/tCO2e
 
 Start with: # Executive Strategy Memo — ${project.name}
 End with: *All figures sourced from verified primary data.*`;

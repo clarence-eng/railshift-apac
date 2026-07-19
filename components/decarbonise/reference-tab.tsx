@@ -20,7 +20,7 @@ function BarRow({ label, value, unit, max, barColor }: {
 }) {
   const pct = Math.min(100, (value / max) * 100);
   return (
-    <div className="py-2.5 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
+    <div className="px-4 py-2.5 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
       <div className="flex items-center justify-between gap-4 mb-1.5">
         <span className="text-sm" style={{ color: "var(--theme-color-std-text)" }}>{label}</span>
         <span className="font-mono text-xs tabular-nums shrink-0" style={{ color: "var(--theme-color-primary)" }}>
@@ -53,7 +53,7 @@ function SectionCard({ title, children, note }: { title: string; children: React
 
 function DefRow({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
-    <div className="py-2 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
+    <div className="px-4 py-2 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
       <div className="flex items-start justify-between gap-4">
         <span className="text-sm" style={{ color: "var(--theme-color-soft-text)" }}>{label}</span>
         <span className="font-mono text-xs tabular-nums shrink-0 font-semibold" style={{ color: "var(--theme-color-primary)" }}>{value}</span>
@@ -72,7 +72,10 @@ export default function ReferenceTab() {
         title="Mode comparison — transport emission factors"
         note="Well-to-wheel gCO₂e per passenger-km. EEA EU-27 boundary, 2018. Bar proportional to car baseline (143 gCO₂e/pkm)."
       >
-        <div>
+        <div
+          className="rounded-sm border overflow-hidden"
+          style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)", background: "var(--theme-color-2)" }}
+        >
           {EMISSION_FACTORS.map((f) => (
             <BarRow key={f.mode} label={f.mode} value={f.gCO2ePerPkm} unit="gCO₂e/pkm" max={MODE_MAX} barColor={modeBarColor(f.gCO2ePerPkm)} />
           ))}
@@ -84,7 +87,10 @@ export default function ReferenceTab() {
         title="Grid comparison — electricity carbon intensity by country"
         note="Lifecycle gCO₂e per kWh. Ember 2024. Bar proportional to Indonesia (680 gCO₂e/kWh)."
       >
-        <div>
+        <div
+          className="rounded-sm border overflow-hidden"
+          style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)", background: "var(--theme-color-2)" }}
+        >
           {GRID_FACTORS.map((g) => (
             <BarRow key={g.country} label={g.country} value={g.gCO2ePerKWh} unit="gCO₂e/kWh" max={GRID_MAX} barColor={gridBarColor(g.gCO2ePerKWh)} />
           ))}
@@ -96,7 +102,10 @@ export default function ReferenceTab() {
         title="Calculator defaults"
         note="Default values used in Modal Shift and Electrification calculators. All user-tunable via sliders."
       >
-        <div>
+        <div
+          className="rounded-sm border overflow-hidden"
+          style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)", background: "var(--theme-color-2)" }}
+        >
           <DefRow label="Baseline car factor" value={`${CALC_DEFAULTS.baselineCarFactor} gCO₂e/pkm`} note="EEA EU-27 average car, 1.6 occupancy, WtW 2018" />
           <DefRow label="Rail energy intensity" value={`${CALC_DEFAULTS.railEnergyIntensity} kWh/pkm`} note={`Range ${CALC_DEFAULTS.railEnergyIntensityRange[0]}–${CALC_DEFAULTS.railEnergyIntensityRange[1]} kWh/pkm`} />
           <DefRow label="EEA rail avg (simple mode)" value={`${CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm`} note="All services avg, WtW 2018. Not calibrated to APAC grids." />

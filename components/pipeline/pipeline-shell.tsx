@@ -68,12 +68,18 @@ export default function PipelineShell({ projects }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedProject = projects.find((p) => p.id === selectedId) ?? null;
 
-  const kpis = useMemo(() => [
-    { label: "Projects tracked",    value: projects.length },
-    { label: "Under construction",  value: projects.filter((p) => p.status === "under-construction").length },
-    { label: "Approved",          value: projects.filter((p) => p.status === "approved").length },
-    { label: "Siemens incumbent",   value: projects.filter((p) => /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")).length },
-  ], [projects]);
+  const kpis = useMemo(() => {
+    const total = projects.length;
+    const underCon = projects.filter((p) => p.status === "under-construction").length;
+    const approved = projects.filter((p) => p.status === "approved").length;
+    const incumbent = projects.filter((p) => /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")).length;
+    return [
+      { label: "Projects tracked",   value: String(total),     sub: null },
+      { label: "Under construction",  value: String(underCon),  sub: `${Math.round(underCon / total * 100)}% of pipeline` },
+      { label: "Approved",           value: String(approved),  sub: `${Math.round(approved / total * 100)}% of pipeline` },
+      { label: "Siemens incumbent",  value: String(incumbent), sub: `${incumbent} of ${total} projects` },
+    ];
+  }, [projects]);
 
   function handleSelect(id: string) {
     setSelectedId((prev) => (prev === id ? null : id));
@@ -169,6 +175,11 @@ export default function PipelineShell({ projects }: Props) {
               <p className="font-mono text-2xl font-semibold tabular-nums leading-7" style={{ color: "var(--theme-color-primary)" }}>
                 {kpi.value}
               </p>
+              {kpi.sub && (
+                <p className="text-xs leading-4" style={{ color: "var(--theme-color-weak-text)" }}>
+                  {kpi.sub}
+                </p>
+              )}
             </div>
           </div>
         ))}

@@ -184,7 +184,7 @@ export default function BriefShell() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
+      <div className="no-print pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--theme-color-std-text)" }}>Brief</h1>
         <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
           AI-generated executive strategy memo. All figures are sourced from the verified dataset — Gemini is instructed not to invent data.
@@ -194,7 +194,7 @@ export default function BriefShell() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
         {/* Controls */}
         <div
-          className="rounded-sm border overflow-hidden"
+          className="no-print rounded-sm border overflow-hidden"
           style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.18)" }}
         >
           <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
@@ -319,22 +319,26 @@ export default function BriefShell() {
         {/* Output panel */}
         <div className="space-y-3">
           {error && (
-            <IxMessageBar type="alarm" persistent>
-              {error}
-            </IxMessageBar>
+            <div className="no-print">
+              <IxMessageBar type="alarm" persistent>
+                {error}
+              </IxMessageBar>
+            </div>
           )}
 
           {result?.isFallback && result.fallbackReason && (
-            <IxMessageBar type="warning" persistent>
-              Showing a saved example — live AI generation is currently unavailable.
-            </IxMessageBar>
+            <div className="no-print">
+              <IxMessageBar type="warning" persistent>
+                Showing a saved example — live AI generation is currently unavailable.
+              </IxMessageBar>
+            </div>
           )}
 
           {loading ? (
-            <MemoSkeleton />
+            <div className="no-print"><MemoSkeleton /></div>
           ) : result ? (
             <div
-              className="rounded-sm border overflow-hidden"
+              className="print-memo rounded-sm border overflow-hidden"
               style={{
                 background: "var(--theme-color-2)",
                 borderColor: "var(--theme-color-std-bdr)",
@@ -342,7 +346,7 @@ export default function BriefShell() {
               }}
             >
               <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-              <div className="flex items-center justify-between px-5 pt-4 pb-1 sm:px-6">
+              <div className="no-print flex items-center justify-between px-5 pt-4 pb-1 sm:px-6">
                 <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
                   Executive Memo
                 </p>
@@ -381,7 +385,7 @@ export default function BriefShell() {
             </div>
           ) : !error ? (
             <div
-              className="overflow-hidden rounded-sm border min-h-[280px] flex flex-col"
+              className="no-print overflow-hidden rounded-sm border min-h-[280px] flex flex-col"
               style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
             >
               <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
@@ -405,7 +409,7 @@ export default function BriefShell() {
 
       {/* Project quick-ref */}
       <div
-        className="rounded-sm border overflow-hidden"
+        className="no-print rounded-sm border overflow-hidden"
         style={{
           background: "var(--theme-color-2)",
           borderColor: "var(--theme-color-std-bdr)",
