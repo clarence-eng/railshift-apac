@@ -54,7 +54,7 @@ export default function DecarboniseShell() {
         {activeTab === "Reference" && "Underlying emission factors and calculator defaults with primary source citations."}
       </p>
 
-      <div>
+      <div role="tabpanel" aria-label={activeTab}>
         {activeTab === "Modal Shift" && <ModalShiftTab />}
         {activeTab === "Electrification" && <ElectrificationTab />}
         {activeTab === "Reference" && <ReferenceTab />}
