@@ -8,11 +8,14 @@ import {
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { PRECOMPUTED_BY_ID } from "@/data/precomputed-briefs";
-import { SectionDivider, fmt, fmtSGD } from "@/components/decarbonise/primitives";
+import { fmt, fmtSGD } from "@/components/decarbonise/primitives";
 
 const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
 const hasFallback = (id: string) => id in PRECOMPUTED_BY_ID;
+
+// Conservative mid-range per ITDP empirical 15–35% for new urban metro (2022)
+const BRIEF_SHARE_ASSUMPTION = 0.30;
 
 // Resolve the best available grid country for a project country string
 function projectGridCountry(projectCountry: string): string {
@@ -36,7 +39,7 @@ function buildCalcOutputs(gridCountry: string, dailyRidership: number, carbonPri
   const result = modalShiftAvoided({
     dailyRidership,
     avgTripKm: CALC_DEFAULTS.avgTripKm,
-    shareDivertedFromCar: 0.30, // conservative mid-range: ITDP empirical 15–35%
+    shareDivertedFromCar: BRIEF_SHARE_ASSUMPTION,
     gridFactor,
     railEnergyIntensity: CALC_DEFAULTS.railEnergyIntensity,
     baselineCarFactor: CALC_DEFAULTS.baselineCarFactor,
@@ -199,7 +202,7 @@ export default function BriefShell() {
 
           {/* Project select */}
           <div className="space-y-1.5">
-            <SectionDivider label="Project" />
+            <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>Project</p>
             <IxSelect
               value={projectId}
               onValueChange={(e) => handleProjectChange((e.detail as string) ?? "")}
@@ -222,7 +225,7 @@ export default function BriefShell() {
 
           {/* Grid select */}
           <div className="space-y-1.5">
-            <SectionDivider label="Country grid" />
+            <p className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>Country grid</p>
             <IxSelect
               value={gridCountry}
               onValueChange={(e) => setGridCountry((e.detail as string) ?? "")}
@@ -277,7 +280,7 @@ export default function BriefShell() {
             className="rounded-sm border px-3 py-3 space-y-2"
             style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
           >
-            <p className="text-xs uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>
+            <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
               Scenario inputs
             </p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
@@ -321,7 +324,7 @@ export default function BriefShell() {
 
           {result?.isFallback && result.fallbackReason && (
             <IxMessageBar type="warning" persistent>
-              {result.fallbackReason}
+              Showing a saved example — live AI generation is currently unavailable.
             </IxMessageBar>
           )}
 

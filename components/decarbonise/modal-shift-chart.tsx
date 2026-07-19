@@ -25,7 +25,7 @@ export default function ModalShiftChart({ data, currentShare }: Props) {
         boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
       }}
     >
-      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <div className="h-[4px] w-full border-b" style={{ background: "var(--ix-gradient)", borderColor: "var(--theme-color-std-bdr)" }} aria-hidden="true" />
       <div className="p-4 space-y-2">
         <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
           Avoided tCO₂/yr vs modal-shift %

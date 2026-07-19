@@ -140,14 +140,21 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorSchema]);
 
-  // Fly to selected project
+  // Fly to selected project with context-aware zoom
   useEffect(() => {
     if (!mapRef.current || !selectedId) return;
     const project = projects.find((p) => p.id === selectedId);
     if (!project) return;
-    mapRef.current.flyTo({
+    const map = mapRef.current;
+    const currentZoom = map.getZoom();
+    // If currently zoomed in close (>5.5), zoom out slightly to give geographic context
+    // If zoomed out wide (<4), zoom in enough to see the marker clearly
+    const targetZoom = currentZoom > 5.5
+      ? Math.max(currentZoom - 0.8, 4.5)
+      : Math.max(currentZoom, 4.5);
+    map.flyTo({
       center: [project.lng, project.lat],
-      zoom: Math.max(mapRef.current.getZoom(), 5),
+      zoom: targetZoom,
       duration: 800,
     });
   }, [selectedId, projects]);

@@ -71,7 +71,7 @@ export default function PipelineShell({ projects }: Props) {
   const kpis = useMemo(() => [
     { label: "Projects tracked",    value: projects.length },
     { label: "Under construction",  value: projects.filter((p) => p.status === "under-construction").length },
-    { label: "Approved / pipeline", value: projects.filter((p) => p.status === "approved").length },
+    { label: "Approved",          value: projects.filter((p) => p.status === "approved").length },
     { label: "Siemens incumbent",   value: projects.filter((p) => /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")).length },
   ], [projects]);
 
