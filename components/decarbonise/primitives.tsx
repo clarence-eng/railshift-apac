@@ -150,7 +150,7 @@ export function SectionDivider({ label }: { label: string }) {
         style={{ background: "var(--ix-primary)" }}
         aria-hidden="true"
       />
-      <span className="text-xs font-semibold uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>
+      <span className="text-xs font-semibold uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-std-text)" }}>
         {label}
       </span>
       <div className="flex-1 border-t" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }} />

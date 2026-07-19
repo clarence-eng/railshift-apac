@@ -146,7 +146,7 @@ export default function PipelineShell({ projects }: Props) {
               boxShadow: "0 1px 4px rgba(0,0,0,0.14)",
             }}
           >
-            <div className="h-[3px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+            <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
             <div className="px-4 pt-3 pb-4 space-y-1">
               <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>
                 {kpi.label}

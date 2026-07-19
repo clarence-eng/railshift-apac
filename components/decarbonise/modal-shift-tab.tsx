@@ -138,7 +138,7 @@ export default function ModalShiftTab() {
             <IxCheckbox
               checked={simpleMode}
               label={`Simple mode — EEA rail avg ${CALC_DEFAULTS.eeaRailAvgFactor} gCO₂e/pkm`}
-              onCheckedChange={(e) => setSimpleMode(e.detail)}
+              onCheckedChange={(e) => setSimpleMode(e.detail ?? false)}
             />
             {simpleMode && (
               <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>

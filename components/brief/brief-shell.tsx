@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import {
   IxSelect, IxSelectItem, IxSlider, IxButton, IxMessageBar,
@@ -109,6 +109,18 @@ export default function BriefShell() {
   const [result, setResult] = useState<BriefResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(async () => {
+    if (!result?.markdown) return;
+    try {
+      await navigator.clipboard.writeText(result.markdown);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard API unavailable (non-https dev) — silently ignore
+    }
+  }, [result?.markdown]);
 
   function handleProjectChange(id: string) {
     setProjectId(id);
@@ -123,7 +135,7 @@ export default function BriefShell() {
 
   const fmt = (n: number) => n.toLocaleString("en-SG", { maximumFractionDigits: 0 });
   const fmtSGD = (n: number) =>
-    n >= 1_000_000 ? `S$${(n / 1_000_000).toFixed(1)}m` : `S$${fmt(n)}`;
+    Math.abs(n) >= 1_000_000 ? `S$${(n / 1_000_000).toFixed(1)}m` : `S$${fmt(n)}`;
 
   async function handleGenerate() {
     setLoading(true); setError(null); setResult(null);
@@ -216,7 +228,7 @@ export default function BriefShell() {
             <IxSlider
               min={10_000} max={2_000_000} step={10_000}
               value={dailyRidership}
-              onValueChange={(e) => setDailyRidership(e.detail)}
+              onValueChange={(e) => setDailyRidership(e.detail ?? 300_000)}
               style={{ width: "100%" }}
             />
           </div>
@@ -234,7 +246,7 @@ export default function BriefShell() {
               max={CALC_DEFAULTS.carbonPriceRangeSGD[1]}
               step={1}
               value={carbonPrice}
-              onValueChange={(e) => setCarbonPrice(e.detail)}
+              onValueChange={(e) => setCarbonPrice(e.detail ?? CALC_DEFAULTS.carbonPriceSGD)}
               style={{ width: "100%" }}
             />
           </div>
@@ -249,11 +261,11 @@ export default function BriefShell() {
             </p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Avoided tCO₂/yr</span>
-              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>{fmt(calcOutputs.avoidedTCO2PerYear)}</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{fmt(calcOutputs.avoidedTCO2PerYear)}</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Carbon value/yr</span>
-              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>{fmtSGD(calcOutputs.carbonValueSGDPerYear)}</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{fmtSGD(calcOutputs.carbonValueSGDPerYear)}</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Lifetime value</span>
-              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-std-text)" }}>{fmtSGD(calcOutputs.lifetimeValueSGD)}</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{fmtSGD(calcOutputs.lifetimeValueSGD)}</span>
             </div>
           </div>
 
@@ -300,7 +312,25 @@ export default function BriefShell() {
               }}
             >
               <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-              <div className="px-5 py-5 sm:px-6">
+              <div className="flex items-center justify-between px-5 pt-4 pb-1 sm:px-6">
+                <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
+                  Executive Memo
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="text-xs border rounded-sm px-2 py-1 transition-colors duration-150"
+                  style={{
+                    borderColor: copied ? "var(--ix-primary)" : "var(--theme-color-std-bdr)",
+                    color: copied ? "var(--ix-primary)" : "var(--theme-color-soft-text)",
+                    background: "transparent",
+                  }}
+                  aria-label="Copy memo to clipboard"
+                >
+                  {copied ? "Copied" : "Copy"}
+                </button>
+              </div>
+              <div className="px-5 pb-5 sm:px-6">
                 <MemoBody markdown={result.markdown} />
               </div>
             </div>
