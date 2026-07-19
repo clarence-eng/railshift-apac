@@ -56,12 +56,25 @@ const REGULATORY_CONTEXT = [
     implication: "MAHSR is the flagship HSR reference in the region. Indian Railways' electrification ambition aligns strongly with Siemens DEGREE Decarbonization narrative.",
     signal: "HIGH",
   },
+  {
+    market: "Thailand",
+    headline: "National EV/clean energy push + Thai-China HSR",
+    relevance: "Thai-China HSR Phase 1 under construction (Bangkok–Nakhon Ratchasima, ~US$5.5bn). Thailand targeting 30% renewable electricity by 2030 under Power Development Plan.",
+    implication: "ETCS-relevant mainline opportunity. HSR is Chinese-designed; monitor for systems integration scope in later phases. Carbon narrative supports rail electrification positioning.",
+    signal: "MED",
+  },
+  {
+    market: "Philippines",
+    headline: "Renewable Energy Act + Metro Manila Subway",
+    relevance: "Metro Manila Subway under construction (JICA-financed, ~PHP 488bn, 33km). Philippines targeting 35% renewable energy by 2030.",
+    implication: "JICA financing favours open competitive procurement. Siemens should register interest for signalling/systems on subsequent subway phases.",
+    signal: "MED",
+  },
 ];
 
 const SIGNAL_COLOR: Record<string, string> = {
   HIGH: "var(--theme-color-success)",
   MED:  "var(--theme-color-warning)",
-  LOW:  "var(--theme-color-neutral)",
 };
 
 export default function SustainabilityContext({ projects }: Props) {
