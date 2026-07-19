@@ -5,10 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import MethodologyDrawer from "@/components/methodology-drawer";
-import TourDrawer from "@/components/tour-drawer";
+import TourDrawer, { TOUR_DISMISSED_KEY } from "@/components/tour-drawer";
 import RailShiftWordmark from "@/components/railshift-wordmark";
-
-const TOUR_STORAGE_KEY = "railshift-tour-dismissed";
 
 const NAV_LINKS = [
   { href: "/",            label: "Pipeline"    },
@@ -25,7 +23,7 @@ export default function TopNav() {
 
   // Auto-show tour on first visit
   useEffect(() => {
-    if (typeof window !== "undefined" && !localStorage.getItem(TOUR_STORAGE_KEY)) {
+    if (typeof window !== "undefined" && !localStorage.getItem(TOUR_DISMISSED_KEY)) {
       // Small delay so the page fade-in completes first
       const t = setTimeout(() => setTourOpen(true), 600);
       return () => clearTimeout(t);

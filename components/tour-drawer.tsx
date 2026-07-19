@@ -49,7 +49,8 @@ const TOUR_STEPS: TourStep[] = [
   },
 ];
 
-const STORAGE_KEY = "railshift-tour-dismissed";
+// Shared key — imported by top-nav to read and by TourDrawer to write
+export const TOUR_DISMISSED_KEY = "railshift-tour-dismissed";
 
 interface Props {
   open: boolean;
@@ -92,7 +93,7 @@ export default function TourDrawer({ open, onClose }: Props) {
   }, [open, onClose]);
 
   const handleDismiss = useCallback(() => {
-    localStorage.setItem(STORAGE_KEY, "1");
+    localStorage.setItem(TOUR_DISMISSED_KEY, "1");
     onClose();
   }, [onClose]);
 

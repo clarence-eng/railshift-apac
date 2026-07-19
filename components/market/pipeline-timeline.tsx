@@ -65,7 +65,7 @@ export default function PipelineTimeline({ projects }: Props) {
                         <div
                           key={yr}
                           className="absolute top-0 bottom-0 w-px"
-                          style={{ left: `${(i / (years.length - 1 || 1)) * 100}%`, background: "var(--theme-color-x-weak-bdr)", opacity: 0.5 }}
+                          style={{ left: `${(i / (years.length - 1 || 1)) * 100}%`, background: "var(--theme-color-x-weak-bdr)" }}
                         />
                       ))}
                       {/* Marker */}
