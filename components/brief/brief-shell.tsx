@@ -19,10 +19,10 @@ const hasFallback = (id: string) => id in PRECOMPUTED_BY_ID;
 const BRIEF_SHARE_ASSUMPTION = 0.30;
 
 // Resolve the best available grid country for a project country string
+const GRID_COUNTRY_NAMES = new Set(GRID_FACTORS.map((g) => g.country));
 function projectGridCountry(projectCountry: string): string {
-  const available = new Set(GRID_FACTORS.map((g) => g.country));
   for (const token of projectCountry.split(/\s*\/\s*/)) {
-    if (available.has(token.trim())) return token.trim();
+    if (GRID_COUNTRY_NAMES.has(token.trim())) return token.trim();
   }
   return "World avg";
 }

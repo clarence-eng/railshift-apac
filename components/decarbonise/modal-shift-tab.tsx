@@ -17,15 +17,13 @@ const ModalShiftChart = dynamic(() => import("./modal-shift-chart"), {
   ),
 });
 
-// Build a map from the primary country word (first token before " /") to grid country
-const COUNTRY_TO_GRID: Record<string, string> = {};
-GRID_FACTORS.forEach((g) => { COUNTRY_TO_GRID[g.country] = g.country; });
+const GRID_COUNTRY_NAMES = new Set(GRID_FACTORS.map((g) => g.country));
 
 function projectGridCountry(projectCountry: string): string {
   // "Malaysia / Singapore" → try "Malaysia" first, then "Singapore"
   const tokens = projectCountry.split(/\s*\/\s*/);
   for (const t of tokens) {
-    if (COUNTRY_TO_GRID[t.trim()]) return t.trim();
+    if (GRID_COUNTRY_NAMES.has(t.trim())) return t.trim();
   }
   return "World avg";
 }
