@@ -1,18 +1,31 @@
-import { PROJECTS, CALC_DEFAULTS, GRID_FACTORS } from "@/data/seed";
+import Link from "next/link";
+import { PROJECTS, CALC_DEFAULTS, GRID_FACTORS, SOURCES } from "@/data/seed";
 import MarketCard from "@/components/market/market-card";
 
-// ─── Derived stats (all from seed, no fabrication) ───────────────────────────
+// ─── Derived stats (all from seed, no fabrication) ────────────────────────────
 const incumbentCount = PROJECTS.filter(
   (p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")
 ).length;
 const underConCount = PROJECTS.filter((p) => p.status === "under-construction").length;
 const approvedCount = PROJECTS.filter((p) => p.status === "approved").length;
-const sgGrid = GRID_FACTORS.find((g) => g.country === "Singapore")!.gCO2ePerKWh;
-const sgElectricFactor = (CALC_DEFAULTS.railEnergyIntensity * sgGrid).toFixed(1);
-const sgCarSaving = CALC_DEFAULTS.baselineCarFactor - parseFloat(sgElectricFactor);
+const sgGridFactor = GRID_FACTORS.find((g) => g.country === "Singapore")!.gCO2ePerKWh;
+// Avoid parseFloat roundtrip — compute directly
+const sgElectricGCO2 = CALC_DEFAULTS.railEnergyIntensity * sgGridFactor;
+const sgCarSavingGCO2 = Math.round(CALC_DEFAULTS.baselineCarFactor - sgElectricGCO2);
+
+// ─── Explicit interface for StatCard ─────────────────────────────────────────
+interface DegreePillar {
+  letter: string;
+  pillar: string;
+  color: string;
+  appLink: string;
+  href: string;
+  desc: string;
+  stat: string;
+}
 
 // ─── DEGREE pillars ───────────────────────────────────────────────────────────
-const DEGREE_PILLARS = [
+const DEGREE_PILLARS: DegreePillar[] = [
   {
     letter: "D",
     pillar: "Decarbonization",
@@ -20,16 +33,16 @@ const DEGREE_PILLARS = [
     appLink: "Decarbonise",
     href: "/decarbonise",
     desc: "Modal Shift and Electrification calculators quantify tCO₂e avoided and lifetime carbon value at the Singapore carbon price (S$45/tCO₂e, 2026–27). Grid-aware model accounts for APAC electricity intensity differences.",
-    stat: `${sgCarSaving.toFixed(0)} gCO₂e/pkm saved vs car on Singapore grid`,
+    stat: `${sgCarSavingGCO2} gCO₂e/pkm saved vs car on Singapore grid`,
   },
   {
     letter: "E",
     pillar: "Ethics",
     color: "var(--theme-color-info)",
-    appLink: "Methodology drawer",
+    appLink: "Methodology",
     href: "/",
-    desc: "Every figure in the app cites its source. Confidence levels (HIGH/MED/LOW) are displayed on all data points. No figures are fabricated — nulls render as 'n/a'.",
-    stat: "18 primary sources cited across the dataset",
+    desc: "Every figure in the app cites its primary source. Confidence levels (HIGH/MED/LOW) are displayed on all data points. No figures are fabricated — nulls render as n/a throughout.",
+    stat: `${SOURCES.length} primary sources cited across the dataset`,
   },
   {
     letter: "G",
@@ -44,25 +57,25 @@ const DEGREE_PILLARS = [
     letter: "R",
     pillar: "Resource efficiency",
     color: "var(--theme-color-warning)",
-    appLink: "Decarbonise → Electrification",
+    appLink: "Decarbonise — Electrification",
     href: "/decarbonise",
-    desc: "Electrification tab models the grid-to-wheel emission reduction from diesel-to-electric conversion. Shows that sequencing electrification with grid transition is the only path to credible decarbonisation in high-intensity grids (India 670, Indonesia 680 gCO₂e/kWh).",
+    desc: "Electrification tab models the grid-to-wheel emission reduction from diesel-to-electric conversion across APAC markets. Shows that sequencing electrification with grid transition is the only credible path in high-intensity grids.",
     stat: "Indonesia: electrification cuts only ~13% of diesel emissions on current grid",
   },
   {
     letter: "E",
     pillar: "Equity",
     color: "var(--theme-color-neutral)",
-    appLink: "Market → Country",
+    appLink: "Market — Country",
     href: "/market",
-    desc: "Country breakdown surfaces the distribution of rail investment across APAC markets, including lower-income economies (Vietnam US$67.6bn HSR, Philippines subway) where rail access is a social equity multiplier.",
-    stat: "8 markets tracked · 6 countries with active construction",
+    desc: "Country breakdown surfaces rail investment distribution across APAC markets, including lower-income economies (Vietnam US$67.6bn HSR, Philippines subway) where rail access is a social equity multiplier.",
+    stat: `${[...new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets tracked · ${underConCount} with active construction`,
   },
   {
     letter: "E",
     pillar: "Employability",
     color: "var(--theme-color-primary)",
-    appLink: "Market → Competitive",
+    appLink: "Market — Competitive",
     href: "/market",
     desc: "Competitive analysis and M&A signals surface strategic pursuit opportunities — directly informing where Siemens Mobility deploys business development resource and grows its APAC talent footprint.",
     stat: `${incumbentCount} incumbent positions to protect · ${approvedCount} pursuit windows open`,
@@ -70,47 +83,48 @@ const DEGREE_PILLARS = [
 ];
 
 // ─── BTA planning dimensions ──────────────────────────────────────────────────
-const BTA_DIMENSIONS = [
+interface BtaDimension {
+  title: string;
+  desc: string;
+  appCapability: string;
+  href: string;
+}
+
+const BTA_DIMENSIONS: BtaDimension[] = [
   {
     title: "Market sizing",
-    icon: "📊",
     desc: "Country breakdown and project value totals for APAC planning cycles.",
-    appCapability: "Market → Country tab: project count, route km, Siemens presence by market",
+    appCapability: "Market — Country tab: project count, route km, Siemens presence by market",
     href: "/market",
   },
   {
     title: "Competitive positioning",
-    icon: "🎯",
     desc: "Competitor presence matrix across Siemens, Alstom, Hitachi, CRRC.",
-    appCapability: "Market → Competitive tab: INCUMBENT/PRESENT/LIKELY/POSSIBLE matrix",
+    appCapability: "Market — Competitive tab: INCUMBENT / PRESENT / LIKELY / POSSIBLE matrix",
     href: "/market",
   },
   {
     title: "Pipeline horizon",
-    icon: "📅",
     desc: "Project completion timeline with Siemens-specific delivery windows.",
-    appCapability: "Market → Timeline tab: Gantt view with incumbent highlights",
+    appCapability: "Market — Timeline tab: Gantt view with incumbent highlights",
     href: "/market",
   },
   {
     title: "Carbon value case",
-    icon: "♻️",
     desc: "Quantified decarbonisation argument for every project in the pipeline.",
     appCapability: "Decarbonise: avoided tCO₂e/yr, carbon value/yr, lifetime value (undiscounted)",
     href: "/decarbonise",
   },
   {
     title: "Strategic memos",
-    icon: "📝",
     desc: "One-page AI-generated executive memo per project for internal circulation.",
-    appCapability: "Brief: 4-section memo (Market Opportunity, Competitive, DEGREE, Recommendation)",
+    appCapability: "Brief: 4-section memo — Market Opportunity, Competitive, DEGREE, Recommendation",
     href: "/brief",
   },
   {
     title: "M&A signals",
-    icon: "🔍",
-    desc: "PROTECT/PURSUE/MONITOR/WATCH classification for portfolio prioritisation.",
-    appCapability: "Market → M&A Signals tab: signal cards with urgency ratings",
+    desc: "PROTECT / PURSUE / MONITOR / WATCH classification for portfolio prioritisation.",
+    appCapability: "Market — M&A Signals tab: signal cards with urgency ratings",
     href: "/market",
   },
 ];
@@ -135,7 +149,7 @@ const STRATEGIC_THEMES = [
   {
     theme: "External growth / M&A",
     jdRef: "Develop proposals for external growth such as M&A",
-    appEvidence: "M&A Signals: project-level PURSUE signals with action notes; Competitive: incumbent gap analysis; all with confidence ratings to flag where intelligence is speculative vs confirmed.",
+    appEvidence: "M&A Signals: project-level PURSUE signals with action notes; Competitive: incumbent gap analysis; all with confidence ratings to distinguish confirmed vs speculative intelligence.",
   },
   {
     theme: "Executive communication",
@@ -145,13 +159,24 @@ const STRATEGIC_THEMES = [
   {
     theme: "BTA & target setting",
     jdRef: "Develop business plans and control target setting processes, Business Target Agreements (BTAs)",
-    appEvidence: "Pipeline KPI strip: Projects tracked, Under construction %, Approved %, Siemens incumbent count; Market Country table: per-market route km and project status distribution — the structured data a BTA requires.",
+    appEvidence: "Pipeline KPI strip: Projects tracked, Under construction %, Approved %, Siemens incumbent count; Market Country table: per-market route km and project status distribution.",
   },
 ];
 
-function StatCard({ letter, pillar, color, stat, desc, appLink, href }: typeof DEGREE_PILLARS[0]) {
+// ─── Components ───────────────────────────────────────────────────────────────
+
+function StatCard({ letter, pillar, color, stat, desc, appLink, href }: DegreePillar) {
   return (
-    <a href={href} className="block rounded-sm border overflow-hidden transition-opacity hover:opacity-90" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.18)", textDecoration: "none" }}>
+    <Link
+      href={href}
+      className="block rounded-sm border overflow-hidden transition-opacity hover:opacity-90"
+      style={{
+        background: "var(--theme-color-2)",
+        borderColor: "var(--theme-color-std-bdr)",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
+        textDecoration: "none",
+      }}
+    >
       <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">
@@ -166,7 +191,29 @@ function StatCard({ letter, pillar, color, stat, desc, appLink, href }: typeof D
         <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>{desc}</p>
         <p className="text-xs font-mono" style={{ color }}>{stat}</p>
       </div>
-    </a>
+    </Link>
+  );
+}
+
+function BtaCard({ title, desc, appCapability, href }: BtaDimension) {
+  return (
+    <Link
+      href={href}
+      className="block rounded-sm border overflow-hidden transition-opacity hover:opacity-90"
+      style={{
+        background: "var(--theme-color-2)",
+        borderColor: "var(--theme-color-std-bdr)",
+        boxShadow: "0 1px 4px rgba(0,0,0,0.14)",
+        textDecoration: "none",
+      }}
+    >
+      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+      <div className="p-4 space-y-1.5">
+        <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{title}</p>
+        <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>{desc}</p>
+        <p className="text-xs font-mono leading-relaxed" style={{ color: "var(--ix-primary)" }}>{appCapability}</p>
+      </div>
+    </Link>
   );
 }
 
@@ -179,18 +226,18 @@ export default function StrategyShell() {
           Strategy Alignment
         </h1>
         <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-          How RailShift APAC maps to Siemens Mobility&#39;s strategic frameworks — DEGREE sustainability, BTA planning, and APAC market strategy.
+          How RailShift APAC maps to Siemens Mobility&rsquo;s strategic frameworks — DEGREE sustainability, BTA planning, and APAC market strategy.
         </p>
       </div>
 
       {/* DEGREE pillars */}
       <section className="space-y-4">
-        <div>
+        <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
           <h2 className="text-base font-semibold tracking-tight" style={{ color: "var(--theme-color-std-text)" }}>
             DEGREE Framework alignment
           </h2>
           <p className="text-xs mt-0.5" style={{ color: "var(--theme-color-soft-text)" }}>
-            Siemens&#39; six-pillar sustainability framework. Each pillar maps to a specific app capability backed by cited, verifiable data.
+            Siemens&rsquo; six-pillar sustainability framework. Each pillar maps to a specific app capability backed by cited, verifiable data.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -202,7 +249,7 @@ export default function StrategyShell() {
 
       {/* BTA Planning dimensions */}
       <section className="space-y-4">
-        <div>
+        <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
           <h2 className="text-base font-semibold tracking-tight" style={{ color: "var(--theme-color-std-text)" }}>
             BTA planning dimensions
           </h2>
@@ -211,21 +258,14 @@ export default function StrategyShell() {
           </p>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {BTA_DIMENSIONS.map(({ title, desc, appCapability, href }) => (
-            <a key={title} href={href} className="block rounded-sm border overflow-hidden transition-opacity hover:opacity-90" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)", textDecoration: "none" }}>
-              <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-              <div className="p-4 space-y-1.5">
-                <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{title}</p>
-                <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>{desc}</p>
-                <p className="text-xs font-mono leading-relaxed" style={{ color: "var(--ix-primary)" }}>{appCapability}</p>
-              </div>
-            </a>
+          {BTA_DIMENSIONS.map((d) => (
+            <BtaCard key={d.title} {...d} />
           ))}
         </div>
       </section>
 
-      {/* Strategic themes from JD */}
-      <MarketCard title="JD requirements → app capabilities mapping">
+      {/* JD Requirements mapping */}
+      <MarketCard title="JD requirements — app capabilities mapping">
         <div className="space-y-0">
           {STRATEGIC_THEMES.map(({ theme, jdRef, appEvidence }, i) => (
             <div
@@ -234,14 +274,16 @@ export default function StrategyShell() {
               style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}
             >
               <div className="flex items-start gap-3">
-                <span className="font-mono text-xs shrink-0 w-5 tabular-nums" style={{ color: "var(--ix-primary)" }}>{i + 1}</span>
+                <span className="font-mono text-xs shrink-0 w-5 tabular-nums" style={{ color: "var(--ix-primary)" }}>
+                  {i + 1}
+                </span>
                 <div className="space-y-1.5 min-w-0">
                   <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{theme}</p>
                   <p className="text-xs italic leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>
                     &ldquo;{jdRef}&rdquo;
                   </p>
                   <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-primary)" }}>
-                    ↳ {appEvidence}
+                    &#8594; {appEvidence}
                   </p>
                 </div>
               </div>

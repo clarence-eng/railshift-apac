@@ -35,15 +35,15 @@ export default function TopNav() {
             <RailShiftWordmark height={22} width={124} viewBox="0 0 210 50" className="sm:hidden" />
           </Link>
 
-          {/* Nav links */}
-          <nav className="flex flex-1 items-center min-w-0" aria-label="Main navigation">
+          {/* Nav links — scrollable on mobile */}
+          <nav className="flex flex-1 items-center min-w-0 overflow-x-auto" style={{ scrollbarWidth: "none" }} aria-label="Main navigation">
             {NAV_LINKS.map(({ href, label }) => {
               const active = pathname === href;
               return (
                 <Link
                   key={href}
                   href={href}
-                  className="px-2 py-3 text-xs border-b-2 whitespace-nowrap transition-colors duration-150 sm:px-3 sm:py-4 sm:text-sm"
+                  className="px-2 py-3 text-xs border-b-2 whitespace-nowrap transition-colors duration-150 sm:px-3 sm:py-4 sm:text-sm shrink-0"
                   style={{
                     borderColor: active ? "var(--ix-primary)" : "transparent",
                     color: active ? "var(--ix-text)" : "var(--ix-text-soft)",
