@@ -30,7 +30,7 @@ function buildCountryRows(projects: Project[]): CountryRow[] {
       underConstruction: ps.filter((p) => p.status === "under-construction").length,
       approved: ps.filter((p) => p.status === "approved").length,
       undecided: ps.filter((p) => p.status === "undecided").length,
-      siemensCount: ps.filter((p) => /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")).length,
+      siemensCount: ps.filter((p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")).length,
       totalKm: ps.reduce((sum, p) => sum + (p.lengthKm ?? 0), 0),
     }))
     .sort((a, b) => b.total - a.total);

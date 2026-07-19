@@ -154,8 +154,6 @@
   --color-neutral:        var(--ix-neutral);
   --color-chart-grid:     var(--ix-chart-grid);
 
-  --shadow-card:  var(--theme-shadow-1, 0 1px 3px rgba(0,0,0,.35));
-  --shadow-panel: var(--theme-shadow-3, 0 4px 12px rgba(0,0,0,.4));
   --duration-fast: 150ms;
   --duration-base: 200ms;
   --ease-default: cubic-bezier(0.2, 0, 0, 1);
@@ -180,7 +178,6 @@
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
-  .bg-card, .bg-surface-1 { box-shadow: var(--shadow-card); }
 }
 
 /* Drawer slide-in (replaces tw-animate-css animate-in slide-in-from-right) */

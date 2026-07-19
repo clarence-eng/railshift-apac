@@ -245,7 +245,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="line-clamp-2">{p.name}</span>
-                    {/siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "") && (
+                    {/siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "") && (
                       <span
                         className="hidden sm:inline shrink-0"
                         style={{ background: "var(--ix-primary)", color: "#fff", fontSize: "9px", fontWeight: 700, padding: "1px 4px", borderRadius: "2px", letterSpacing: "0.5px" }}

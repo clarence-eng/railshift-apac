@@ -50,7 +50,7 @@ export default function PipelineTimeline({ projects }: Props) {
             <div className="space-y-3">
               {dated.map((p) => {
                 const offset = ((p.year - minYear) / yearSpan) * 100;
-                const isIncumbent = /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "");
+                const isIncumbent = /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "");
                 return (
                   <div key={p.id} className="flex items-center gap-2">
                     <div className="w-52 shrink-0">

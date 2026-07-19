@@ -11,15 +11,13 @@ const BG: Record<Confidence, string> = {
 
 interface Props {
   confidence: Confidence;
-  className?: string;
 }
 
-export default function ConfidenceBadge({ confidence, className = "" }: Props) {
+export default function ConfidenceBadge({ confidence }: Props) {
   return (
     <IxChip
       variant="custom"
       background={BG[confidence]}
-      className={className}
       style={{ fontSize: "11px" }}
     >
       {confidence}

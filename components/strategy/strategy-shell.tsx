@@ -8,6 +8,7 @@ const incumbentCount = PROJECTS.filter(
 ).length;
 const underConCount = PROJECTS.filter((p) => p.status === "under-construction").length;
 const approvedCount = PROJECTS.filter((p) => p.status === "approved").length;
+const marketCount = new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0])).size;
 const sgGridFactor = GRID_FACTORS.find((g) => g.country === "Singapore")?.gCO2ePerKWh ?? 497;
 // Avoid parseFloat roundtrip — compute directly
 const sgElectricGCO2 = CALC_DEFAULTS.railEnergyIntensity * sgGridFactor;
@@ -53,7 +54,7 @@ const CANDIDATE_FIT: CandidateFitItem[] = [
   },
   {
     requirement: "Singapore and APAC market context",
-    evidence: `${PROJECTS.length} APAC projects tracked across ${[...new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets. 3 Siemens Singapore lines (CRL, JRL, TEL) with deep analyst notes.`,
+    evidence: `${PROJECTS.length} APAC projects tracked across ${marketCount} markets. 3 Siemens Singapore lines (CRL, JRL, TEL) with deep analyst notes.`,
     strength: "HIGH",
   },
   {
@@ -120,7 +121,7 @@ const DEGREE_PILLARS: DegreePillar[] = [
     appLink: "Market — Country",
     href: "/market",
     desc: "Country breakdown surfaces rail investment distribution across APAC markets, including lower-income economies (Vietnam US$67.6bn HSR, Philippines subway) where rail access is a social equity multiplier.",
-    stat: `${[...new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets tracked · ${underConCount} with active construction`,
+    stat: `${marketCount} markets tracked · ${underConCount} with active construction`,
   },
   {
     letter: "E",
