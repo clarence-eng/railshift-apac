@@ -82,7 +82,6 @@ function MemoSkeleton() {
     >
       <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="px-5 py-5 space-y-4">
-        <div className="h-4 rounded-sm w-2/3" style={{ background: "var(--theme-color-3)" }} />
         <div className="space-y-1.5">
           <div className="h-2 rounded-sm w-1/5" style={{ background: "var(--theme-color-3)" }} />
           <div className="h-2.5 rounded-sm w-full" style={{ background: "var(--theme-color-3)" }} />
@@ -114,9 +113,13 @@ export default function BriefShell() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
-  // Clean up copy timer on unmount
-  useEffect(() => () => { if (copyTimerRef.current) clearTimeout(copyTimerRef.current); }, []);
+  // Clean up copy timer and in-flight request on unmount
+  useEffect(() => () => {
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    abortRef.current?.abort();
+  }, []);
 
   const handleCopy = useCallback(async () => {
     if (!result?.markdown) return;
@@ -136,6 +139,9 @@ export default function BriefShell() {
     setError(null);
     setCopied(false);
     if (copyTimerRef.current) { clearTimeout(copyTimerRef.current); copyTimerRef.current = null; }
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setLoading(false);
     const proj = PROJECTS.find((proj) => proj.id === id);
     if (proj) setGridCountry(projectGridCountry(proj.country));
   }
@@ -147,12 +153,17 @@ export default function BriefShell() {
   );
 
   async function handleGenerate() {
+    if (loading) return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
     setLoading(true); setError(null); setResult(null);
     try {
       const res = await fetch("/api/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ projectId, calcOutputs }),
+        signal: controller.signal,
       });
       if (!res.ok) {
         const text = await res.text().catch(() => "Unknown error");
@@ -160,6 +171,7 @@ export default function BriefShell() {
       }
       setResult((await res.json()) as BriefResponse);
     } catch (err) {
+      if ((err as Error).name === "AbortError") return; // intentional abort, no error shown
       setError((err as Error).message ?? "Request failed");
     } finally {
       setLoading(false);

@@ -122,7 +122,7 @@ export default function ElectrificationTab() {
 
         {/* Show calculation */}
         <Disclosure label="Show calculation">
-          <CalcRow label="Annual pkm" value={`${fmt(annualPkm)} pkm`} />
+          <CalcRow label="Annual pkm" value={`${annualPkmBn.toFixed(1)}bn pkm/yr (${fmt(annualPkm)} pkm)`} />
           <CalcRow label="Diesel factor" value={`${dieselFactor} gCO₂e/pkm`} />
           <CalcRow label="Electric factor" value={`${result.electricFactor.toFixed(2)} gCO₂e/pkm (${railEnergy} kWh/pkm × ${gridFactor} gCO₂e/kWh)`} />
           <CalcRow label="Net saving / pkm" value={`${result.netFactorSaving.toFixed(2)} gCO₂e/pkm`} />

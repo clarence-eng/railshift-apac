@@ -23,8 +23,8 @@ interface Props {
 }
 
 function SortIcon({ dir }: { dir: SortDir | null }) {
-  if (!dir) return <span className="opacity-20 select-none">↕</span>;
-  return <span className="select-none">{dir === "asc" ? "↑" : "↓"}</span>;
+  if (!dir) return <span className="select-none" style={{ color: "var(--theme-color-weak-text)" }}>↕</span>;
+  return <span className="select-none" style={{ color: "var(--theme-color-primary)" }}>{dir === "asc" ? "↑" : "↓"}</span>;
 }
 
 // Hoisted outside the component — avoids react-hooks/static-components error.

@@ -10,17 +10,20 @@ export const metadata: Metadata = {
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000"
   ),
-  title: "RailShift APAC",
-  description: "Rail strategy and decarbonisation cockpit for Asia-Pacific",
+  title: "RailShift APAC — Siemens Mobility Rail Strategy",
+  description: "Rail strategy and decarbonisation cockpit for Asia-Pacific. Pipeline tracking, emission calculators, and AI-generated executive briefs for APAC rail infrastructure.",
+  keywords: ["rail strategy", "APAC rail", "decarbonisation", "Siemens Mobility", "rail infrastructure", "emission calculator", "Singapore", "HSR", "CBTC", "DEGREE"],
+  authors: [{ name: "Clarence Eng" }],
+  creator: "Clarence Eng",
   openGraph: {
-    title: "RailShift APAC",
-    description: "Rail strategy and decarbonisation cockpit for Asia-Pacific",
+    title: "RailShift APAC — Siemens Mobility Rail Strategy",
+    description: "Rail strategy and decarbonisation cockpit for Asia-Pacific.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "RailShift APAC",
-    description: "Rail strategy and decarbonisation cockpit for Asia-Pacific",
+    title: "RailShift APAC — Siemens Mobility Rail Strategy",
+    description: "Rail strategy and decarbonisation cockpit for Asia-Pacific.",
   },
 };
 

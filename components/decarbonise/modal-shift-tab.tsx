@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { IxSelect, IxSelectItem, IxCheckbox, IxMessageBar } from "@siemens/ix-react";
+import { IxSelect, IxSelectItem, IxCheckbox } from "@siemens/ix-react";
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider, fmt, fmtSGD } from "./primitives";
@@ -214,9 +214,15 @@ export default function ModalShiftTab() {
       {/* Outputs */}
       <div className="space-y-6">
         {result.degenerate && (
-          <IxMessageBar type="warning" persistent>
-            Ridership is zero — all outputs are zero.
-          </IxMessageBar>
+          <div
+            className="rounded-sm border px-4 py-3 flex items-start gap-3"
+            style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-warning)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+          >
+            <span className="text-xs mt-0.5 shrink-0" style={{ color: "var(--theme-color-warning)" }}>⚠</span>
+            <p className="text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
+              Daily ridership is zero — set a ridership value to see meaningful outputs.
+            </p>
+          </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

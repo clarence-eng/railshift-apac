@@ -135,6 +135,7 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
     return () => {
       mapRef.current?.remove();
       mapRef.current = null;
+      markerEls.current.clear();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorSchema]);
