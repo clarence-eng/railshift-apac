@@ -68,11 +68,16 @@ export default function PipelineShell({ projects }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedProject = projects.find((p) => p.id === selectedId) ?? null;
 
+  const marketCount = useMemo(
+    () => new Set(projects.map((p) => p.country.split(/\s*\/\s*/)[0])).size,
+    [projects]
+  );
+
   const kpis = useMemo(() => {
     const total = projects.length;
     const underCon = projects.filter((p) => p.status === "under-construction").length;
     const approved = projects.filter((p) => p.status === "approved").length;
-    const incumbent = projects.filter((p) => /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "")).length;
+    const incumbent = projects.filter((p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")).length;
     return [
       { label: "Projects tracked",   value: String(total),     sub: null },
       { label: "Under construction",  value: String(underCon),  sub: `${Math.round(underCon / total * 100)}% of pipeline` },
@@ -92,7 +97,7 @@ export default function PipelineShell({ projects }: Props) {
         <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
           <h1 className="text-2xl font-semibold tracking-tight">Pipeline</h1>
           <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-            {projects.length} active APAC rail projects tracked across {[...new Set(projects.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets
+            {projects.length} active APAC rail projects tracked across {marketCount} markets
           </p>
         </div>
         {/* Legend — wraps gracefully on narrow screens */}

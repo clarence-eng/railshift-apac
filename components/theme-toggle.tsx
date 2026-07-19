@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return <span className="w-7 h-7 inline-block shrink-0" aria-hidden />;

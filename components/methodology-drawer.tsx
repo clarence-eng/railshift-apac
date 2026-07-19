@@ -273,7 +273,7 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
               confidence={p.confidence}
               sourceId={p.source}
               note={
-                "Lat/lng are approximate centroids — flagged for verification before shipping."
+                "Lat/lng are approximate centroids for map display."
               }
             />
           ))}

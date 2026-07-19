@@ -40,7 +40,7 @@ export default function DecarboniseShell() {
         {activeTab === 0 ? <ModalShiftTab /> : activeTab === 1 ? <ElectrificationTab /> : <ReferenceTab />}
       </div>
 
-      <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-std-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
+      <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-weak-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
         Emission factors: EEA EU-27 WtW 2018 · Grid factors: Ember 2024 lifecycle · Carbon price: NCCS Singapore 2026–27 · Supports DEGREE decarbonization pillar · Calculations are indicative.
       </p>
     </div>

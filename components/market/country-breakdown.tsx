@@ -1,5 +1,6 @@
 import type { Project } from "@/data/seed";
 import MarketCard from "./market-card";
+import CountryChartWrapper from "./country-chart-wrapper";
 
 interface Props { projects: Project[]; }
 
@@ -35,9 +36,7 @@ function buildCountryRows(projects: Project[]): CountryRow[] {
     .sort((a, b) => b.total - a.total);
 }
 
-// CountryChart is client-only (Recharts) — lazy import in CountryBreakdown
-import CountryChartWrapper from "./country-chart-wrapper";
-
+// CountryChart is client-only (Recharts) — lazy import via CountryChartWrapper
 export default function CountryBreakdown({ projects }: Props) {
   const byCountry = buildCountryRows(projects);
 

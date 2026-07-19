@@ -192,8 +192,8 @@ export default function BriefShell() {
     abortRef.current?.abort();
     abortRef.current = null;
     setLoading(false);
-    const proj = PROJECTS.find((proj) => proj.id === id);
-    if (proj) setGridCountry(projectGridCountry(proj.country));
+    const found = PROJECTS.find((p) => p.id === id);
+    if (found) setGridCountry(projectGridCountry(found.country));
   }
 
   return (

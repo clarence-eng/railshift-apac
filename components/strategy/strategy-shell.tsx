@@ -8,7 +8,7 @@ const incumbentCount = PROJECTS.filter(
 ).length;
 const underConCount = PROJECTS.filter((p) => p.status === "under-construction").length;
 const approvedCount = PROJECTS.filter((p) => p.status === "approved").length;
-const sgGridFactor = GRID_FACTORS.find((g) => g.country === "Singapore")!.gCO2ePerKWh;
+const sgGridFactor = GRID_FACTORS.find((g) => g.country === "Singapore")?.gCO2ePerKWh ?? 497;
 // Avoid parseFloat roundtrip — compute directly
 const sgElectricGCO2 = CALC_DEFAULTS.railEnergyIntensity * sgGridFactor;
 const sgCarSavingGCO2 = Math.round(CALC_DEFAULTS.baselineCarFactor - sgElectricGCO2);

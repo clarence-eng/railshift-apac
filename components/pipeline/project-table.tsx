@@ -40,9 +40,13 @@ function TH({
 }) {
   return (
     <th
+      scope="col"
       onClick={() => onSort(col)}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSort(col); } }}
+      tabIndex={0}
       className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap"
       style={{ color: "var(--theme-color-soft-text)" }}
+      aria-sort={sortKey === col ? (sortDir === "asc" ? "ascending" : "descending") : "none"}
     >
       {children} <SortIcon dir={sortKey === col ? sortDir : null} />
     </th>
@@ -191,17 +195,23 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
               <TH col="name" {...thProps}>Project</TH>
               <TH col="country" {...thProps}>Country</TH>
               <TH col="status" {...thProps}>Status</TH>
-              <th className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>Value</th>
-              <TH col="lengthKm" {...thProps}>km</TH>
-              <th className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>Stations</th>
               <th
+                scope="col"
+                className="hidden md:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>Value</th>
+              <TH col="lengthKm" {...thProps}>km</TH>
+              <th scope="col" className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>Stations</th>
+              <th
+                scope="col"
                 className="hidden sm:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer select-none whitespace-nowrap"
                 style={{ color: "var(--theme-color-soft-text)" }}
                 onClick={() => toggleSort("keyDate")}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleSort("keyDate"); } }}
+                tabIndex={0}
+                aria-sort={sortKey === "keyDate" ? (sortDir === "asc" ? "ascending" : "descending") : "none"}
               >
                 Key date <SortIcon dir={sortKey === "keyDate" ? sortDir : null} />
               </th>
-              <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Conf.</th>
+              <th scope="col" className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Conf.</th>
             </tr>
           </thead>
           <tbody>
@@ -209,7 +219,10 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
               <tr
                 key={p.id}
                 onClick={() => onSelect(p.id)}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelect(p.id); } }}
+                tabIndex={0}
                 className="ix-table-row border-b cursor-pointer last:border-0"
+                aria-selected={selectedId === p.id}
                 style={{
                   borderColor: "var(--theme-color-x-weak-bdr)",
                   background: selectedId === p.id ? "var(--theme-color-ghost--selected)" : undefined,

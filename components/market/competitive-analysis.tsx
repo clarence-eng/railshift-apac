@@ -41,8 +41,8 @@ function assessCompetitors(p: Project): CompetitorPresence {
 
   // CRRC — rolling stock dominant; signalling emerging in China-influenced projects
   const crrc: CompetitorPresence["crrc"] =
-    /crrc|china.*exim|jica.*china|chinese.*funded/i.test(combined) ? "likely" :
-    /china exim|china.funded|tcr|thai.china|ecrl|whoosh/i.test(combined) ? "likely" :
+    /crrc|china.*exim|chinese.*funded/i.test(combined) ? "likely" :
+    /tcr|thai.china|ecrl|whoosh/i.test(combined) ? "likely" :
     /freight|mainline/i.test(combined) ? "possible" :
     "unclear";
 

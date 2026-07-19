@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IxBlind, IxSlider, IxCheckbox } from "@siemens/ix-react";
+import { IxBlind, IxSlider } from "@siemens/ix-react";
 
 // ---------------------------------------------------------------------------
 // Shared formatters — used by Modal Shift, Electrification, and Brief
@@ -53,28 +53,6 @@ export function SliderRow({ label, value, min, max, step, format, onChange, note
         <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>{note}</p>
       )}
     </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// SimpleCheckbox — wraps IxCheckbox
-// ---------------------------------------------------------------------------
-
-interface CheckboxRowProps {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  children: React.ReactNode;
-}
-
-export function CheckboxRow({ checked, onChange, children }: CheckboxRowProps) {
-  return (
-    <IxCheckbox
-      checked={checked}
-      label={typeof children === "string" ? children : undefined}
-      onCheckedChange={(e) => onChange(e.detail ?? false)}
-    >
-      {typeof children !== "string" && children}
-    </IxCheckbox>
   );
 }
 

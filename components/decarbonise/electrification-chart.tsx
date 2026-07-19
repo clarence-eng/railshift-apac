@@ -61,8 +61,9 @@ export default function ElectrificationChart({ rows, dieselFactor, railEnergy }:
                 color: ch.foreground,
               }}
               formatter={(v, _name, entry) => {
-                const ef = (entry.payload as { electricFactor: number }).electricFactor;
-                return [`${v ?? 0}% (electric: ${ef.toFixed(1)} gCO₂e/pkm)`, "Reduction"];
+                const payload = entry.payload as CountryElectrificationRow | undefined;
+                const ef = payload?.electricFactor;
+                return [`${v ?? 0}% (electric: ${ef != null ? ef.toFixed(1) : "n/a"} gCO₂e/pkm)`, "Reduction"];
               }}
             />
             <Bar dataKey="reductionPct" radius={[2, 2, 0, 0]}>

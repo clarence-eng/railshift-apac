@@ -63,8 +63,6 @@ export default function TechClassification({ projects }: Props) {
             className="rounded-sm border overflow-hidden"
             style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
           >
-            {/* Use gradient band for consistency */}
-            <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
             <div className="h-[4px] w-full" style={{ background: color }} aria-hidden="true" />
             <div className="px-4 pt-3 pb-4 space-y-1">
               <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>{tech}</p>

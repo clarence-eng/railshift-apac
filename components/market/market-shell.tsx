@@ -53,11 +53,13 @@ export default function MarketShell() {
       </div>
 
       {/* Tab bar — scrollable on mobile */}
-      <div className="flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)", scrollbarWidth: "none" }}>
+      <div role="tablist" aria-label="Market intelligence tabs" className="flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)", scrollbarWidth: "none" }}>
         {TABS.map((tab) => (
           <button
             key={tab}
             type="button"
+            role="tab"
+            aria-selected={activeTab === tab}
             onClick={() => setActiveTab(tab)}
             className="px-4 py-2.5 text-sm border-b-2 -mb-px transition-colors duration-150 whitespace-nowrap shrink-0"
             style={{
@@ -83,7 +85,7 @@ export default function MarketShell() {
       </div>
 
       {/* Footer note */}
-      <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-std-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
+      <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-weak-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
         Market intelligence derived from project dataset · Values in original reported currencies · Confidence levels per dataset conventions
       </p>
     </div>
