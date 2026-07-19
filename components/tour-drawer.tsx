@@ -22,16 +22,16 @@ const TOUR_STEPS: TourStep[] = [
   {
     page: "Market",
     href: "/market",
-    headline: "Six-tab market intelligence dashboard",
-    body: "Work through the tabs left to right: Country → size the market by geography. Technology → see the CBTC/HSR/Metro mix. Timeline → visualise the delivery horizon to 2036. Competitive → see where Siemens, Alstom, Hitachi and CRRC each stand. Funding → understand tied vs open procurement. M&A Signals → get PROTECT/PURSUE/MONITOR/WATCH classifications.",
-    tip: "Tab state is saved in the URL — you can share a direct link to any tab.",
+    headline: "Seven-tab market intelligence dashboard",
+    body: "Country → size the market by geography. Technology → CBTC/HSR/Metro mix. Timeline → delivery horizon. Competitive → where Siemens, Alstom, Hitachi and CRRC stand. Funding → tied vs open procurement. Sustainability → carbon price trajectory and regulatory context per market. M&A Signals → PROTECT/PURSUE/MONITOR/WATCH classifications.",
+    tip: "The Sustainability tab shows Singapore's carbon price rising to S$80/tCO₂e by 2030 — each year it rises, the commercial case for rail decarbonisation strengthens.",
   },
   {
     page: "Decarbonise",
     href: "/decarbonise",
-    headline: "Quantify the carbon value case",
-    body: "Modal Shift: set a line's daily ridership and see how many tonnes of CO₂ are avoided per year vs car travel, priced at Singapore's carbon tax. Electrification: compare diesel-to-electric savings across APAC grids. Reference: raw emission factors and calculator defaults with full source citations.",
-    tip: "Try the Cross Island Line: 500k riders/day, Singapore grid. The lifetime carbon value (~S$193m undiscounted) is a powerful commercial anchor.",
+    headline: "Quantify the carbon value Siemens creates",
+    body: "Two distinct calculators. Modal Shift: when a metro line opens, people switch from cars to rail — this calculates how many tonnes of CO₂ are avoided per year and what that is worth at Singapore's carbon price. Electrification: when a diesel line goes electric, how much does it reduce emissions — and how dependent is the answer on the local grid intensity?",
+    tip: "Try Cross Island Line on Modal Shift: 500k riders/day, Singapore grid. Lifetime carbon value ~S$193m undiscounted — a powerful anchor for lifecycle services negotiations.",
   },
   {
     page: "Brief",
@@ -43,9 +43,9 @@ const TOUR_STEPS: TourStep[] = [
   {
     page: "Strategy",
     href: "/strategy",
-    headline: "Framework alignment and candidate fit",
-    body: "Strategy maps this prototype to three frameworks the JD requires: DEGREE sustainability (6 clickable pillars linking to evidence), BTA planning dimensions (6 cards showing what feeds a Business Target Agreement), and a direct JD requirements → app capabilities mapping table. The Candidate Fit section at the bottom shows HIGH/MED fit against each role requirement.",
-    tip: "Each DEGREE card is a clickable link — click Decarbonization to go straight to the calculator.",
+    headline: "DEGREE, BTA planning, and JD alignment",
+    body: "Strategy maps this prototype to Siemens' frameworks. DEGREE: 6 clickable pillars showing which app capability serves each sustainability dimension. BTA planning: 6 dimensions that feed a Business Target Agreement cycle. JD requirements: direct mapping from each role requirement to specific app evidence.",
+    tip: "Each DEGREE card is a clickable link — click Decarbonization to go straight to the carbon calculator.",
   },
 ];
 

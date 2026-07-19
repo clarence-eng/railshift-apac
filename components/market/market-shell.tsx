@@ -10,20 +10,22 @@ import PipelineTimeline from "./pipeline-timeline";
 import CompetitiveAnalysis from "./competitive-analysis";
 import MASignals from "./ma-signals";
 import FundingAnalysis from "./funding-analysis";
+import SustainabilityContext from "./sustainability-context";
 
-const TABS = ["Country", "Technology", "Timeline", "Competitive", "Funding", "M&A Signals"] as const;
+const TABS = ["Country", "Technology", "Timeline", "Competitive", "Funding", "Sustainability", "M&A Signals"] as const;
 type Tab = typeof TABS[number];
 
 // Computed once at module level — PROJECTS is a static constant
 const MARKET_COUNT = new Set(PROJECTS.map((p) => primaryCountry(p.country))).size;
 
 const TAB_PARAM: Record<Tab, string> = {
-  "Country":     "country",
-  "Technology":  "technology",
-  "Timeline":    "timeline",
-  "Competitive": "competitive",
-  "Funding":     "funding",
-  "M&A Signals": "ma-signals",
+  "Country":        "country",
+  "Technology":     "technology",
+  "Timeline":       "timeline",
+  "Competitive":    "competitive",
+  "Funding":        "funding",
+  "Sustainability": "sustainability",
+  "M&A Signals":   "ma-signals",
 };
 const PARAM_TO_TAB: Record<string, Tab> = Object.fromEntries(
   (Object.entries(TAB_PARAM) as [Tab, string][]).map(([tab, param]) => [param, tab])
@@ -83,8 +85,9 @@ export default function MarketShell() {
         {activeTab === "Technology"  && <TechClassification    projects={PROJECTS} />}
         {activeTab === "Timeline"    && <PipelineTimeline       projects={PROJECTS} />}
         {activeTab === "Competitive" && <CompetitiveAnalysis    projects={PROJECTS} />}
-        {activeTab === "Funding"     && <FundingAnalysis        projects={PROJECTS} />}
-        {activeTab === "M&A Signals" && <MASignals              projects={PROJECTS} />}
+        {activeTab === "Funding"       && <FundingAnalysis        projects={PROJECTS} />}
+        {activeTab === "Sustainability" && <SustainabilityContext  projects={PROJECTS} />}
+        {activeTab === "M&A Signals"   && <MASignals              projects={PROJECTS} />}
       </div>
 
       {/* Footer note */}
