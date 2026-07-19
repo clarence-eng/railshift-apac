@@ -71,7 +71,6 @@ function PresenceBadge({ level }: { level: string }) {
       borderRadius: "2px",
       letterSpacing: "0.4px",
       display: "inline-block",
-      border: level === "unclear" ? "none" : "none",
     }}>
       {s.label}
     </span>
@@ -129,6 +128,7 @@ export default function CompetitiveAnalysis({ projects }: Props) {
                 <th className="px-3 py-2 text-center text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Alstom</th>
                 <th className="px-3 py-2 text-center text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Hitachi</th>
                 <th className="px-3 py-2 text-center text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>CRRC</th>
+                <th className="hidden lg:table-cell px-3 py-2 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>Analyst note</th>
               </tr>
             </thead>
             <tbody>
@@ -145,6 +145,7 @@ export default function CompetitiveAnalysis({ projects }: Props) {
                   <td className="px-3 py-2.5 text-center"><PresenceBadge level={comp.alstom} /></td>
                   <td className="px-3 py-2.5 text-center"><PresenceBadge level={comp.hitachi} /></td>
                   <td className="px-3 py-2.5 text-center"><PresenceBadge level={comp.crrc} /></td>
+                  <td className="hidden lg:table-cell px-3 py-2.5 text-xs max-w-[240px]" style={{ color: "var(--theme-color-soft-text)" }}>{comp.rationale}</td>
                 </tr>
               ))}
             </tbody>

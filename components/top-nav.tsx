@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/market",     label: "Market"      },
   { href: "/decarbonise", label: "Decarbonise" },
   { href: "/brief",       label: "Brief"       },
+  { href: "/strategy",   label: "Strategy"    },
 ];
 
 export default function TopNav() {
