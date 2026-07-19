@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import MethodologyDrawer from "@/components/methodology-drawer";
+import TourDrawer from "@/components/tour-drawer";
 import RailShiftWordmark from "@/components/railshift-wordmark";
+
+const TOUR_STORAGE_KEY = "railshift-tour-dismissed";
 
 const NAV_LINKS = [
   { href: "/",            label: "Pipeline"    },
@@ -18,6 +21,16 @@ const NAV_LINKS = [
 export default function TopNav() {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
+
+  // Auto-show tour on first visit
+  useEffect(() => {
+    if (typeof window !== "undefined" && !localStorage.getItem(TOUR_STORAGE_KEY)) {
+      // Small delay so the page fade-in completes first
+      const t = setTimeout(() => setTourOpen(true), 600);
+      return () => clearTimeout(t);
+    }
+  }, []);
 
   return (
     <>
@@ -58,6 +71,18 @@ export default function TopNav() {
 
           {/* Right controls */}
           <div className="ml-2 flex items-center gap-2 shrink-0">
+            {/* Tour / Help button */}
+            <button
+              type="button"
+              onClick={() => setTourOpen(true)}
+              className="w-7 h-7 flex items-center justify-center rounded-sm border text-xs font-semibold transition-colors duration-150"
+              style={{ borderColor: "var(--ix-border)", color: "var(--ix-text-soft)", background: "transparent" }}
+              aria-label="Open app guide"
+              title="How to use this app"
+            >
+              ?
+            </button>
+
             <button
               type="button"
               onClick={() => setDrawerOpen(true)}
@@ -74,6 +99,7 @@ export default function TopNav() {
       </header>
 
       <MethodologyDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <TourDrawer open={tourOpen} onClose={() => setTourOpen(false)} />
     </>
   );
 }
