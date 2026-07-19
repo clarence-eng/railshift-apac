@@ -181,7 +181,7 @@ function StatCard({ letter, pillar, color, stat, desc, appLink, href }: DegreePi
       <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-2xl font-bold" style={{ color }}>{letter}</span>
+            <span className="font-mono text-3xl font-bold leading-none" style={{ color }}>{letter}</span>
             <span className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{pillar}</span>
           </div>
           <span style={{ background: color, color: "#fff", fontSize: "8px", fontWeight: 700, padding: "1px 5px", borderRadius: "2px", flexShrink: 0 }}>

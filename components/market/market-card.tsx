@@ -19,7 +19,7 @@ export default function MarketCard({ title, note, children }: Props) {
     >
       <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
       <div className="px-4 py-3 border-b" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ix-primary)" }}>
+        <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--ix-primary)" }}>
           {title}
         </p>
         {note && (

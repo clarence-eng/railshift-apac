@@ -192,6 +192,20 @@
   animation: ix-slide-in-from-right 200ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
+/* Page content fade-in — applies to main content on every route */
+@keyframes ix-page-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ix-page-enter {
+  animation: ix-page-fade-in 220ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+/* Table row hover transition — supplements the JS style mutation */
+.ix-table-row {
+  transition: background 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
 /* ================================================================
    PRINT STYLES
    When window.print() is called from the Brief page, hide everything

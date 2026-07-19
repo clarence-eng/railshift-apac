@@ -172,7 +172,7 @@ export default function PipelineShell({ projects }: Props) {
               <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>
                 {kpi.label}
               </p>
-              <p className="font-mono text-2xl font-semibold tabular-nums leading-7" style={{ color: "var(--theme-color-primary)" }}>
+              <p className="font-mono text-3xl font-semibold tabular-nums leading-8" style={{ color: "var(--theme-color-primary)" }}>
                 {kpi.value}
               </p>
               {kpi.sub && (

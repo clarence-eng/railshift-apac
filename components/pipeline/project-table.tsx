@@ -208,7 +208,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
               <tr
                 key={p.id}
                 onClick={() => onSelect(p.id)}
-                className="border-b cursor-pointer transition-colors last:border-0"
+                className="ix-table-row border-b cursor-pointer last:border-0"
                 style={{
                   borderColor: "var(--theme-color-x-weak-bdr)",
                   background: selectedId === p.id ? "var(--theme-color-ghost--selected)" : undefined,

@@ -106,7 +106,7 @@ export default function CompetitiveAnalysis({ projects }: Props) {
             <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
             <div className="px-4 pt-3 pb-4 space-y-1">
               <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>{label}</p>
-              <p className="font-mono text-2xl font-semibold tabular-nums leading-7" style={{ color }}>{value}</p>
+              <p className="font-mono text-3xl font-semibold tabular-nums leading-8" style={{ color }}>{value}</p>
               <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>{sub}</p>
             </div>
           </div>

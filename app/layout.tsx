@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <ThemeSync />
           <TopNav />
-          <main className="flex-1 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <main className="ix-page-enter flex-1 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             {children}
           </main>
           <footer
@@ -54,13 +54,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               style={{ background: "var(--ix-gradient)" }}
               aria-hidden="true"
             />
-            <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+            <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
               <p className="text-xs" style={{ color: "var(--ix-text-soft)" }}>
                 Built by Clarence Eng.
               </p>
-              <p className="text-xs" style={{ color: "var(--ix-text-weak)" }}>
-                Data: EEA 2018 · Ember 2024 · NCCS 2026
-              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                {["EEA 2018", "Ember 2024", "NCCS 2026"].map((src) => (
+                  <span
+                    key={src}
+                    className="text-xs border rounded-sm px-2 py-0.5 font-mono"
+                    style={{ borderColor: "var(--ix-border)", color: "var(--ix-text-weak)" }}
+                  >
+                    {src}
+                  </span>
+                ))}
+              </div>
             </div>
           </footer>
         </ThemeProvider>
