@@ -83,7 +83,7 @@ export default function OgImage() {
             margin: 0,
           }}
         >
-          Rail strategy &amp; decarbonisation cockpit — Asia-Pacific
+          Siemens Mobility · Rail strategy &amp; decarbonisation cockpit · Asia-Pacific
         </p>
       </div>
     ),

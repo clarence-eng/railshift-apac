@@ -264,6 +264,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Missing projectId" }, { status: 400 });
   }
 
+  // Validate required numeric outputs to guard against malformed or injected requests
+  if (
+    !calcOutputs ||
+    typeof calcOutputs !== "object" ||
+    !Number.isFinite(calcOutputs.avoidedTCO2PerYear) ||
+    !Number.isFinite(calcOutputs.carbonValueSGDPerYear) ||
+    !Number.isFinite(calcOutputs.lifetimeValueSGD)
+  ) {
+    return NextResponse.json({ error: "Invalid calcOutputs" }, { status: 400 });
+  }
+
   const project = PROJECTS.find((p) => p.id === projectId);
   if (!project) {
     return NextResponse.json({ error: "Unknown projectId" }, { status: 400 });

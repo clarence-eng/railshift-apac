@@ -68,7 +68,8 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
         if (q) return (
           p.name.toLowerCase().includes(q) ||
           p.country.toLowerCase().includes(q) ||
-          (p.value?.toLowerCase().includes(q) ?? false)
+          (p.value?.toLowerCase().includes(q) ?? false) ||
+          (p.note?.toLowerCase().includes(q) ?? false)
         );
         return true;
       })

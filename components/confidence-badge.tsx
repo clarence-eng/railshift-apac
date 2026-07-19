@@ -4,7 +4,7 @@ import { IxChip } from "@siemens/ix-react";
 import type { Confidence } from "@/data/seed";
 
 const BG: Record<Confidence, string> = {
-  HIGH: "var(--theme-color-neutral)",
+  HIGH: "var(--theme-color-success)",
   MED:  "var(--theme-color-warning)",
   LOW:  "var(--theme-color-alarm)",
 };

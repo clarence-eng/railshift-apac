@@ -286,8 +286,10 @@ export default function BriefShell() {
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
               <span style={{ color: "var(--theme-color-soft-text)" }}>Daily ridership</span>
               <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{(dailyRidership / 1000).toFixed(0)}k pax/day</span>
+              <span style={{ color: "var(--theme-color-soft-text)" }}>Avg trip length</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{CALC_DEFAULTS.avgTripKm} km</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Diverted from car</span>
-              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>30% (ITDP mid-range)</span>
+              <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{Math.round(BRIEF_SHARE_ASSUMPTION * 100)}% (ITDP mid-range)</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Avoided tCO₂/yr</span>
               <span className="font-mono text-right tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{fmt(calcOutputs.avoidedTCO2PerYear)}</span>
               <span style={{ color: "var(--theme-color-soft-text)" }}>Carbon value/yr</span>
@@ -344,19 +346,34 @@ export default function BriefShell() {
                 <p className="text-xs uppercase tracking-widest" style={{ color: "var(--theme-color-soft-text)" }}>
                   Executive Memo
                 </p>
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  className="text-xs border rounded-sm px-2 py-1 transition-colors duration-150"
-                  style={{
-                    borderColor: copied ? "var(--ix-primary)" : "var(--theme-color-std-bdr)",
-                    color: copied ? "var(--ix-primary)" : "var(--theme-color-soft-text)",
-                    background: "transparent",
-                  }}
-                  aria-label="Copy memo to clipboard"
-                >
-                  {copied ? "Copied" : "Copy"}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="text-xs border rounded-sm px-2 py-1 transition-colors duration-150"
+                    style={{
+                      borderColor: "var(--theme-color-std-bdr)",
+                      color: "var(--theme-color-soft-text)",
+                      background: "transparent",
+                    }}
+                    aria-label="Print memo"
+                  >
+                    Print
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="text-xs border rounded-sm px-2 py-1 transition-colors duration-150"
+                    style={{
+                      borderColor: copied ? "var(--ix-primary)" : "var(--theme-color-std-bdr)",
+                      color: copied ? "var(--ix-primary)" : "var(--theme-color-soft-text)",
+                      background: "transparent",
+                    }}
+                    aria-label="Copy memo to clipboard"
+                  >
+                    {copied ? "Copied" : "Copy"}
+                  </button>
+                </div>
               </div>
               <div className="px-5 pb-5 sm:px-6">
                 <MemoBody markdown={result.markdown} />

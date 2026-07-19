@@ -1,5 +1,3 @@
-"use client";
-
 import { EMISSION_FACTORS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 
 const MODE_MAX = 143;

@@ -85,12 +85,12 @@ export default function PipelineShell({ projects }: Props) {
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
           <h1 className="text-2xl font-semibold tracking-tight">Pipeline</h1>
-          <p className="mt-0.5 text-sm text-muted-foreground">
+          <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
             {projects.length} active APAC rail projects — total identified value exceeding US$200bn
           </p>
         </div>
         {/* Legend — wraps gracefully on narrow screens */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
           {STATUSES.map((s) => (
             <span key={s} className="flex items-center gap-1.5">
               <span
