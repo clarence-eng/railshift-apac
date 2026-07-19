@@ -268,7 +268,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                   {p.value ?? <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
                 </td>
                 <td className="px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>
-                  {p.lengthKm != null ? p.lengthKm.toLocaleString() : <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
+                  {p.lengthKm != null ? p.lengthKm.toLocaleString("en-SG") : <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}
                 </td>
                 <td className="hidden lg:table-cell px-3 py-2.5 text-xs whitespace-nowrap" style={{ color: "var(--theme-color-soft-text)" }}>
                   {p.stations != null ? p.stations : <span style={{ color: "var(--theme-color-weak-text)" }}>n/a</span>}

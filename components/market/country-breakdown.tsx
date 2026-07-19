@@ -81,7 +81,7 @@ export default function CountryBreakdown({ projects }: Props) {
                   <td className="px-3 py-2.5 text-xs" style={{ color: "var(--theme-color-soft-text)" }}>{row.approved || "—"}</td>
                   <td className="px-3 py-2.5 text-xs" style={{ color: "var(--theme-color-soft-text)" }}>{row.undecided || "—"}</td>
                   <td className="px-3 py-2.5 text-xs font-mono tabular-nums" style={{ color: "var(--theme-color-soft-text)" }}>
-                    {row.totalKm > 0 ? row.totalKm.toLocaleString() : "—"}
+                    {row.totalKm > 0 ? row.totalKm.toLocaleString("en-SG") : "—"}
                   </td>
                   <td className="px-3 py-2.5">
                     {row.siemensCount > 0 ? (

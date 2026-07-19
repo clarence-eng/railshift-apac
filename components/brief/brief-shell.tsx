@@ -53,7 +53,6 @@ function buildCalcOutputs(gridCountry: string, dailyRidership: number, carbonPri
     lifetimeValueSGD: result.lifetimeValueSGD,
     railFactor: result.railFactor,
     netFactorSaving: result.netFactorSaving,
-    annualPkmShifted: result.annualPkmShifted,
     carbonPriceSGD,
     assetLifeYears: CALC_DEFAULTS.assetLifeYears,
     gridCountry,

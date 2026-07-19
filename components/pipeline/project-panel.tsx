@@ -61,7 +61,7 @@ export default function ProjectPanel({ project, onClose }: Props) {
           }
         />
         <Row label="Value" value={project.value} />
-        <Row label="Length" value={project.lengthKm != null ? `${project.lengthKm.toLocaleString()} km` : null} />
+        <Row label="Length" value={project.lengthKm != null ? `${project.lengthKm.toLocaleString("en-SG")} km` : null} />
         <Row label="Stations" value={project.stations != null ? project.stations : null} />
         <Row label="Key date" value={project.keyDate} />
         <Row label="Confidence" value={<ConfidenceBadge confidence={project.confidence} />} />
