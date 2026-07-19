@@ -10,3 +10,10 @@ const INCUMBENT_RE = /siemens.*incumbent|incumbent.*siemens/i;
 export function isSiemensIncumbent(note: string | null): boolean {
   return INCUMBENT_RE.test(note ?? "");
 }
+
+/** Extracts the first 4-digit year (2020–2049) from a keyDate string. */
+export function extractYear(keyDate: string | null): number | null {
+  if (!keyDate) return null;
+  const m = keyDate.match(/\b(20[2-4][0-9])\b/);
+  return m ? parseInt(m[1], 10) : null;
+}

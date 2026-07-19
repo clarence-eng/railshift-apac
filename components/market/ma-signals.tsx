@@ -1,5 +1,5 @@
 import type { Project } from "@/data/seed";
-import { isSiemensIncumbent } from "@/lib/project-utils";
+import { isSiemensIncumbent, extractYear } from "@/lib/project-utils";
 
 interface Props { projects: Project[]; }
 
@@ -16,12 +16,6 @@ interface Signal {
 function truncateNote(note: string | null, max = 120): string {
   if (!note) return "";
   return note.length > max ? `${note.slice(0, max).trimEnd()}…` : note;
-}
-
-function extractYear(keyDate: string | null): number | null {
-  if (!keyDate) return null;
-  const m = keyDate.match(/\b(20[2-4][0-9])\b/);
-  return m ? parseInt(m[1], 10) : null;
 }
 
 // Use a stable reference year so the component is deterministic for SSG.
