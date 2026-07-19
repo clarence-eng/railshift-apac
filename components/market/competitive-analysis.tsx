@@ -1,6 +1,6 @@
 import type { Project } from "@/data/seed";
 import MarketCard from "./market-card";
-import { isSiemensIncumbent } from "@/lib/project-utils";
+import { isSiemensIncumbent, hasSiemensPresence } from "@/lib/project-utils";
 
 interface Props { projects: Project[]; }
 
@@ -22,7 +22,7 @@ function assessCompetitors(p: Project): CompetitorPresence {
   // Siemens position
   const siemens: CompetitorPresence["siemens"] =
     isSiemensIncumbent(p.note) ? "incumbent" :
-    /siemens/i.test(p.note ?? "") ? "likely" :
+    hasSiemensPresence(p.note) ? "likely" :
     /cbtc|trainguard|sirius|goA 4/i.test(p.note ?? "") ? "likely" :
     "possible";
 

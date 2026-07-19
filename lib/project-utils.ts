@@ -3,12 +3,14 @@
  * No "use client" directive — safe to import from both RSC and client code.
  */
 
-/** RegExp for Siemens incumbent confirmation in analyst notes. */
-const INCUMBENT_RE = /siemens.*incumbent|incumbent.*siemens/i;
-
 /** Returns true if the project note confirms Siemens is the incumbent. */
 export function isSiemensIncumbent(note: string | null): boolean {
-  return INCUMBENT_RE.test(note ?? "");
+  return /siemens.*incumbent|incumbent.*siemens/i.test(note ?? "");
+}
+
+/** Returns true if the project note mentions Siemens in any capacity. */
+export function hasSiemensPresence(note: string | null): boolean {
+  return /siemens/i.test(note ?? "");
 }
 
 /** Extracts the first 4-digit year (2020–2049) from a keyDate string. */

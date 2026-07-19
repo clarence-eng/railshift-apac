@@ -1,5 +1,5 @@
 import type { Project } from "@/data/seed";
-import { isSiemensIncumbent, extractYear } from "@/lib/project-utils";
+import { isSiemensIncumbent, hasSiemensPresence, extractYear } from "@/lib/project-utils";
 
 interface Props { projects: Project[]; }
 
@@ -27,7 +27,7 @@ function deriveSignals(projects: Project[]): Signal[] {
 
   for (const p of projects) {
     const isIncumbent = isSiemensIncumbent(p.note);
-    const hasSiemens = /siemens/i.test(p.note ?? "");
+    const hasSiemens = hasSiemensPresence(p.note);
     const year = extractYear(p.keyDate);
     const yearsOut = year != null ? year - DATASET_YEAR : null;
 

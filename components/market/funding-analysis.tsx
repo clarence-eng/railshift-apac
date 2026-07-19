@@ -48,7 +48,7 @@ export default function FundingAnalysis({ projects }: Props) {
   const classified = projects.map((p) => ({ ...p, funding: classifyFunding(p) }));
 
   const byFunding = FUNDING_ORDER
-    .map((f) => ({ source: f, projects: classified.filter((p) => p.funding === f) }))
+    .map((f) => ({ source: f, color: FUNDING_COLOR[f], note: FUNDING_NOTE[f], projects: classified.filter((p) => p.funding === f) }))
     .filter((g) => g.projects.length > 0);
 
   const total = projects.length;
@@ -57,12 +57,12 @@ export default function FundingAnalysis({ projects }: Props) {
     <div className="space-y-6">
       {/* Summary tiles */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-        {byFunding.map(({ source, projects: ps }) => (
+        {byFunding.map(({ source, color, projects: ps }) => (
           <div key={source} className="rounded-sm border overflow-hidden" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}>
-            <div className="h-[4px] w-full" style={{ background: FUNDING_COLOR[source] }} aria-hidden="true" />
+            <div className="h-[4px] w-full" style={{ background: color }} aria-hidden="true" />
             <div className="px-4 pt-3 pb-4 space-y-1">
               <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>{source}</p>
-              <p className="font-mono text-3xl font-semibold tabular-nums leading-8" style={{ color: FUNDING_COLOR[source] }}>{ps.length}</p>
+              <p className="font-mono text-3xl font-semibold tabular-nums leading-8" style={{ color }}>{ps.length}</p>
               <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>{Math.round(ps.length / total * 100)}% of pipeline</p>
             </div>
           </div>
@@ -72,9 +72,8 @@ export default function FundingAnalysis({ projects }: Props) {
       {/* Proportional bar */}
       <MarketCard title="Funding source mix">
         <div className="space-y-4">
-          {byFunding.map(({ source, projects: ps }) => {
+          {byFunding.map(({ source, color, note, projects: ps }) => {
             const pct = Math.round(ps.length / total * 100);
-            const color = FUNDING_COLOR[source];
             return (
               <div key={source}>
                 <div className="flex items-center justify-between mb-1">
@@ -86,7 +85,7 @@ export default function FundingAnalysis({ projects }: Props) {
                 <div className="w-full rounded-full overflow-hidden" style={{ height: "8px", background: "var(--theme-color-x-weak-bdr)" }}>
                   <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: "9999px", transition: "width 0.4s ease" }} />
                 </div>
-                <p className="text-xs mt-1" style={{ color: "var(--theme-color-weak-text)" }}>{FUNDING_NOTE[source]}</p>
+                <p className="text-xs mt-1" style={{ color: "var(--theme-color-weak-text)" }}>{note}</p>
               </div>
             );
           })}
@@ -96,10 +95,10 @@ export default function FundingAnalysis({ projects }: Props) {
       {/* Project breakdown by funding source */}
       <MarketCard title="Projects by funding source" note="Classified from analyst notes and project value fields. Verify with primary sources before use in proposals.">
         <div className="space-y-5">
-          {byFunding.map(({ source, projects: ps }) => (
+          {byFunding.map(({ source, color, projects: ps }) => (
             <div key={source}>
               <div className="flex items-center gap-2 mb-2">
-                <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: FUNDING_COLOR[source] }} aria-hidden="true" />
+                <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ background: color }} aria-hidden="true" />
                 <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--theme-color-std-text)" }}>{source}</span>
               </div>
               <div className="pl-4 space-y-1">
@@ -124,22 +123,19 @@ export default function FundingAnalysis({ projects }: Props) {
       {/* Strategic implications */}
       <MarketCard title="Procurement implications by funding source">
         <div>
-          {byFunding.map(({ source, projects: ps }) => {
-            const color = FUNDING_COLOR[source];
-            return (
-              <div key={source} className="py-3 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
-                <div className="flex items-start gap-3">
-                  <span style={{ background: color, color: "#fff", fontSize: "9px", fontWeight: 700, padding: "2px 5px", borderRadius: "2px", flexShrink: 0, marginTop: "2px", letterSpacing: "0.4px" }}>
-                    {ps.length}
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{source}</p>
-                    <p className="text-xs mt-0.5 leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>{FUNDING_NOTE[source]}</p>
-                  </div>
+          {byFunding.map(({ source, color, note, projects: ps }) => (
+            <div key={source} className="py-3 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
+              <div className="flex items-start gap-3">
+                <span style={{ background: color, color: "#fff", fontSize: "9px", fontWeight: 700, padding: "2px 5px", borderRadius: "2px", flexShrink: 0, marginTop: "2px", letterSpacing: "0.4px" }}>
+                  {ps.length}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{source}</p>
+                  <p className="text-xs mt-0.5 leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>{note}</p>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </MarketCard>
     </div>
