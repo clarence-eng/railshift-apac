@@ -47,7 +47,7 @@ export default function TopNav() {
           </Link>
 
           {/* Nav links — scrollable on mobile */}
-          <nav className="flex flex-1 items-center min-w-0 overflow-x-auto" style={{ scrollbarWidth: "none" }} aria-label="Main navigation">
+          <nav className="ix-no-scrollbar flex flex-1 items-center min-w-0 overflow-x-auto" aria-label="Main navigation">
             {NAV_LINKS.map(({ href, label }) => {
               const active = pathname === href;
               return (

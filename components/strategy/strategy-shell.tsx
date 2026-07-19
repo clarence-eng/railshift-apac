@@ -234,7 +234,7 @@ function StatCard({ letter, sub, pillar, color, stat, desc, appLink, href }: Deg
           <div className="flex items-center gap-2">
             <span className="font-mono text-3xl font-bold leading-none" style={{ color }}>
               {letter}
-              {sub && <sub className="font-mono text-sm" style={{ verticalAlign: "sub", fontSize: "0.55em" }}>{sub}</sub>}
+              {sub && <sub className="font-mono" style={{ verticalAlign: "sub", fontSize: "0.55em" }}>{sub}</sub>}
             </span>
             <span className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{pillar}</span>
           </div>
@@ -319,7 +319,7 @@ export default function StrategyShell() {
 
       {/* JD Requirements mapping */}
       <MarketCard title="JD requirements — app capabilities mapping">
-        <div className="space-y-0">
+        <div>
           {STRATEGIC_THEMES.map(({ theme, jdRef, appEvidence }, i) => (
             <div
               key={theme}

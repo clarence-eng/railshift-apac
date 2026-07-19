@@ -20,7 +20,7 @@ function SourceLink({ id }: { id: string }) {
       href={src.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="underline transition-colors"
+      className="underline transition-colors duration-150"
       style={{ color: "var(--ix-text-soft)" }}
       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text)")}
       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text-soft)")}
@@ -158,7 +158,7 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
           <button
             onClick={onClose}
             aria-label="Close drawer"
-            className="text-xl leading-none transition-colors"
+            className="text-xl leading-none transition-colors duration-150"
             style={{ color: "var(--ix-text-soft)" }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text)")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text-soft)")}
@@ -288,7 +288,7 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline transition-colors"
+                  className="underline transition-colors duration-150"
                   style={{ color: "var(--ix-text)" }}
                   onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text-soft)")}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text)")}

@@ -192,6 +192,15 @@
   animation: ix-slide-in-from-right 200ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
+/* Hide scrollbars on overflow-x-auto containers (nav, tab bars).
+   scrollbarWidth:none covers Firefox; ::-webkit-scrollbar covers Chrome/Safari. */
+.ix-no-scrollbar {
+  scrollbar-width: none;
+}
+.ix-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Page content fade-in — applies to main content on every route */
 @keyframes ix-page-fade-in {
   from { opacity: 0; transform: translateY(6px); }

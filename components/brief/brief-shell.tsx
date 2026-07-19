@@ -409,7 +409,7 @@ export default function BriefShell() {
           ) : !error ? (
             <div
               className="no-print overflow-hidden rounded-sm border min-h-[280px] flex flex-col"
-              style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
+              style={{ borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.18)" }}
             >
               <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
               <div className="flex-1 flex flex-col items-center justify-center gap-3 text-center px-8">
@@ -436,7 +436,7 @@ export default function BriefShell() {
         style={{
           background: "var(--theme-color-2)",
           borderColor: "var(--theme-color-std-bdr)",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
         }}
       >
         <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
@@ -454,7 +454,7 @@ export default function BriefShell() {
             </div>
             <a
               href="/"
-              className="shrink-0 text-xs underline transition-opacity hover:opacity-70"
+              className="shrink-0 text-xs underline transition-opacity duration-150 hover:opacity-70"
               style={{ color: "var(--theme-color-primary)" }}
             >
               View on Pipeline →

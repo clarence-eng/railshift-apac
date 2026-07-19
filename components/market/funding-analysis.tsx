@@ -123,7 +123,7 @@ export default function FundingAnalysis({ projects }: Props) {
 
       {/* Strategic implications */}
       <MarketCard title="Procurement implications by funding source">
-        <div className="space-y-0">
+        <div>
           {byFunding.map(({ source, projects: ps }) => {
             const color = FUNDING_COLOR[source];
             return (

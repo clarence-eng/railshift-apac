@@ -286,7 +286,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                     <button
                       type="button"
                       onClick={() => { setQuery(""); setStatusFilter(""); }}
-                      className="mt-2 text-xs underline transition-colors"
+                      className="mt-2 text-xs underline transition-colors duration-150"
                       style={{ color: "var(--theme-color-primary)" }}
                     >
                       Clear all filters

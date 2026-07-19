@@ -138,7 +138,7 @@ export default function TourDrawer({ open, onClose }: Props) {
           <button
             onClick={onClose}
             aria-label="Close guide"
-            className="text-xl leading-none transition-colors"
+            className="text-xl leading-none transition-colors duration-150"
             style={{ color: "var(--ix-text-soft)" }}
             onMouseEnter={(e) => ((e.currentTarget).style.color = "var(--ix-text)")}
             onMouseLeave={(e) => ((e.currentTarget).style.color = "var(--ix-text-soft)")}
@@ -198,7 +198,7 @@ export default function TourDrawer({ open, onClose }: Props) {
           <Link
             href={current.href}
             onClick={onClose}
-            className="mt-5 block text-xs underline transition-opacity hover:opacity-70"
+            className="mt-5 block text-xs underline transition-opacity duration-150 hover:opacity-70"
             style={{ color: "var(--ix-primary)" }}
           >
             Open {current.page} page →
@@ -220,7 +220,7 @@ export default function TourDrawer({ open, onClose }: Props) {
           <button
             type="button"
             onClick={handleDismiss}
-            className="text-xs transition-colors"
+            className="text-xs transition-colors duration-150"
             style={{ color: "var(--ix-text-weak)" }}
           >
             Don&rsquo;t show again

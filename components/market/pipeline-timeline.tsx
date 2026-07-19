@@ -59,7 +59,7 @@ export default function PipelineTimeline({ projects }: Props) {
                     </div>
                     <div className="flex-1 relative" style={{ height: "24px" }}>
                       {/* Track */}
-                      <div className="absolute inset-y-0 inset-x-0 rounded-full" style={{ background: "var(--theme-color-x-weak-bdr)", top: "50%", height: "2px", transform: "translateY(-50%)" }} />
+                      <div className="absolute rounded-full" style={{ background: "var(--theme-color-x-weak-bdr)", top: "50%", left: 0, right: 0, height: "2px", transform: "translateY(-50%)" }} />
                       {/* Year grid lines */}
                       {years.map((yr, i) => (
                         <div

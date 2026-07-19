@@ -13,6 +13,9 @@ import FundingAnalysis from "./funding-analysis";
 const TABS = ["Country", "Technology", "Timeline", "Competitive", "Funding", "M&A Signals"] as const;
 type Tab = typeof TABS[number];
 
+// Computed once at module level — PROJECTS is a static constant
+const MARKET_COUNT = new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0])).size;
+
 const TAB_PARAM: Record<Tab, string> = {
   "Country":     "country",
   "Technology":  "technology",
@@ -46,14 +49,13 @@ export default function MarketShell() {
           Market
         </h1>
         <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-          APAC rail market intelligence — {PROJECTS.length} projects across{" "}
-          {[...new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets.
+          APAC rail market intelligence — {PROJECTS.length} projects across {MARKET_COUNT} markets.
           All figures from verified sources, zero network calls.
         </p>
       </div>
 
       {/* Tab bar — scrollable on mobile */}
-      <div role="tablist" aria-label="Market intelligence tabs" className="flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)", scrollbarWidth: "none" }}>
+      <div role="tablist" aria-label="Market intelligence tabs" className="ix-no-scrollbar flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
         {TABS.map((tab) => (
           <button
             key={tab}

@@ -75,7 +75,7 @@ export default function ProjectPanel({ project, onClose }: Props) {
             href={src.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:opacity-80 transition-opacity"
+            className="underline hover:opacity-80 transition-opacity duration-150"
             style={{ color: "var(--theme-color-primary)" }}
           >
             {src.label}
