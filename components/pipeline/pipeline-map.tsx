@@ -89,43 +89,60 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
 
     function addMarkers(map: MLMap, Marker: typeof import("maplibre-gl").Marker) {
       for (const project of projects) {
-        const el = document.createElement("div");
         const color = getResolvedStatusColor(project.status);
         const isDarkMap = colorSchema !== "light";
-        el.style.cssText = `
+
+        // Outer container — sized to accommodate the scaled dot without layout shift.
+        // MapLibre positions this element; we never transform it.
+        const container = document.createElement("div");
+        container.style.cssText = `
+          width: 24px; height: 24px;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer;
+          background: transparent;
+        `;
+        container.title = project.name;
+        container.setAttribute("aria-label", project.name);
+
+        // Inner dot — this is the only element we scale/style.
+        // transform-origin: center ensures scale expands from the dot's own centre.
+        const dot = document.createElement("div");
+        dot.style.cssText = `
           width: 12px; height: 12px;
           background: ${color};
           border: 1.5px solid ${isDarkMap ? "rgba(15,22,25,0.9)" : "rgba(255,255,255,0.9)"};
           border-radius: 50%;
-          cursor: pointer;
           box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-          transition: transform 0.12s;
+          transition: transform 0.12s, box-shadow 0.12s;
+          transform-origin: center center;
         `;
-        el.title = project.name;
-        el.setAttribute("aria-label", project.name);
+        container.appendChild(dot);
 
-        el.addEventListener("mouseenter", () => {
-          if (el.style.zIndex !== "10") el.style.transform = "scale(1.6)";
+        container.addEventListener("mouseenter", () => {
+          if (dot.dataset.selected !== "1") dot.style.transform = "scale(1.5)";
         });
-        el.addEventListener("mouseleave", () => {
-          if (el.style.zIndex !== "10") el.style.transform = "scale(1)";
+        container.addEventListener("mouseleave", () => {
+          if (dot.dataset.selected !== "1") dot.style.transform = "scale(1)";
         });
-        el.addEventListener("click", () => onSelectRef.current(project.id));
+        container.addEventListener("click", () => onSelectRef.current(project.id));
 
-        markerEls.current.set(project.id, el);
+        // Store the dot (not the container) in markerEls for highlight updates
+        markerEls.current.set(project.id, dot);
 
-        new Marker({ element: el })
+        // anchor:'center' ensures the container's centre aligns with the coordinate
+        new Marker({ element: container, anchor: "center" })
           .setLngLat([project.lng, project.lat])
           .addTo(map);
       }
 
+      // Re-apply selection highlight for any marker selected before rebuild
       const sel = selectedIdRef.current;
       if (sel) {
-        const selEl = markerEls.current.get(sel);
-        if (selEl) {
-          selEl.style.transform = "scale(1.8)";
-          selEl.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
-          selEl.style.zIndex = "10";
+        const dot = markerEls.current.get(sel);
+        if (dot) {
+          dot.dataset.selected = "1";
+          dot.style.transform = "scale(1.6)";
+          dot.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
         }
       }
     }
@@ -159,17 +176,17 @@ export default function PipelineMap({ projects, selectedId, onSelect }: Props) {
     });
   }, [selectedId, projects]);
 
-  // Highlight selected marker
+  // Highlight selected marker — operates on the inner dot stored in markerEls
   useEffect(() => {
-    markerEls.current.forEach((el, id) => {
+    markerEls.current.forEach((dot, id) => {
       if (id === selectedId) {
-        el.style.transform = "scale(1.8)";
-        el.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
-        el.style.zIndex = "10";
+        dot.dataset.selected = "1";
+        dot.style.transform = "scale(1.6)";
+        dot.style.boxShadow = "0 0 0 3px var(--ix-primary, #009999), 0 1px 3px rgba(0,0,0,0.5)";
       } else {
-        el.style.transform = "scale(1)";
-        el.style.boxShadow = "0 1px 3px rgba(0,0,0,0.5)";
-        el.style.zIndex = "";
+        dot.dataset.selected = "";
+        dot.style.transform = "scale(1)";
+        dot.style.boxShadow = "0 1px 3px rgba(0,0,0,0.5)";
       }
     });
   }, [selectedId]);
