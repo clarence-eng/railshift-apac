@@ -92,7 +92,7 @@ export default function PipelineShell({ projects }: Props) {
         <div className="pl-3 border-l-2" style={{ borderColor: "var(--ix-primary)" }}>
           <h1 className="text-2xl font-semibold tracking-tight">Pipeline</h1>
           <p className="mt-0.5 text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-            {projects.length} active APAC rail projects — total identified value exceeding US$200bn
+            {projects.length} active APAC rail projects tracked across {[...new Set(projects.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets
           </p>
         </div>
         {/* Legend — wraps gracefully on narrow screens */}

@@ -22,8 +22,8 @@ function SourceLink({ id }: { id: string }) {
       rel="noopener noreferrer"
       className="underline transition-colors"
       style={{ color: "var(--ix-text-soft)" }}
-      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text)")}
-      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text-soft)")}
+      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text)")}
+      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text-soft)")}
     >
       {src.label}
     </a>
@@ -160,8 +160,8 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
             aria-label="Close drawer"
             className="text-xl leading-none transition-colors"
             style={{ color: "var(--ix-text-soft)" }}
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text)")}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text-soft)")}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text)")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text-soft)")}
           >
             ×
           </button>
@@ -290,8 +290,8 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
                   rel="noopener noreferrer"
                   className="underline transition-colors"
                   style={{ color: "var(--ix-text)" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text-soft)")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text)")}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text-soft)")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--ix-text)")}
                 >
                   {s.label}
                 </a>

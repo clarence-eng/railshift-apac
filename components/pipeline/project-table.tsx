@@ -87,6 +87,30 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
 
   const thProps = { sortKey, sortDir, onSort: toggleSort };
 
+  function exportCSV() {
+    const headers = ["Project", "Country", "Status", "Value", "km", "Stations", "Key date", "Confidence"];
+    const rows = filtered.map((p) => [
+      p.name,
+      p.country,
+      STATUS_LABEL[p.status],
+      p.value ?? "",
+      p.lengthKm != null ? String(p.lengthKm) : "",
+      p.stations != null ? String(p.stations) : "",
+      p.keyDate ?? "",
+      p.confidence,
+    ]);
+    const csv = [headers, ...rows]
+      .map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `railshift-apac-pipeline-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <section className="space-y-3">
       {/* Toolbar */}
@@ -129,6 +153,21 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
         <span className="ml-auto text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
           {filtered.length} of {projects.length}
         </span>
+
+        <button
+          type="button"
+          onClick={exportCSV}
+          className="text-xs border rounded-sm px-2 py-1 transition-colors duration-150"
+          style={{
+            borderColor: "var(--theme-color-std-bdr)",
+            color: "var(--theme-color-soft-text)",
+            background: "transparent",
+          }}
+          aria-label="Export table as CSV"
+          title="Export filtered results as CSV"
+        >
+          Export CSV
+        </button>
       </div>
 
       {/* Table */}
@@ -186,7 +225,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                 <td
                   className="px-3 py-2.5 font-medium"
                   style={{
-                    color: "var(--theme-color-std-text)",
+                    color: p.confidence === "HIGH" ? "var(--theme-color-std-text)" : "var(--theme-color-soft-text)",
                     borderLeft: selectedId === p.id ? "2px solid var(--theme-color-primary)" : "2px solid transparent",
                   }}
                 >

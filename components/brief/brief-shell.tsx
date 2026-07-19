@@ -124,6 +124,19 @@ export default function BriefShell() {
     abortRef.current?.abort();
   }, []);
 
+  // Cmd/Ctrl+Enter shortcut to generate brief
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && !loading) {
+        e.preventDefault();
+        handleGenerate();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
   const handleCopy = useCallback(async () => {
     if (!result?.markdown) return;
     try {
@@ -305,13 +318,14 @@ export default function BriefShell() {
             onClick={handleGenerate}
             disabled={loading}
             style={{ width: "100%" }}
+            title="Generate brief (⌘Enter)"
           >
             {loading ? "Generating…" : "Generate brief"}
           </IxButton>
 
           {/* Privacy note */}
           <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>
-            Project id and calculator outputs are sent to Gemini server-side. No personal data is transmitted. Responses are cached 1 hour per unique input set.
+            Project id and calculator outputs are sent to Gemini server-side. No personal data is transmitted. Responses are cached 1 hour per unique input set. Press ⌘Enter to generate.
           </p>
           </div>
         </div>

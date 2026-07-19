@@ -16,7 +16,7 @@ const ElectrificationChart = dynamic(() => import("./electrification-chart"), {
   loading: () => (
     <div
       className="rounded-sm border animate-pulse"
-      style={{ height: 248, background: "var(--theme-color-3)", borderColor: "var(--theme-color-std-bdr)", opacity: 0.4 }}
+      style={{ height: 248, background: "var(--theme-color-3)", borderColor: "var(--theme-color-x-weak-bdr)" }}
     />
   ),
 });
