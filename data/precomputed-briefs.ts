@@ -48,7 +48,7 @@ The Singapore carbon price path (S$45 today, target S$50–80 by 2030) provides 
 
 ## Recommendation
 
-**Protect and deepen the incumbent position.** The immediate priority is to convert the signalling contract into a multi-year Asset Performance Management (APM) agreement before Phase 2 delivery, when LTA's procurement attention shifts to the next network. A bundled Phase 1 + Phase 2 lifecycle service offering, priced against the avoided carbon value trajectory, is the strongest value narrative available. Quantify the 40-year lifetime carbon value (approximately **S$193 million undiscounted at current carbon price**) in commercial conversations — it is a credible, citable anchor that Alstom and Hitachi cannot match with the same source rigour on this specific line.
+**Protect and deepen the incumbent position.** The immediate priority is to convert the signalling contract into a multi-year Asset Performance Management (APM) agreement before Phase 2 delivery, when LTA's procurement attention shifts to the next network. A bundled Phase 1 + Phase 2 lifecycle service offering, priced against the avoided carbon value trajectory, is the strongest value narrative available. Quantify the 40-year lifetime carbon value (approximately **S$194 million undiscounted at current carbon price**, assuming 500k daily riders and 50% modal shift) in commercial conversations — it is a credible, citable anchor that Alstom and Hitachi cannot match with the same source rigour on this specific line.
 
 *All figures sourced from verified primary data. Confidence ratings per dataset conventions.*`,
 };

@@ -63,8 +63,10 @@ export default function MarketShell() {
           <button
             key={tab}
             type="button"
+            id={`market-tab-${TAB_PARAM[tab]}`}
             role="tab"
             aria-selected={activeTab === tab}
+            aria-controls="market-tabpanel"
             onClick={() => setActiveTab(tab)}
             className="px-4 py-2.5 text-sm border-b-2 -mb-px transition-colors duration-150 whitespace-nowrap shrink-0"
             style={{
@@ -80,7 +82,11 @@ export default function MarketShell() {
       </div>
 
       {/* Content */}
-      <div>
+      <div
+        id="market-tabpanel"
+        role="tabpanel"
+        aria-labelledby={`market-tab-${TAB_PARAM[activeTab]}`}
+      >
         {activeTab === "Country"     && <CountryBreakdown      projects={PROJECTS} />}
         {activeTab === "Technology"  && <TechClassification    projects={PROJECTS} />}
         {activeTab === "Timeline"    && <PipelineTimeline       projects={PROJECTS} />}

@@ -31,8 +31,10 @@ export default function DecarboniseShell() {
           <button
             key={tab}
             type="button"
+            id={`decarb-tab-${tab.toLowerCase().replace(/\s+/g, "-")}`}
             role="tab"
             aria-selected={activeTab === tab}
+            aria-controls={`decarb-panel-${tab.toLowerCase().replace(/\s+/g, "-")}`}
             onClick={() => setActiveTab(tab)}
             className="px-4 py-2.5 text-sm border-b-2 -mb-px transition-colors duration-150 whitespace-nowrap shrink-0"
             style={{
@@ -54,13 +56,17 @@ export default function DecarboniseShell() {
         {activeTab === "Reference" && "Underlying emission factors and calculator defaults with primary source citations."}
       </p>
 
-      <div role="tabpanel" aria-label={activeTab}>
+      <div
+        role="tabpanel"
+        id={`decarb-panel-${activeTab.toLowerCase().replace(/\s+/g, "-")}`}
+        aria-labelledby={`decarb-tab-${activeTab.toLowerCase().replace(/\s+/g, "-")}`}
+      >
         {activeTab === "Modal Shift" && <ModalShiftTab />}
         {activeTab === "Electrification" && <ElectrificationTab />}
         {activeTab === "Reference" && <ReferenceTab />}
       </div>
 
-      <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-std-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
+      <p className="text-xs border-t pt-3" style={{ color: "var(--theme-color-weak-text)", borderColor: "var(--theme-color-x-weak-bdr)" }}>
         Calculations are indicative. All figures sourced from verified primary data — see Methodology drawer for citations.
       </p>
     </div>

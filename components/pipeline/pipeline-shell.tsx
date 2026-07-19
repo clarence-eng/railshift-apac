@@ -2,11 +2,10 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import type { Project } from "@/data/seed";
+import type { Project, ProjectStatus } from "@/data/seed";
 import ProjectPanel from "./project-panel";
 import ProjectTable from "./project-table";
 import { STATUS_COLOR_VAR, STATUS_LABEL } from "./status-config";
-import type { ProjectStatus } from "@/data/seed";
 import { isSiemensIncumbent, primaryCountry } from "@/lib/project-utils";
 
 const STATUSES: ProjectStatus[] = [

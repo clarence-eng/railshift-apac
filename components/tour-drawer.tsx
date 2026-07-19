@@ -31,7 +31,7 @@ const TOUR_STEPS: TourStep[] = [
     href: "/decarbonise",
     headline: "Quantify the carbon value Siemens creates",
     body: "Two distinct calculators. Modal Shift: when a metro line opens, people switch from cars to rail — this calculates how many tonnes of CO₂ are avoided per year and what that is worth at Singapore's carbon price. Electrification: when a diesel line goes electric, how much does it reduce emissions — and how dependent is the answer on the local grid intensity?",
-    tip: "Try Cross Island Line on Modal Shift: 500k riders/day, Singapore grid. Lifetime carbon value ~S$193m undiscounted — a powerful anchor for lifecycle services negotiations.",
+    tip: "Try Cross Island Line on Modal Shift: 500k riders/day, Singapore grid, 50% modal-shift share. Lifetime carbon value ~S$194m undiscounted — a powerful anchor for lifecycle services negotiations.",
   },
   {
     page: "Brief",
@@ -61,7 +61,8 @@ export default function TourDrawer({ open, onClose }: Props) {
   const [step, setStep] = useState(0);
   const panelRef = useRef<HTMLElement>(null);
 
-  // Reset to first step when reopened — intentional setState inside effect
+  // Reset to first step when reopened — intentional: open→true is the external
+  // trigger to synchronise step back to 0; this is a controlled open/close prop.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (open) setStep(0); }, [open]);
 
