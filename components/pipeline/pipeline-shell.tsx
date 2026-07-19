@@ -79,10 +79,10 @@ export default function PipelineShell({ projects }: Props) {
     const approved = projects.filter((p) => p.status === "approved").length;
     const incumbent = projects.filter((p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")).length;
     return [
-      { label: "Projects tracked",   value: String(total),     sub: null },
-      { label: "Under construction",  value: String(underCon),  sub: `${Math.round(underCon / total * 100)}% of pipeline` },
-      { label: "Approved",           value: String(approved),  sub: `${Math.round(approved / total * 100)}% of pipeline` },
-      { label: "Siemens incumbent",  value: String(incumbent), sub: `${incumbent} of ${total} projects` },
+      { label: "Projects tracked",   value: `${total}`,     sub: null },
+      { label: "Under construction",  value: `${underCon}`,  sub: `${Math.round(underCon / total * 100)}% of pipeline` },
+      { label: "Approved",           value: `${approved}`,  sub: `${Math.round(approved / total * 100)}% of pipeline` },
+      { label: "Siemens incumbent",  value: `${incumbent}`, sub: `${incumbent} of ${total} projects` },
     ];
   }, [projects]);
 

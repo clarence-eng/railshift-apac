@@ -156,6 +156,7 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
             Methodology &amp; Sources
           </h2>
           <button
+            type="button"
             onClick={onClose}
             aria-label="Close drawer"
             className="text-xl leading-none transition-colors duration-150"

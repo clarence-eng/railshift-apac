@@ -137,12 +137,13 @@ export default function TourDrawer({ open, onClose }: Props) {
             </p>
           </div>
           <button
+            type="button"
             onClick={onClose}
             aria-label="Close guide"
             className="text-xl leading-none transition-colors duration-150"
             style={{ color: "var(--ix-text-soft)" }}
-            onMouseEnter={(e) => ((e.currentTarget).style.color = "var(--ix-text)")}
-            onMouseLeave={(e) => ((e.currentTarget).style.color = "var(--ix-text-soft)")}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "var(--ix-text)")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "var(--ix-text-soft)")}
           >
             ×
           </button>
