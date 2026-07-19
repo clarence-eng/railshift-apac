@@ -18,7 +18,7 @@ const STATUSES: ProjectStatus[] = [
 function MapSkeleton() {
   return (
     <div
-      className="w-full rounded-sm border border-border bg-surface-1 overflow-hidden animate-pulse relative"
+      className="w-full rounded-sm border border-border overflow-hidden animate-pulse relative"
       style={{ height: "clamp(300px, 50vw, 420px)", background: "var(--theme-color-2)" }}
       aria-label="Map loading"
     >
@@ -134,7 +134,7 @@ export default function PipelineShell({ projects }: Props) {
             >
               <span
                 className="inline-block w-2 h-2 rounded-full"
-                style={{ background: "var(--ix-primary)", opacity: 0.5 }}
+                style={{ background: "var(--theme-color-weak-text)" }}
                 aria-hidden="true"
               />
               <p className="text-xs tracking-widest uppercase" style={{ color: "var(--theme-color-weak-text)" }}>

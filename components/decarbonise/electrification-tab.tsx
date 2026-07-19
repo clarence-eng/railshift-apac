@@ -93,7 +93,7 @@ export default function ElectrificationTab() {
           <OutputCard
             label="Avoided tCO₂ / year"
             value={fmt(result.avoidedTCO2PerYear)}
-            sub={result.reductionFraction != null ? `${Math.round(result.reductionFraction * 100)}% reduction vs diesel` : "diesel factor is zero"}
+            sub={result.reductionFraction != null ? `${Math.round(result.reductionFraction * 100)}% reduction vs diesel` : "n/a — diesel factor is zero"}
           />
           <OutputCard label="Carbon value / year" value={fmtSGD(result.carbonValueSGDPerYear)} sub={`at S$${carbonPrice}/tCO₂e`} />
           <OutputCard label={`Lifetime value (${assetLife}yr)`} value={fmtSGD(result.lifetimeValueSGD)} sub="undiscounted" />

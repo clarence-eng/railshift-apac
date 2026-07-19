@@ -69,7 +69,8 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
           p.name.toLowerCase().includes(q) ||
           p.country.toLowerCase().includes(q) ||
           (p.value?.toLowerCase().includes(q) ?? false) ||
-          (p.note?.toLowerCase().includes(q) ?? false)
+          (p.note?.toLowerCase().includes(q) ?? false) ||
+          p.status.replace(/-/g, " ").includes(q)
         );
         return true;
       })
@@ -223,8 +224,18 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-3 py-8 text-center text-sm" style={{ color: "var(--theme-color-soft-text)" }}>
-                  No projects match the current filter.
+                <td colSpan={7} className="px-3 py-8 text-center" style={{ color: "var(--theme-color-soft-text)" }}>
+                  <p className="text-sm">No projects match the current filter.</p>
+                  {(query || statusFilter) && (
+                    <button
+                      type="button"
+                      onClick={() => { setQuery(""); setStatusFilter(""); }}
+                      className="mt-2 text-xs underline transition-colors"
+                      style={{ color: "var(--theme-color-primary)" }}
+                    >
+                      Clear all filters
+                    </button>
+                  )}
                 </td>
               </tr>
             )}

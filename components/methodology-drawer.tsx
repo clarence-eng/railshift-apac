@@ -14,13 +14,16 @@ const sourceMap = Object.fromEntries(SOURCES.map((s) => [s.id, s]));
 
 function SourceLink({ id }: { id: string }) {
   const src = sourceMap[id];
-  if (!src) return <span className="text-muted-foreground">{id}</span>;
+  if (!src) return <span style={{ color: "var(--ix-text-soft)" }}>{id}</span>;
   return (
     <a
       href={src.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="underline text-muted-foreground hover:text-foreground transition-colors"
+      className="underline transition-colors"
+      style={{ color: "var(--ix-text-soft)" }}
+      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text)")}
+      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text-soft)")}
     >
       {src.label}
     </a>
@@ -29,7 +32,7 @@ function SourceLink({ id }: { id: string }) {
 
 function SectionHead({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-5 pb-2 border-b border-border" style={{ color: "var(--ix-primary)" }}>
+    <h3 className="text-xs font-semibold uppercase tracking-wider pt-5 pb-2 border-b" style={{ color: "var(--ix-primary)", borderColor: "var(--ix-border)" }}>
       {children}
     </h3>
   );
@@ -49,17 +52,17 @@ function DataRow({
   note?: string;
 }) {
   return (
-    <div className="py-2.5 border-b border-border last:border-0 space-y-0.5">
+    <div className="py-2.5 border-b last:border-0 space-y-0.5" style={{ borderColor: "var(--ix-border)" }}>
       <div className="flex items-start justify-between gap-3">
-        <span className="font-medium text-sm text-foreground leading-5">{label}</span>
+        <span className="font-medium text-sm leading-5" style={{ color: "var(--ix-text)" }}>{label}</span>
         <div className="flex items-center gap-2 shrink-0">
           {confidence && (
             <ConfidenceBadge confidence={confidence as "HIGH" | "MED" | "LOW"} />
           )}
-          <span className="font-mono font-semibold text-sm text-foreground tabular-nums">{value}</span>
+          <span className="font-mono font-semibold text-sm tabular-nums" style={{ color: "var(--ix-text)" }}>{value}</span>
         </div>
       </div>
-      {note && <p className="text-xs text-muted-foreground">{note}</p>}
+      {note && <p className="text-xs" style={{ color: "var(--ix-text-soft)" }}>{note}</p>}
       {sourceId && (
         <p className="text-xs">
           <SourceLink id={sourceId} />
@@ -144,17 +147,21 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label="Methodology & Sources"
-        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xl flex-col bg-card border-l border-border shadow-2xl overflow-hidden ix-drawer-enter"
+        className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xl flex-col overflow-hidden shadow-2xl ix-drawer-enter"
+        style={{ background: "var(--ix-surface-1)", borderLeft: "1px solid var(--ix-border)" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
-          <h2 className="text-sm font-semibold tracking-tight text-foreground">
+        <div className="flex items-center justify-between px-6 py-4 shrink-0" style={{ borderBottom: "1px solid var(--ix-border)" }}>
+          <h2 className="text-sm font-semibold tracking-tight" style={{ color: "var(--ix-text)" }}>
             Methodology &amp; Sources
           </h2>
           <button
             onClick={onClose}
             aria-label="Close drawer"
-            className="text-muted-foreground hover:text-foreground transition-colors text-xl leading-none"
+            className="text-xl leading-none transition-colors"
+            style={{ color: "var(--ix-text-soft)" }}
+            onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text)")}
+            onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text-soft)")}
           >
             ×
           </button>
@@ -164,11 +171,11 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
         <div className="flex-1 overflow-y-auto px-6 pb-10">
 
           {/* Preamble */}
-          <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
+          <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--ix-text-soft)" }}>
             Every figure in this tool is drawn from the sources below.
-            Confidence levels: <strong className="text-foreground">HIGH</strong> = primary
-            official or statutory source; <strong className="text-foreground">MED</strong> = secondary
-            or corroborated press; <strong className="text-foreground">LOW</strong> = single
+            Confidence levels: <strong style={{ color: "var(--ix-text)" }}>HIGH</strong> = primary
+            official or statutory source; <strong style={{ color: "var(--ix-text)" }}>MED</strong> = secondary
+            or corroborated press; <strong style={{ color: "var(--ix-text)" }}>LOW</strong> = single
             source, unverified. All emission calculations use well-to-wheel (WtW)
             boundaries per EEA convention.
           </p>
@@ -275,13 +282,16 @@ export default function MethodologyDrawer({ open, onClose }: Props) {
           <SectionHead>All sources</SectionHead>
           <div className="space-y-2 pt-1">
             {SOURCES.map((s) => (
-              <div key={s.id} className="text-xs border-b border-border pb-2 last:border-0">
-                <span className="font-mono text-muted-foreground mr-2">[{s.id}]</span>
+              <div key={s.id} className="text-xs pb-2 border-b last:border-0" style={{ borderColor: "var(--ix-border)" }}>
+                <span className="font-mono mr-2" style={{ color: "var(--ix-text-soft)" }}>[{s.id}]</span>
                 <a
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline text-foreground hover:text-muted-foreground transition-colors"
+                  className="underline transition-colors"
+                  style={{ color: "var(--ix-text)" }}
+                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text-soft)")}
+                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ix-text)")}
                 >
                   {s.label}
                 </a>
