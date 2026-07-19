@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { PROJECTS, CALC_DEFAULTS, GRID_FACTORS, SOURCES } from "@/data/seed";
 import MarketCard from "@/components/market/market-card";
+import { isSiemensIncumbent } from "@/lib/project-utils";
 
 // ─── Derived stats (all from seed, no fabrication) ────────────────────────────
-const incumbentCount = PROJECTS.filter(
-  (p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")
-).length;
+const incumbentCount = PROJECTS.filter((p) => isSiemensIncumbent(p.note)).length;
 const underConCount = PROJECTS.filter((p) => p.status === "under-construction").length;
 const approvedCount = PROJECTS.filter((p) => p.status === "approved").length;
 const marketCount = new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0])).size;

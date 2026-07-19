@@ -1,6 +1,7 @@
 import type { Project } from "@/data/seed";
 import { STATUS_COLOR_FALLBACK } from "@/components/pipeline/status-config";
 import MarketCard from "./market-card";
+import { isSiemensIncumbent } from "@/lib/project-utils";
 
 interface Props { projects: Project[]; }
 
@@ -50,7 +51,7 @@ export default function PipelineTimeline({ projects }: Props) {
             <div className="space-y-3">
               {dated.map((p) => {
                 const offset = ((p.year - minYear) / yearSpan) * 100;
-                const isIncumbent = /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "");
+                const isIncumbent = isSiemensIncumbent(p.note);
                 return (
                   <div key={p.id} className="flex items-center gap-2">
                     <div className="w-52 shrink-0">

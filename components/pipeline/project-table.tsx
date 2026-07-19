@@ -5,6 +5,7 @@ import { IxChip, IxSelect, IxSelectItem, IxIconButton } from "@siemens/ix-react"
 import type { Project, ProjectStatus } from "@/data/seed";
 import { STATUS_LABEL, STATUS_CHIP_BG } from "./status-config";
 import ConfidenceBadge from "@/components/confidence-badge";
+import { isSiemensIncumbent } from "@/lib/project-utils";
 
 type SortKey = "name" | "country" | "status" | "lengthKm" | "keyDate";
 type SortDir = "asc" | "desc";
@@ -248,7 +249,7 @@ export default function ProjectTable({ projects, selectedId, onSelect }: Props) 
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="line-clamp-2">{p.name}</span>
-                    {/siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "") && (
+                    {isSiemensIncumbent(p.note) && (
                       <span
                         className="hidden sm:inline shrink-0"
                         style={{ background: "var(--ix-primary)", color: "#fff", fontSize: "9px", fontWeight: 700, padding: "1px 4px", borderRadius: "2px", letterSpacing: "0.5px" }}

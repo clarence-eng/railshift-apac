@@ -1,6 +1,7 @@
 import type { Project } from "@/data/seed";
 import MarketCard from "./market-card";
 import CountryChartWrapper from "./country-chart-wrapper";
+import { isSiemensIncumbent } from "@/lib/project-utils";
 
 interface Props { projects: Project[]; }
 
@@ -30,7 +31,7 @@ function buildCountryRows(projects: Project[]): CountryRow[] {
       underConstruction: ps.filter((p) => p.status === "under-construction").length,
       approved: ps.filter((p) => p.status === "approved").length,
       undecided: ps.filter((p) => p.status === "undecided").length,
-      siemensCount: ps.filter((p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")).length,
+      siemensCount: ps.filter((p) => isSiemensIncumbent(p.note)).length,
       totalKm: ps.reduce((sum, p) => sum + (p.lengthKm ?? 0), 0),
     }))
     .sort((a, b) => b.total - a.total);

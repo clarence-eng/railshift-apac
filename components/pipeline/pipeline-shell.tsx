@@ -7,6 +7,7 @@ import ProjectPanel from "./project-panel";
 import ProjectTable from "./project-table";
 import { STATUS_COLOR_VAR, STATUS_LABEL } from "./status-config";
 import type { ProjectStatus } from "@/data/seed";
+import { isSiemensIncumbent } from "@/lib/project-utils";
 
 const STATUSES: ProjectStatus[] = [
   "operational",
@@ -77,7 +78,7 @@ export default function PipelineShell({ projects }: Props) {
     const total = projects.length;
     const underCon = projects.filter((p) => p.status === "under-construction").length;
     const approved = projects.filter((p) => p.status === "approved").length;
-    const incumbent = projects.filter((p) => /siemens.*incumbent|incumbent.*siemens/i.test(p.note ?? "")).length;
+    const incumbent = projects.filter((p) => isSiemensIncumbent(p.note)).length;
     return [
       { label: "Projects tracked",   value: `${total}`,     sub: null },
       { label: "Under construction",  value: `${underCon}`,  sub: `${Math.round(underCon / total * 100)}% of pipeline` },
