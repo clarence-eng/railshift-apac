@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PROJECTS } from "@/data/seed";
+import { primaryCountry } from "@/lib/project-utils";
 import CountryBreakdown from "./country-breakdown";
 import TechClassification from "./tech-classification";
 import PipelineTimeline from "./pipeline-timeline";
@@ -14,7 +15,7 @@ const TABS = ["Country", "Technology", "Timeline", "Competitive", "Funding", "M&
 type Tab = typeof TABS[number];
 
 // Computed once at module level — PROJECTS is a static constant
-const MARKET_COUNT = new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0])).size;
+const MARKET_COUNT = new Set(PROJECTS.map((p) => primaryCountry(p.country))).size;
 
 const TAB_PARAM: Record<Tab, string> = {
   "Country":     "country",

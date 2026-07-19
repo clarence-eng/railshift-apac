@@ -19,3 +19,9 @@ export function extractYear(keyDate: string | null): number | null {
   const m = keyDate.match(/\b(20[2-4][0-9])\b/);
   return m ? parseInt(m[1], 10) : null;
 }
+
+/** Returns the primary country for a project (first token before " / ").
+ *  E.g. "Malaysia / Singapore" → "Malaysia". */
+export function primaryCountry(country: string): string {
+  return country.split(/\s*\/\s*/)[0];
+}

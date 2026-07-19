@@ -1,7 +1,7 @@
 import type { Project } from "@/data/seed";
 import MarketCard from "./market-card";
 import CountryChartWrapper from "./country-chart-wrapper";
-import { isSiemensIncumbent } from "@/lib/project-utils";
+import { isSiemensIncumbent, primaryCountry } from "@/lib/project-utils";
 
 interface Props { projects: Project[]; }
 
@@ -19,7 +19,7 @@ interface CountryRow {
 function buildCountryRows(projects: Project[]): CountryRow[] {
   const map = new Map<string, Project[]>();
   for (const p of projects) {
-    const c = p.country.split(/\s*\/\s*/)[0];
+    const c = primaryCountry(p.country);
     if (!map.has(c)) map.set(c, []);
     map.get(c)!.push(p);
   }

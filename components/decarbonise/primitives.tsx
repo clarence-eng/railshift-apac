@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { IxBlind, IxSlider } from "@siemens/ix-react";
 import { GRID_FACTORS } from "@/data/seed";
+import { primaryCountry } from "@/lib/project-utils";
 
 // ---------------------------------------------------------------------------
 // Shared formatters — used by Modal Shift, Electrification, and Brief
@@ -32,8 +33,6 @@ export function projectGridCountry(projectCountry: string): string {
   }
   return "World avg";
 }
-
-// ---------------------------------------------------------------------------
 // SliderRow — wraps IxSlider
 // ---------------------------------------------------------------------------
 

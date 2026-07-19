@@ -7,7 +7,7 @@ import ProjectPanel from "./project-panel";
 import ProjectTable from "./project-table";
 import { STATUS_COLOR_VAR, STATUS_LABEL } from "./status-config";
 import type { ProjectStatus } from "@/data/seed";
-import { isSiemensIncumbent } from "@/lib/project-utils";
+import { isSiemensIncumbent, primaryCountry } from "@/lib/project-utils";
 
 const STATUSES: ProjectStatus[] = [
   "operational",
@@ -70,7 +70,7 @@ export default function PipelineShell({ projects }: Props) {
   const selectedProject = projects.find((p) => p.id === selectedId) ?? null;
 
   const marketCount = useMemo(
-    () => new Set(projects.map((p) => p.country.split(/\s*\/\s*/)[0])).size,
+    () => new Set(projects.map((p) => primaryCountry(p.country))).size,
     [projects]
   );
 
