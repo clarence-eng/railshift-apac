@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PROJECTS } from "@/data/seed";
 import CountryBreakdown from "./country-breakdown";
 import TechClassification from "./tech-classification";
@@ -12,8 +13,30 @@ import FundingAnalysis from "./funding-analysis";
 const TABS = ["Country", "Technology", "Timeline", "Competitive", "Funding", "M&A Signals"] as const;
 type Tab = typeof TABS[number];
 
+const TAB_PARAM: Record<Tab, string> = {
+  "Country":     "country",
+  "Technology":  "technology",
+  "Timeline":    "timeline",
+  "Competitive": "competitive",
+  "Funding":     "funding",
+  "M&A Signals": "ma-signals",
+};
+const PARAM_TO_TAB: Record<string, Tab> = Object.fromEntries(
+  (Object.entries(TAB_PARAM) as [Tab, string][]).map(([tab, param]) => [param, tab])
+);
+
 export default function MarketShell() {
-  const [activeTab, setActiveTab] = useState<Tab>("Country");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const rawTab = searchParams.get("tab") ?? "";
+  const activeTab: Tab = PARAM_TO_TAB[rawTab] ?? "Country";
+
+  const setActiveTab = useCallback((tab: Tab) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", TAB_PARAM[tab]);
+    router.replace(`/market?${params.toString()}`, { scroll: false });
+  }, [router, searchParams]);
 
   return (
     <div className="space-y-5">
@@ -29,8 +52,8 @@ export default function MarketShell() {
         </p>
       </div>
 
-      {/* Tab bar */}
-      <div className="flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
+      {/* Tab bar — scrollable on mobile */}
+      <div className="flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--theme-color-std-bdr)", scrollbarWidth: "none" }}>
         {TABS.map((tab) => (
           <button
             key={tab}

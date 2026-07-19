@@ -7,14 +7,18 @@ type FundingSource = "JICA" | "China EXIM" | "State / Public" | "Private / Conso
 
 function classifyFunding(p: Project): FundingSource {
   const text = `${p.note ?? ""} ${p.value ?? ""}`.toLowerCase();
-  if (/jica/i.test(text))                    return "JICA";
-  if (/china exim|exim.*china|crrc.*exim/i.test(text)) return "China EXIM";
-  if (/private.*fund|private.bid|consortium/i.test(text)) return "Private / Consortium";
-  if (/multilateral|adb\b|world bank/i.test(text)) return "Multilateral";
-  // State/public: government announcements, national rail authority
-  if (p.source.startsWith("pib") || p.source.startsWith("lta") || p.source.startsWith("my-") || p.source.startsWith("th-") || p.source.startsWith("vn-") || p.source.startsWith("ph-") || p.source.startsWith("au-") || p.source.startsWith("id-")) {
-    return "State / Public";
-  }
+  // Note-based checks run first — these are explicit in the dataset
+  if (/jica/i.test(text))                                          return "JICA";
+  if (/china exim|exim.*china/i.test(text))                       return "China EXIM";
+  if (/private.*fund|private.bid|consortium/i.test(text))         return "Private / Consortium";
+  if (/multilateral|adb\b|world bank/i.test(text))                return "Multilateral";
+  // Source-prefix fallback — project authority implies state procurement
+  const src = p.source;
+  if (src.startsWith("siemens-") || src === "lta" ||
+      src.startsWith("my-") || src.startsWith("th-") ||
+      src.startsWith("vn-") || src.startsWith("ph-") ||
+      src.startsWith("au-") || src.startsWith("id-") ||
+      src.startsWith("pib"))                                       return "State / Public";
   return "Unknown";
 }
 

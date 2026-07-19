@@ -13,7 +13,55 @@ const sgGridFactor = GRID_FACTORS.find((g) => g.country === "Singapore")!.gCO2eP
 const sgElectricGCO2 = CALC_DEFAULTS.railEnergyIntensity * sgGridFactor;
 const sgCarSavingGCO2 = Math.round(CALC_DEFAULTS.baselineCarFactor - sgElectricGCO2);
 
-// ─── Explicit interface for StatCard ─────────────────────────────────────────
+// ─── Candidate fit data ───────────────────────────────────────────────────────
+interface CandidateFitItem {
+  requirement: string;
+  evidence: string;
+  strength: "HIGH" | "MED";
+}
+
+const CANDIDATE_FIT: CandidateFitItem[] = [
+  {
+    requirement: "Strategy consulting background",
+    evidence: "Built a full APAC rail strategy cockpit from scratch — pipeline tracking, market analysis, competitive intelligence, M&A signals, and executive memo generation.",
+    strength: "HIGH",
+  },
+  {
+    requirement: "Market analysis for opportunity identification",
+    evidence: "Market page: 6-tab analysis covering country, technology, timeline, competitive, funding, and M&A signal dimensions — all from a single cited dataset.",
+    strength: "HIGH",
+  },
+  {
+    requirement: "Sustainability / DEGREE framework literacy",
+    evidence: "Decarbonise page: quantified avoided emissions + carbon value calculator aligned to DEGREE Decarbonization pillar. Strategy page explicitly maps all 6 DEGREE pillars to app capabilities.",
+    strength: "HIGH",
+  },
+  {
+    requirement: "Competitive intelligence and M&A",
+    evidence: "Competitive tab: INCUMBENT/PRESENT/LIKELY/POSSIBLE presence matrix across 4 competitors for 14 projects. M&A Signals: PROTECT/PURSUE/MONITOR/WATCH classification with urgency ratings.",
+    strength: "HIGH",
+  },
+  {
+    requirement: "Executive-quality communication",
+    evidence: "Brief page: AI-generated 4-section strategy memo per project (Print + Copy). Pre-computed offline examples for Singapore CRL, JRL, TEL. Built for senior audience with no filler.",
+    strength: "HIGH",
+  },
+  {
+    requirement: "Cross-functional coordination and data rigour",
+    evidence: `Every figure links to a primary source (${SOURCES.length} cited). Confidence levels on all data points. No figures fabricated — nulls render as n/a. Methodology drawer with full source list.`,
+    strength: "HIGH",
+  },
+  {
+    requirement: "Singapore and APAC market context",
+    evidence: `${PROJECTS.length} APAC projects tracked across ${[...new Set(PROJECTS.map((p) => p.country.split(/\s*\/\s*/)[0]))].length} markets. 3 Siemens Singapore lines (CRL, JRL, TEL) with deep analyst notes.`,
+    strength: "HIGH",
+  },
+  {
+    requirement: "Digital tools and analytical capability",
+    evidence: "Next.js 15, TypeScript, Recharts, MapLibre GL, Siemens iX design system, Gemini AI integration. Deployed on Vercel. All code open-source and reviewable.",
+    strength: "MED",
+  },
+];
 interface DegreePillar {
   letter: string;
   pillar: string;
@@ -301,72 +349,41 @@ export default function StrategyShell() {
           </p>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {[
-            {
-              requirement: "Strategy consulting background",
-              evidence: "Built a full APAC rail strategy cockpit from scratch — pipeline tracking, market analysis, competitive intelligence, M&A signals, and executive memo generation.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Market analysis for opportunity identification",
-              evidence: "Market page: 6-tab analysis covering country, technology, timeline, competitive, funding, and M&A signal dimensions — all from a single cited dataset.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Sustainability / DEGREE framework literacy",
-              evidence: "Decarbonise page: quantified avoided emissions + carbon value calculator aligned to DEGREE Decarbonization pillar. Strategy page explicitly maps all 6 DEGREE pillars to app capabilities.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Competitive intelligence and M&A",
-              evidence: "Competitive tab: INCUMBENT/PRESENT/LIKELY/POSSIBLE presence matrix across 4 competitors for 14 projects. M&A Signals: PROTECT/PURSUE/MONITOR/WATCH classification with urgency ratings.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Executive-quality communication",
-              evidence: "Brief page: AI-generated 4-section strategy memo per project (Print + Copy). Pre-computed offline examples for Singapore CRL, JRL, TEL. Built for senior audience with no filler.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Cross-functional coordination and data rigour",
-              evidence: "Every figure links to a primary source (18 cited). Confidence levels on all data points. No figures fabricated — nulls render as n/a. Methodology drawer with full source list.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Singapore and APAC market context",
-              evidence: "14 APAC projects tracked: Singapore, Malaysia, Indonesia, India, Thailand, Vietnam, Philippines, Australia. 3 Siemens Singapore lines (CRL, JRL, TEL) with deep analyst notes.",
-              strength: "HIGH",
-            },
-            {
-              requirement: "Digital tools and analytical capability",
-              evidence: "Next.js 15, TypeScript, Recharts, MapLibre GL, Siemens iX design system, Gemini AI integration. Deployed on Vercel. All code open-source and reviewable.",
-              strength: "MED",
-            },
-          ].map(({ requirement, evidence, strength }) => (
-            <div
-              key={requirement}
-              className="rounded-sm border overflow-hidden"
-              style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
-            >
-              <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-              <div className="p-4 space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>{requirement}</p>
-                  <span style={{
-                    background: strength === "HIGH" ? "var(--theme-color-success)" : "var(--theme-color-warning)",
-                    color: "#fff",
-                    fontSize: "8px",
-                    fontWeight: 700,
-                    padding: "1px 5px",
-                    borderRadius: "2px",
-                    flexShrink: 0,
-                    letterSpacing: "0.4px",
-                  }}>{strength}</span>
+          {CANDIDATE_FIT.map(({ requirement, evidence, strength }) => {
+            const accentColor = strength === "HIGH" ? "var(--theme-color-success)" : "var(--theme-color-warning)";
+            return (
+              <div
+                key={requirement}
+                className="rounded-sm border overflow-hidden"
+                style={{
+                  background: "var(--theme-color-2)",
+                  borderColor: "var(--theme-color-std-bdr)",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.14)",
+                  borderLeft: `3px solid ${accentColor}`,
+                }}
+              >
+                <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
+                <div className="p-4 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--theme-color-soft-text)" }}>
+                      {requirement}
+                    </p>
+                    <span style={{
+                      background: accentColor,
+                      color: "#fff",
+                      fontSize: "8px",
+                      fontWeight: 700,
+                      padding: "1px 5px",
+                      borderRadius: "2px",
+                      flexShrink: 0,
+                      letterSpacing: "0.4px",
+                    }}>{strength}</span>
+                  </div>
+                  <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>{evidence}</p>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-soft-text)" }}>{evidence}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
