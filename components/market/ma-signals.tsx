@@ -13,6 +13,11 @@ interface Signal {
   action: string;
 }
 
+function truncateNote(note: string | null, max = 120): string {
+  if (!note) return "";
+  return note.length > max ? `${note.slice(0, max).trimEnd()}…` : note;
+}
+
 function extractYear(keyDate: string | null): number | null {
   if (!keyDate) return null;
   const m = keyDate.match(/\b(202[0-9]|203[0-9]|204[0-9])\b/);
@@ -33,12 +38,13 @@ function deriveSignals(projects: Project[]): Signal[] {
     const yearsOut = year != null ? year - DATASET_YEAR : null;
 
     if (isIncumbent && yearsOut != null && yearsOut <= 4) {
+      const windowEnd = year != null && year > DATASET_YEAR ? year - 1 : DATASET_YEAR;
       signals.push({
         project: p,
         type: "PROTECT",
         urgency: yearsOut <= 2 ? "HIGH" : "MED",
         headline: `Delivery in ${year} — secure lifecycle contract before commissioning`,
-        action: `Initiate multi-year APM/services negotiation now. Client procurement focus shifts post-delivery. Window: ${DATASET_YEAR}–${(year ?? DATASET_YEAR) - 1}.`,
+        action: `Initiate multi-year APM/services negotiation now. Client procurement focus shifts post-delivery. Window: ${DATASET_YEAR}–${windowEnd}.`,
       });
     }
 
@@ -48,7 +54,7 @@ function deriveSignals(projects: Project[]): Signal[] {
         type: "PURSUE",
         urgency: p.status === "approved" ? "HIGH" : "MED",
         headline: "Pre-tender window — Siemens not confirmed; live pursuit opportunity",
-        action: `Submit positioning paper. Map decision-maker landscape. ${p.note ?? ""}`,
+        action: `Submit positioning paper. Map decision-maker landscape. ${truncateNote(p.note)}`,
       });
     }
 
@@ -58,7 +64,7 @@ function deriveSignals(projects: Project[]): Signal[] {
         type: "PURSUE",
         urgency: "HIGH",
         headline: "Approved, pre-tender — open competition for signalling/systems",
-        action: `Register interest. Review technical specs. ${p.note ?? ""}`,
+        action: `Register interest. Review technical specs. ${truncateNote(p.note)}`,
       });
     }
 
@@ -68,7 +74,7 @@ function deriveSignals(projects: Project[]): Signal[] {
         type: "MONITOR",
         urgency: "LOW",
         headline: "No government decision — track political signals",
-        action: `Set news alert. Engage with bilateral trade offices. ${p.note ?? ""}`,
+        action: `Set news alert. Engage with bilateral trade offices. ${truncateNote(p.note)}`,
       });
     }
 

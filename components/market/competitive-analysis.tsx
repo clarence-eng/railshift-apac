@@ -132,8 +132,15 @@ export default function CompetitiveAnalysis({ projects }: Props) {
               </tr>
             </thead>
             <tbody>
-              {data.map(({ p, comp }) => (
-                <tr key={p.id} className="border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
+              {data.map(({ p, comp }, i) => (
+                <tr
+                  key={p.id}
+                  className="border-b last:border-0"
+                  style={{
+                    borderColor: "var(--theme-color-x-weak-bdr)",
+                    background: i % 2 === 1 ? "var(--theme-color-3)" : undefined,
+                  }}
+                >
                   <td className="px-3 py-2.5" style={{ color: "var(--theme-color-std-text)" }}>
                     <span className="font-medium text-xs">{p.name}</span>
                     {comp.siemens === "incumbent" && (

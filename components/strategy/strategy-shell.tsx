@@ -38,7 +38,7 @@ const CANDIDATE_FIT: CandidateFitItem[] = [
   },
   {
     requirement: "Competitive intelligence and M&A",
-    evidence: "Competitive tab: INCUMBENT/PRESENT/LIKELY/POSSIBLE presence matrix across 4 competitors for 14 projects. M&A Signals: PROTECT/PURSUE/MONITOR/WATCH classification with urgency ratings.",
+    evidence: `Competitive tab: INCUMBENT/PRESENT/LIKELY/POSSIBLE presence matrix across 4 competitors for ${PROJECTS.length} projects. M&A Signals: PROTECT/PURSUE/MONITOR/WATCH classification with urgency ratings.`,
     strength: "HIGH",
   },
   {
@@ -64,6 +64,7 @@ const CANDIDATE_FIT: CandidateFitItem[] = [
 ];
 interface DegreePillar {
   letter: string;
+  sub?: string;
   pillar: string;
   color: string;
   appLink: string;
@@ -85,6 +86,7 @@ const DEGREE_PILLARS: DegreePillar[] = [
   },
   {
     letter: "E",
+    sub: "1",
     pillar: "Ethics",
     color: "var(--theme-color-info)",
     appLink: "Methodology",
@@ -112,6 +114,7 @@ const DEGREE_PILLARS: DegreePillar[] = [
   },
   {
     letter: "E",
+    sub: "2",
     pillar: "Equity",
     color: "var(--theme-color-neutral)",
     appLink: "Market — Country",
@@ -121,6 +124,7 @@ const DEGREE_PILLARS: DegreePillar[] = [
   },
   {
     letter: "E",
+    sub: "3",
     pillar: "Employability",
     color: "var(--theme-color-primary)",
     appLink: "Market — Competitive",
@@ -213,7 +217,7 @@ const STRATEGIC_THEMES = [
 
 // ─── Components ───────────────────────────────────────────────────────────────
 
-function StatCard({ letter, pillar, color, stat, desc, appLink, href }: DegreePillar) {
+function StatCard({ letter, sub, pillar, color, stat, desc, appLink, href }: DegreePillar) {
   return (
     <Link
       href={href}
@@ -228,7 +232,10 @@ function StatCard({ letter, pillar, color, stat, desc, appLink, href }: DegreePi
       <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-3xl font-bold leading-none" style={{ color }}>{letter}</span>
+            <span className="font-mono text-3xl font-bold leading-none" style={{ color }}>
+              {letter}
+              {sub && <sub className="font-mono text-sm" style={{ verticalAlign: "sub", fontSize: "0.55em" }}>{sub}</sub>}
+            </span>
             <span className="text-sm font-semibold" style={{ color: "var(--theme-color-std-text)" }}>{pillar}</span>
           </div>
           <span style={{ background: color, color: "#fff", fontSize: "8px", fontWeight: 700, padding: "1px 5px", borderRadius: "2px", flexShrink: 0 }}>

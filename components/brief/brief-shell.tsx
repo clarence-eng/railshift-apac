@@ -314,16 +314,23 @@ export default function BriefShell() {
             </div>
           </div>
 
-          {/* Generate button */}
-          <IxButton
-            variant="primary"
-            onClick={handleGenerate}
-            disabled={loading}
-            style={{ width: "100%" }}
-            title="Generate brief (⌘Enter)"
-          >
-            {loading ? "Generating…" : "Generate brief"}
-          </IxButton>
+          {/* Generate button + shortcut hint */}
+          <div className="space-y-1.5">
+            <IxButton
+              variant="primary"
+              onClick={handleGenerate}
+              disabled={loading}
+              style={{ width: "100%" }}
+              title="Generate brief (⌘Enter)"
+            >
+              {loading ? "Generating…" : "Generate brief"}
+            </IxButton>
+            <p className="text-xs text-center" style={{ color: "var(--theme-color-weak-text)" }}>
+              <kbd className="font-mono" style={{ background: "var(--theme-color-3)", padding: "0 3px", borderRadius: "2px", fontSize: "10px" }}>⌘</kbd>
+              {" "}<kbd className="font-mono" style={{ background: "var(--theme-color-3)", padding: "0 3px", borderRadius: "2px", fontSize: "10px" }}>↵</kbd>
+              {" "}to generate
+            </p>
+          </div>
 
           {/* Privacy note */}
           <p className="text-xs leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>
@@ -434,14 +441,25 @@ export default function BriefShell() {
       >
         <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
         <div className="px-4 py-3 text-xs" style={{ color: "var(--theme-color-soft-text)" }}>
-          <span className="font-semibold text-sm" style={{ color: "var(--theme-color-std-text)" }}>{selectedProject.name}</span>
-          <span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span>
-          <span>{selectedProject.status}</span>
-          <span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span>
-          <span>{selectedProject.country}</span>
-          {selectedProject.value && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.value}</span></>}
-          {selectedProject.keyDate && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.keyDate}</span></>}
-          {selectedProject.note && <p className="mt-1.5 leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>{selectedProject.note}</p>}
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <span className="font-semibold text-sm" style={{ color: "var(--theme-color-std-text)" }}>{selectedProject.name}</span>
+              <span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span>
+              <span>{selectedProject.status}</span>
+              <span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span>
+              <span>{selectedProject.country}</span>
+              {selectedProject.value && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.value}</span></>}
+              {selectedProject.keyDate && <><span className="mx-1.5" style={{ color: "var(--theme-color-std-bdr)" }}>·</span><span>{selectedProject.keyDate}</span></>}
+              {selectedProject.note && <p className="mt-1.5 leading-relaxed" style={{ color: "var(--theme-color-weak-text)" }}>{selectedProject.note}</p>}
+            </div>
+            <a
+              href="/"
+              className="shrink-0 text-xs underline transition-opacity hover:opacity-70"
+              style={{ color: "var(--theme-color-primary)" }}
+            >
+              View on Pipeline →
+            </a>
+          </div>
         </div>
       </div>
     </div>
