@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { IxSelect, IxSelectItem, IxCheckbox } from "@siemens/ix-react";
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
-import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider, fmt, fmtSGD } from "./primitives";
+import { SliderRow, OutputCard, Disclosure, CalcRow, SectionDivider, fmt, fmtSGD, projectGridCountry } from "./primitives";
 
 const ModalShiftChart = dynamic(() => import("./modal-shift-chart"), {
   ssr: false,
@@ -16,17 +16,6 @@ const ModalShiftChart = dynamic(() => import("./modal-shift-chart"), {
     />
   ),
 });
-
-const GRID_COUNTRY_NAMES = new Set(GRID_FACTORS.map((g) => g.country));
-
-function projectGridCountry(projectCountry: string): string {
-  // "Malaysia / Singapore" → try "Malaysia" first, then "Singapore"
-  const tokens = projectCountry.split(/\s*\/\s*/);
-  for (const t of tokens) {
-    if (GRID_COUNTRY_NAMES.has(t.trim())) return t.trim();
-  }
-  return "World avg";
-}
 
 const LINE_OPTIONS = PROJECTS.map((p) => ({
   id: p.id,

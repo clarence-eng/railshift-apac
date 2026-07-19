@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { IxBlind, IxSlider } from "@siemens/ix-react";
+import { GRID_FACTORS } from "@/data/seed";
 
 // ---------------------------------------------------------------------------
 // Shared formatters — used by Modal Shift, Electrification, and Brief
@@ -15,6 +16,21 @@ export function fmtSGD(n: number): string {
   if (Math.abs(n) >= 1_000_000)
     return `S$${(n / 1_000_000).toLocaleString("en-SG", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}m`;
   return `S$${fmt(n)}`;
+}
+
+// ---------------------------------------------------------------------------
+// Shared grid-country resolver — used by Modal Shift and Brief
+// ---------------------------------------------------------------------------
+
+const GRID_COUNTRY_NAMES = new Set(GRID_FACTORS.map((g) => g.country));
+
+/** Resolves a project country string (e.g. "Malaysia / Singapore") to the
+ *  first token that has a known grid factor, or "World avg" as fallback. */
+export function projectGridCountry(projectCountry: string): string {
+  for (const token of projectCountry.split(/\s*\/\s*/)) {
+    if (GRID_COUNTRY_NAMES.has(token.trim())) return token.trim();
+  }
+  return "World avg";
 }
 
 // ---------------------------------------------------------------------------

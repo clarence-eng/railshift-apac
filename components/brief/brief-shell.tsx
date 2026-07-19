@@ -9,7 +9,7 @@ import {
 import { PROJECTS, GRID_FACTORS, CALC_DEFAULTS } from "@/data/seed";
 import { modalShiftAvoided } from "@/lib/calc";
 import { PRECOMPUTED_BY_ID } from "@/data/precomputed-briefs";
-import { fmt, fmtSGD } from "@/components/decarbonise/primitives";
+import { fmt, fmtSGD, projectGridCountry } from "@/components/decarbonise/primitives";
 
 const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
@@ -17,15 +17,6 @@ const hasFallback = (id: string) => id in PRECOMPUTED_BY_ID;
 
 // Conservative mid-range per ITDP empirical 15–35% for new urban metro (2022)
 const BRIEF_SHARE_ASSUMPTION = 0.30;
-
-// Resolve the best available grid country for a project country string
-const GRID_COUNTRY_NAMES = new Set(GRID_FACTORS.map((g) => g.country));
-function projectGridCountry(projectCountry: string): string {
-  for (const token of projectCountry.split(/\s*\/\s*/)) {
-    if (GRID_COUNTRY_NAMES.has(token.trim())) return token.trim();
-  }
-  return "World avg";
-}
 
 interface BriefResponse {
   markdown: string;
