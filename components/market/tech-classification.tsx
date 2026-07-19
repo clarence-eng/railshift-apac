@@ -1,18 +1,15 @@
-"use client";
-
-import { useMemo } from "react";
 import type { Project } from "@/data/seed";
+import MarketCard from "./market-card";
 
 interface Props { projects: Project[]; }
 
-// Classify projects into technology categories based on name/note keywords
 function classifyTech(p: Project): string {
-  const text = `${p.name} ${p.note ?? ""}`.toLowerCase();
-  if (/cbtc|trainguard|sirius|goA|driverless|automated/i.test(text)) return "CBTC / Automation";
-  if (/hsr|high.speed|320\s*km|bullet/i.test(text)) return "High-Speed Rail";
-  if (/freight|inland rail/i.test(text)) return "Freight Rail";
-  if (/metro|subway|mrt|lrt/i.test(text)) return "Metro / Urban Rail";
-  if (/etcs|mainline|mainline signal/i.test(text)) return "Mainline Signalling";
+  const text = `${p.name} ${p.note ?? ""}`;
+  if (/cbtc|trainguard|sirius|GoA|driverless|automated/i.test(text)) return "CBTC / Automation";
+  if (/hsr|high.speed|320\s*km|bullet/i.test(text))                   return "High-Speed Rail";
+  if (/freight|inland rail/i.test(text))                               return "Freight Rail";
+  if (/metro|subway|mrt|lrt/i.test(text))                             return "Metro / Urban Rail";
+  if (/etcs|mainline/i.test(text))                                     return "Mainline Signalling";
   return "Other / Mixed";
 }
 
@@ -23,7 +20,7 @@ const TECH_ORDER = [
   "Mainline Signalling",
   "Freight Rail",
   "Other / Mixed",
-];
+] as const;
 
 const TECH_COLOR: Record<string, string> = {
   "CBTC / Automation":    "var(--ix-primary)",
@@ -43,30 +40,16 @@ const TECH_DESC: Record<string, string> = {
   "Other / Mixed":        "Multi-modal or early-stage",
 };
 
-function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-sm border overflow-hidden" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.18)" }}>
-      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-      <div className="px-4 py-3 border-b" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ix-primary)" }}>{title}</p>
-      </div>
-      <div className="p-4">{children}</div>
-    </div>
-  );
-}
-
 export default function TechClassification({ projects }: Props) {
-  const byTech = useMemo(() => {
-    const map = new Map<string, Project[]>();
-    for (const p of projects) {
-      const t = classifyTech(p);
-      if (!map.has(t)) map.set(t, []);
-      map.get(t)!.push(p);
-    }
-    return TECH_ORDER
-      .filter((t) => map.has(t))
-      .map((t) => ({ tech: t, projects: map.get(t)!, color: TECH_COLOR[t], desc: TECH_DESC[t] }));
-  }, [projects]);
+  const map = new Map<string, Project[]>();
+  for (const p of projects) {
+    const t = classifyTech(p);
+    if (!map.has(t)) map.set(t, []);
+    map.get(t)!.push(p);
+  }
+  const byTech = TECH_ORDER
+    .filter((t) => map.has(t))
+    .map((t) => ({ tech: t, projects: map.get(t)!, color: TECH_COLOR[t], desc: TECH_DESC[t] }));
 
   const total = projects.length;
 
@@ -75,27 +58,37 @@ export default function TechClassification({ projects }: Props) {
       {/* Overview tiles */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
         {byTech.map(({ tech, projects: ps, color }) => (
-          <div key={tech} className="rounded-sm border overflow-hidden" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}>
+          <div
+            key={tech}
+            className="rounded-sm border overflow-hidden"
+            style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 1px 4px rgba(0,0,0,0.14)" }}
+          >
+            {/* Use gradient band for consistency */}
+            <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
             <div className="h-[3px] w-full" style={{ background: color }} aria-hidden="true" />
             <div className="px-4 pt-3 pb-4 space-y-1">
               <p className="text-xs uppercase tracking-widest leading-4" style={{ color: "var(--theme-color-soft-text)" }}>{tech}</p>
               <p className="font-mono text-2xl font-semibold tabular-nums leading-7" style={{ color }}>{ps.length}</p>
-              <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>{Math.round(ps.length / total * 100)}% of pipeline</p>
+              <p className="text-xs" style={{ color: "var(--theme-color-weak-text)" }}>
+                {Math.round(ps.length / total * 100)}% of pipeline
+              </p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Proportional bar */}
-      <SectionCard title="Technology mix — proportional view">
-        <div className="space-y-3">
+      <MarketCard title="Technology mix — proportional view">
+        <div className="space-y-4">
           {byTech.map(({ tech, projects: ps, color, desc }) => {
             const pct = Math.round(ps.length / total * 100);
             return (
               <div key={tech}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium" style={{ color: "var(--theme-color-std-text)" }}>{tech}</span>
-                  <span className="font-mono text-xs tabular-nums" style={{ color }}>{ps.length} project{ps.length !== 1 ? "s" : ""} · {pct}%</span>
+                  <span className="font-mono text-xs tabular-nums" style={{ color }}>
+                    {ps.length} project{ps.length !== 1 ? "s" : ""} · {pct}%
+                  </span>
                 </div>
                 <div className="w-full rounded-full overflow-hidden" style={{ height: "8px", background: "var(--theme-color-x-weak-bdr)" }}>
                   <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: "9999px", transition: "width 0.4s ease" }} />
@@ -105,11 +98,11 @@ export default function TechClassification({ projects }: Props) {
             );
           })}
         </div>
-      </SectionCard>
+      </MarketCard>
 
       {/* Project list by tech */}
-      <SectionCard title="Projects by technology">
-        <div className="space-y-4">
+      <MarketCard title="Projects by technology">
+        <div className="space-y-5">
           {byTech.map(({ tech, projects: ps, color }) => (
             <div key={tech}>
               <div className="flex items-center gap-2 mb-2">
@@ -118,19 +111,23 @@ export default function TechClassification({ projects }: Props) {
               </div>
               <div className="pl-4 space-y-1">
                 {ps.map((p) => (
-                  <div key={p.id} className="flex items-start justify-between gap-4 text-xs py-1 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
+                  <div
+                    key={p.id}
+                    className="flex items-center justify-between text-xs py-1 border-b last:border-0"
+                    style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}
+                  >
                     <div>
                       <span style={{ color: "var(--theme-color-std-text)" }}>{p.name}</span>
                       <span className="ml-1.5" style={{ color: "var(--theme-color-soft-text)" }}>· {p.country}</span>
                     </div>
-                    <span className="shrink-0" style={{ color: "var(--theme-color-weak-text)" }}>{p.keyDate ?? "n/a"}</span>
+                    <span style={{ color: "var(--theme-color-weak-text)" }}>{p.keyDate ?? "n/a"}</span>
                   </div>
                 ))}
               </div>
             </div>
           ))}
         </div>
-      </SectionCard>
+      </MarketCard>
     </div>
   );
 }

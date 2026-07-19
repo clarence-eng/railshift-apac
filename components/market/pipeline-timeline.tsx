@@ -1,62 +1,41 @@
-"use client";
-
-import { useMemo } from "react";
 import type { Project } from "@/data/seed";
 import { STATUS_COLOR_FALLBACK } from "@/components/pipeline/status-config";
+import MarketCard from "./market-card";
 
 interface Props { projects: Project[]; }
 
-// Extract first 4-digit year from a keyDate string
 function extractYear(keyDate: string | null): number | null {
   if (!keyDate) return null;
   const m = keyDate.match(/\b(202[0-9]|203[0-9]|204[0-9])\b/);
   return m ? parseInt(m[1], 10) : null;
 }
 
-function SectionCard({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-sm border overflow-hidden" style={{ background: "var(--theme-color-2)", borderColor: "var(--theme-color-std-bdr)", boxShadow: "0 2px 8px rgba(0,0,0,0.18)" }}>
-      <div className="h-[4px] w-full" style={{ background: "var(--ix-gradient)" }} aria-hidden="true" />
-      <div className="px-4 py-3 border-b" style={{ borderColor: "var(--theme-color-std-bdr)" }}>
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ix-primary)" }}>{title}</p>
-        {note && <p className="text-xs mt-0.5" style={{ color: "var(--theme-color-weak-text)" }}>{note}</p>}
-      </div>
-      <div className="p-4">{children}</div>
-    </div>
-  );
-}
-
 export default function PipelineTimeline({ projects }: Props) {
-  const { datedProjects, undatedProjects, yearRange } = useMemo(() => {
-    const dated = projects
-      .map((p) => ({ ...p, year: extractYear(p.keyDate) }))
-      .filter((p): p is typeof p & { year: number } => p.year !== null)
-      .sort((a, b) => a.year - b.year);
+  const dated = projects
+    .map((p) => ({ ...p, year: extractYear(p.keyDate) }))
+    .filter((p): p is typeof p & { year: number } => p.year !== null)
+    .sort((a, b) => a.year - b.year);
 
-    const undated = projects.filter((p) => extractYear(p.keyDate) === null);
+  const undated = projects.filter((p) => extractYear(p.keyDate) === null);
 
-    const years = dated.map((p) => p.year);
-    const minYear = Math.min(...years);
-    const maxYear = Math.max(...years);
+  if (dated.length === 0) return <p style={{ color: "var(--theme-color-soft-text)" }}>No dated projects found.</p>;
 
-    return { datedProjects: dated, undatedProjects: undated, yearRange: { min: minYear, max: maxYear } };
-  }, [projects]);
-
-  const yearSpan = yearRange.max - yearRange.min || 1;
-  const years = Array.from({ length: yearRange.max - yearRange.min + 1 }, (_, i) => yearRange.min + i);
+  const minYear = Math.min(...dated.map((p) => p.year));
+  const maxYear = Math.max(...dated.map((p) => p.year));
+  const yearSpan = maxYear - minYear || 1;
+  const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i);
 
   return (
     <div className="space-y-6">
       {/* Gantt-style timeline */}
-      <SectionCard
+      <MarketCard
         title="Project completion timeline"
         note="Based on reported key dates. Extracted year only — actual delivery may vary."
       >
-        {/* Year axis */}
         <div className="overflow-x-auto">
           <div style={{ minWidth: "600px" }}>
             {/* Year header */}
-            <div className="flex border-b mb-3" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
+            <div className="flex border-b mb-4" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
               <div className="w-52 shrink-0" />
               <div className="flex-1 flex">
                 {years.map((yr) => (
@@ -68,86 +47,84 @@ export default function PipelineTimeline({ projects }: Props) {
             </div>
 
             {/* Project rows */}
-            <div className="space-y-2">
-              {datedProjects.map((p) => {
-                const offset = ((p.year - yearRange.min) / yearSpan) * 100;
+            <div className="space-y-3">
+              {dated.map((p) => {
+                const offset = ((p.year - minYear) / yearSpan) * 100;
                 const isIncumbent = /siemens/i.test(p.note ?? "") && /incumbent/i.test(p.note ?? "");
                 return (
                   <div key={p.id} className="flex items-center gap-2">
-                    <div className="w-52 shrink-0 text-xs leading-tight" style={{ color: "var(--theme-color-std-text)" }}>
-                      <span className="line-clamp-1">{p.name}</span>
-                      <span className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</span>
+                    <div className="w-52 shrink-0">
+                      <p className="text-xs font-medium leading-tight line-clamp-1" style={{ color: "var(--theme-color-std-text)" }}>{p.name}</p>
+                      <p className="text-xs" style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</p>
                     </div>
-                    <div className="flex-1 relative h-6">
+                    <div className="flex-1 relative" style={{ height: "24px" }}>
                       {/* Track */}
-                      <div className="absolute inset-y-0 inset-x-0 rounded-full" style={{ background: "var(--theme-color-x-weak-bdr)" }} />
+                      <div className="absolute inset-y-0 inset-x-0 rounded-full" style={{ background: "var(--theme-color-x-weak-bdr)", top: "50%", height: "2px", transform: "translateY(-50%)" }} />
+                      {/* Year grid lines */}
+                      {years.map((yr, i) => (
+                        <div
+                          key={yr}
+                          className="absolute top-0 bottom-0 w-px"
+                          style={{ left: `${(i / (years.length - 1 || 1)) * 100}%`, background: "var(--theme-color-x-weak-bdr)", opacity: 0.5 }}
+                        />
+                      ))}
                       {/* Marker */}
                       <div
-                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex items-center justify-center"
-                        style={{ left: `${offset}%` }}
+                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2"
+                        style={{ left: `${offset}%`, zIndex: 10, position: "absolute" }}
                         title={`${p.name} — ${p.keyDate}`}
                       >
-                        <div
-                          className="rounded-full flex items-center justify-center"
-                          style={{
-                            width: isIncumbent ? "20px" : "14px",
-                            height: isIncumbent ? "20px" : "14px",
-                            background: STATUS_COLOR_FALLBACK[p.status],
-                            border: isIncumbent ? "2px solid var(--ix-primary)" : "1.5px solid rgba(0,0,0,0.3)",
-                            boxShadow: isIncumbent ? "0 0 0 2px var(--ix-primary)" : "0 1px 3px rgba(0,0,0,0.4)",
-                            zIndex: 10,
-                            position: "relative",
-                          }}
-                        />
+                        <div style={{
+                          width: isIncumbent ? "20px" : "12px",
+                          height: isIncumbent ? "20px" : "12px",
+                          borderRadius: "50%",
+                          background: STATUS_COLOR_FALLBACK[p.status],
+                          border: isIncumbent ? "2px solid var(--ix-primary)" : "1.5px solid rgba(0,0,0,0.3)",
+                          boxShadow: isIncumbent ? "0 0 0 2px var(--ix-primary)" : "0 1px 3px rgba(0,0,0,0.4)",
+                        }} />
                       </div>
-                      {/* Year label */}
-                      <span
-                        className="absolute top-1/2 -translate-y-1/2 font-mono text-xs ml-2"
-                        style={{ left: `${offset}%`, marginLeft: "14px", color: "var(--theme-color-weak-text)", whiteSpace: "nowrap" }}
-                      >
-                        {p.year}
-                      </span>
                     </div>
+                    <span className="font-mono text-xs shrink-0 w-10 text-right" style={{ color: "var(--theme-color-weak-text)" }}>{p.year}</span>
                   </div>
                 );
               })}
             </div>
 
             {/* Legend */}
-            <div className="flex items-center gap-4 mt-4 pt-3 border-t text-xs" style={{ borderColor: "var(--theme-color-x-weak-bdr)", color: "var(--theme-color-soft-text)" }}>
+            <div className="flex flex-wrap items-center gap-4 mt-5 pt-4 border-t text-xs" style={{ borderColor: "var(--theme-color-x-weak-bdr)", color: "var(--theme-color-soft-text)" }}>
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-3.5 h-3.5 rounded-full" style={{ background: "var(--theme-color-success)" }} />
+                <span className="inline-block w-3 h-3 rounded-full" style={{ background: "var(--theme-color-success)" }} />
                 Operational
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-3.5 h-3.5 rounded-full" style={{ background: "var(--theme-color-warning)" }} />
+                <span className="inline-block w-3 h-3 rounded-full" style={{ background: "var(--theme-color-warning)" }} />
                 Under construction
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-3.5 h-3.5 rounded-full" style={{ background: "var(--theme-color-info)" }} />
+                <span className="inline-block w-3 h-3 rounded-full" style={{ background: "var(--theme-color-info)" }} />
                 Approved
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-4 h-4 rounded-full" style={{ background: "var(--theme-color-warning)", border: "2px solid var(--ix-primary)", boxShadow: "0 0 0 2px var(--ix-primary)" }} />
+                <span className="inline-block w-3.5 h-3.5 rounded-full" style={{ background: "var(--theme-color-warning)", border: "2px solid var(--ix-primary)", boxShadow: "0 0 0 2px var(--ix-primary)" }} />
                 Siemens incumbent
               </span>
             </div>
           </div>
         </div>
-      </SectionCard>
+      </MarketCard>
 
       {/* Year-by-year completions */}
-      <SectionCard title="Completions by year" note="Number of projects reaching key milestone per year">
+      <MarketCard title="Completions by year" note="Projects reaching key milestone per year">
         <div className="space-y-3">
           {years.map((yr) => {
-            const ps = datedProjects.filter((p) => p.year === yr);
+            const ps = dated.filter((p) => p.year === yr);
             if (ps.length === 0) return null;
             return (
               <div key={yr} className="flex gap-4">
                 <span className="font-mono text-sm font-semibold w-12 shrink-0 tabular-nums" style={{ color: "var(--theme-color-primary)" }}>{yr}</span>
                 <div className="flex-1 space-y-1">
                   {ps.map((p) => (
-                    <div key={p.id} className="flex items-center justify-between text-xs" >
+                    <div key={p.id} className="flex items-center justify-between text-xs">
                       <span style={{ color: "var(--theme-color-std-text)" }}>{p.name}</span>
                       <span style={{ color: "var(--theme-color-soft-text)" }}>{p.country}</span>
                     </div>
@@ -157,20 +134,20 @@ export default function PipelineTimeline({ projects }: Props) {
             );
           })}
         </div>
-      </SectionCard>
+      </MarketCard>
 
       {/* Undated projects */}
-      {undatedProjects.length > 0 && (
-        <SectionCard title="No confirmed date" note="Projects with no extractable completion year">
+      {undated.length > 0 && (
+        <MarketCard title="No confirmed date" note="Projects with no extractable completion year">
           <div className="space-y-1">
-            {undatedProjects.map((p) => (
+            {undated.map((p) => (
               <div key={p.id} className="flex items-center justify-between text-xs py-1 border-b last:border-0" style={{ borderColor: "var(--theme-color-x-weak-bdr)" }}>
                 <span style={{ color: "var(--theme-color-soft-text)" }}>{p.name} · {p.country}</span>
                 <span style={{ color: "var(--theme-color-weak-text)" }}>{p.keyDate ?? "n/a"}</span>
               </div>
             ))}
           </div>
-        </SectionCard>
+        </MarketCard>
       )}
     </div>
   );
